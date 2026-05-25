@@ -110,9 +110,229 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<script src="https://cdn.babylonjs.com/babylon.js"></script>
-<iframe src="https://chromedino.com/" frameborder="0" scrolling="no" width="100%" height="100%" loading="lazy"></iframe>
-<style type="text/css">iframe { position: absolute; width: 100%; height: 100%; z-index: 999; }</style> 
+<p>Control the dinosaur with hand gestures via your webcam:</p>
+<ul>
+<li><strong>Open palm</strong> ✋ — jump</li>
+<li><strong>Closed fist</strong> ✊ — duck (hold)</li>
+<li><strong>Thumbs up</strong> 👍 — restart after a crash</li>
+</ul>
+<div class="trex-host">
+  <div id="main-frame-error" class="interstitial-wrapper">
+    <div id="main-content">
+      <div class="icon icon-offline" alt=""></div>
+    </div>
+    <div id="offline-resources">
+      <img id="offline-resources-1x" src="trex/assets/default_100_percent/100-offline-sprite.png">
+      <img id="offline-resources-2x" src="trex/assets/default_200_percent/200-offline-sprite.png">
+    </div>
+  </div>
+</div>
+
+<div class="nui-panel">
+  <button id="nui-start" type="button">Start camera</button>
+  <div class="nui-feed">
+    <video id="nui-video" playsinline="" muted=""></video>
+    <div class="nui-overlay">
+      <span id="nui-gesture">—</span>
+      <span id="nui-status">Camera off</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .trex-host {
+    position: relative;
+    width: 600px;
+    height: 150px;
+    margin: 1.5rem auto 0.5rem;
+    background: #f7f7f7;
+  }
+  .trex-host #offline-resources,
+  .trex-host #main-content,
+  .trex-host .icon { display: none; }
+  .trex-host .interstitial-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  .trex-host .runner-container {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .trex-host .runner-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+  }
+
+  .nui-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.5rem auto 2rem;
+  }
+  #nui-start {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.95rem;
+    border: 1px solid #888;
+    background: #f4f4f4;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  #nui-start:hover { background: #e8e8e8; }
+  .nui-feed {
+    position: relative;
+    width: 280px;
+    height: 210px;
+    background: #111;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  #nui-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+  }
+  .nui-overlay {
+    position: absolute;
+    inset: auto 0 0 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 8px;
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    font: 600 12px/1.2 monospace;
+  }
+</style>
+
+<script src="trex/trex-runner.js"></script>
+
+<script type="module">
+  const MP_VERSION = "0.10.35";
+  let GestureRecognizer, FilesetResolver;
+  try {
+    ({ GestureRecognizer, FilesetResolver } = await import(
+      `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MP_VERSION}/vision_bundle.mjs`
+    ));
+  } catch (err) {
+    document.getElementById('nui-status').textContent = 'Load failed: ' + err.message;
+    console.error('MediaPipe import failed', err);
+    throw err;
+  }
+
+  const video    = document.getElementById('nui-video');
+  const startBtn = document.getElementById('nui-start');
+  const gestureEl = document.getElementById('nui-gesture');
+  const statusEl  = document.getElementById('nui-status');
+
+  const KEY = { JUMP: 32, DUCK: 40, RESTART: 13 };
+  const JUMP_COOLDOWN_MS = 280;
+
+  let recognizer = null;
+  let lastVideoTime = -1;
+  let lastGesture = 'None';
+  let duckHeld = false;
+  let lastJumpAt = 0;
+
+  // Drive the game directly via its onKeyDown/onKeyUp methods. Synthetic
+  // KeyboardEvents are unreliable because the t-rex-runner reads the
+  // deprecated e.keyCode, and Firefox shadows defineProperty overrides on
+  // KeyboardEvent instances with the prototype getter.
+  function fireKey(type, keyCode) {
+    const runner = window.Runner && window.Runner.instance_;
+    if (!runner) return;
+    const evt = { keyCode, type, target: document, preventDefault() {} };
+    if (type === 'keydown') runner.onKeyDown(evt);
+    else if (type === 'keyup') runner.onKeyUp(evt);
+  }
+  function tapKey(keyCode) {
+    fireKey('keydown', keyCode);
+    setTimeout(() => fireKey('keyup', keyCode), 60);
+  }
+  function setDuck(active) {
+    if (active && !duckHeld)       { fireKey('keydown', KEY.DUCK); duckHeld = true; }
+    else if (!active && duckHeld)  { fireKey('keyup',   KEY.DUCK); duckHeld = false; }
+  }
+  function tryJump() {
+    const now = performance.now();
+    if (now - lastJumpAt < JUMP_COOLDOWN_MS) return;
+    lastJumpAt = now;
+    tapKey(KEY.JUMP);
+  }
+
+  function handleGesture(g) {
+    gestureEl.textContent = g;
+    // Edge-triggered actions on gesture transitions
+    if (g !== lastGesture) {
+      if (g === 'Open_Palm') tryJump();
+      if (g === 'Thumb_Up')  tapKey(KEY.RESTART);
+    }
+    setDuck(g === 'Closed_Fist');
+    lastGesture = g;
+  }
+
+  function loop() {
+    if (video.readyState >= 2 && video.currentTime !== lastVideoTime) {
+      lastVideoTime = video.currentTime;
+      const res = recognizer.recognizeForVideo(video, performance.now());
+      const g = (res.gestures && res.gestures.length) ? res.gestures[0][0].categoryName : 'None';
+      handleGesture(g);
+    }
+    requestAnimationFrame(loop);
+  }
+
+  async function start() {
+    startBtn.disabled = true;
+    statusEl.textContent = 'Requesting camera…';
+    try {
+      // Camera first while the click's user-activation is still fresh — Firefox
+      // can reject getUserMedia with NotAllowedError after a long await chain.
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { width: 320, height: 240, facingMode: 'user' },
+        audio: false
+      });
+      video.srcObject = stream;
+      await video.play();
+
+      statusEl.textContent = 'Loading model…';
+      const vision = await FilesetResolver.forVisionTasks(
+        `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MP_VERSION}/wasm`
+      );
+      recognizer = await GestureRecognizer.createFromOptions(vision, {
+        baseOptions: {
+          modelAssetPath: "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/latest/gesture_recognizer.task",
+          delegate: "CPU"
+        },
+        runningMode: "VIDEO",
+        numHands: 1
+      });
+      statusEl.textContent = 'Tracking';
+      startBtn.style.display = 'none';
+      requestAnimationFrame(loop);
+    } catch (err) {
+      console.error(err);
+      let msg = err.message || String(err);
+      if (err.name === 'NotAllowedError') {
+        msg = window.isSecureContext
+          ? 'Camera permission denied — allow it in the site settings.'
+          : 'Insecure context — open via http://localhost (e.g. `quarto preview`), not file:// or a LAN IP.';
+      } else if (err.name === 'NotFoundError') {
+        msg = 'No camera device found.';
+      }
+      statusEl.textContent = msg;
+      startBtn.disabled = false;
+    }
+  }
+
+  startBtn.addEventListener('click', start);
+</script>
 
 
 
