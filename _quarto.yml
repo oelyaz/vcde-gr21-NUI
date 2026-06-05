@@ -2,3 +2,47 @@ project:
   type: website
   resources:
     - trex/**
+
+website:
+  title: "NUI · Hand- & Pose-Tracking"
+  search: false
+  navbar:
+    background: light
+    pinned: true
+    left:
+      - text: "Start"
+        href: index.qmd
+      - text: "Grundlagen"
+        href: grundlagen.qmd
+      - text: "Methode"
+        href: methode.qmd
+      - text: "Live-Demo"
+        href: demo.qmd
+      - text: "Evaluation & Quiz"
+        href: evaluation.qmd
+      - text: "Über & Referenzen"
+        href: ueber.qmd
+  page-footer:
+    border: false
+    center: "Visual Computing · Natural User Interfaces mit MediaPipe - Restle · Seidl · Kastrati"
+
+lang: de
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-location: left
+    toc-depth: 2
+    toc-title: "Auf dieser Seite"
+    anchor-sections: true
+    link-external-newwindow: true
+
+bibliography: references.bib
+
+jupyter:
+  kernelspec:
+    name: python3
+    language: python
+    display_name: Python 3
+  path: .venv/bin/python
