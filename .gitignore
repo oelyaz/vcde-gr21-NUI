@@ -1,5 +1,19 @@
 /.quarto/
 **/*.quarto_ipynb
+**/*.quarto_ipynb_*
 _site/
 video_generator/
 
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Quarto render artifacts
+/*_files/
+
+# Vorlesungsmaterial & interne Planung (nicht Teil der Projektabgabe)
+_planning/
+D1/
+D2/
+orga.pdf
+thema.pdf
