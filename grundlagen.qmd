@@ -1,0 +1,309 @@
+---
+title: "Grundlagen"
+subtitle: "Vom Prinzip Natural User Interface zu Use-Cases und einer kurzen Geschichte"
+suppress-bibliography: true
+---
+
+::: {.nui-pagehead}
+[Visual Computing · Natural User Interfaces]{.nui-eyebrow}
+
+::: {.nui-lead}
+Was macht ein Interface „natürlich", und warum lohnt sich berührungsloses Tracking?
+Woher kommt die Idee, den Körper selbst zur Schnittstelle zu machen? Dieser Abschnitt
+klärt die wichtigsten Begriffe für die [Methode](methode.qmd) und für die spätere
+Diskussion der Grenzen in der [Evaluation](evaluation.qmd).
+:::
+:::
+
+::: {.callout-note appearance="simple"}
+**Kurzfassung:** Ein Interface wirkt „natürlich", wenn es vorhandene menschliche Fähigkeiten verständlich nutzbar macht, es ist aber ein Designziel und kein Naturgesetz [@norman2010nui].
+Für die Umsetzung ist wichtig, diskrete Gesten als einzelne Ereignisse von kontinuierlichen Kanälen wie Position, Abstand oder Haltung zu trennen.
+Engagement und Disengagement bestimmen, wann eine Bewegung wirklich als Befehl gilt, sonst entsteht das Midas-Touch-Problem [@buxton1990threestate].
+Typische Use-Cases reichen von XR und Accessibility bis Medizin und Gaming, historisch verschiebt sich das Feld von getragenen Sensoren und Handschuhen zu markerlosem kamera-basiertem Tracking.
+:::
+
+## Von der leeren Hand zum Befehl {#motivation}
+
+Klassische Eingabe braucht meistens ein *Instrument*: Maus, Tastatur oder
+Touchscreen. Ein **Natural User Interface (NUI)** probiert das Gegenteil.
+Fähigkeiten, die Menschen sowieso mitbringen, etwa Zeigen, Greifen, Mimik oder
+Körperhaltung, sollen *direkt* zur Eingabe werden. Hand- und Pose-Tracking liefern
+dafür die technische Grundlage. Eine gewöhnliche RGB-Kamera genügt, um die Hand
+bzw. den ganzen Körper als Eingabegerät zu erkennen. In der Landkarte des Visual
+Computing liegt dieses Projekt damit zwischen **Human-Computer Interaction** und
+der **Bildanalyse** (*Image Analysis → Recognition*) [@friedrich_vc_recognition].
+
+„Natural" ist dabei ein **Designziel, kein Naturgesetz**: Auch Gesten sind
+erlernt und kulturell konventioniert, und ein NUI wird erst dann „natürlich",
+wenn es klassische Usability-Prinzipien erfüllt: sichtbare *Affordances*,
+*Discoverability* (welche Gesten sind überhaupt möglich?) und unmittelbares
+*Feedback* [@norman2010nui; @wigdor2011brave]. Zwei Begriffe strukturieren das
+ganze Projekt:
+
+- **Diskrete vs. kontinuierliche Gesten.** Eine diskrete Geste ist ein
+  *Klassen­ereignis* (offene Handfläche → Sprung), ein kontinuierlicher Kanal ein
+  *Wert* (z. B. die Pinch-Distanz zwischen Daumen und Zeigefinger als Schieberegler).
+- **Engagement / Disengagement.** Wann *meint* eine Bewegung einen Befehl, und
+  wann ist sie beiläufig? Ohne saubere Zustände entsteht das **Midas-Touch-Problem**:
+  Jede Bewegung löst ungewollt aus. Buxtons *Three-State-Model* (Out-of-Range →
+  Tracking → Aktiv) liefert das passende Vokabular, um Erkennen und Auslösen
+  bewusst zu trennen [@buxton1990threestate].
+
+Das merkt man direkt in der Technik, zum Beispiel bei Debounce, Hysterese und
+Kalibrierung in der [Methode](methode.qmd). Die Grenzen besprechen wir später auch
+offen: *Gorilla-Arm*, Ermüdung und Fehltrigger in der [Evaluation](evaluation.qmd).
+
+## Use-Cases {#use-cases}
+
+Vier Felder zeigen, warum berührungsloses Tracking mehr ist als eine Spielerei:
+
+```{=html}
+<div class="nui-carousel-root nui-reveal" id="nui-usecases">
+  <div class="nui-carousel-viewport" id="nui-usecases-vp">
+    <div class="nui-carousel-track" id="nui-usecases-track">
+      <div class="nui-card">
+        <i class="ph ph-virtual-reality nui-card-ico" aria-hidden="true"></i>
+        <h3>AR/VR &amp; Spatial Computing</h3>
+        <p>Aktuelle Headsets (Meta Quest, Apple Vision Pro) ersetzen Controller
+          zunehmend durch <strong>markerloses Hand-Tracking</strong> als primäre
+          Eingabe, passend zur XR-Pipeline der Vorlesung.</p>
+      </div>
+      <div class="nui-card">
+        <i class="ph ph-wheelchair nui-card-ico" aria-hidden="true"></i>
+        <h3>Accessibility</h3>
+        <p>Wer Maus, Tastatur oder Touch nicht gut bedienen kann, erhält über Kopf-,
+          Hand- oder Körpergesten einen alternativen Eingabekanal, ganz ohne
+          getragene Hardware.</p>
+      </div>
+      <div class="nui-card">
+        <i class="ph ph-hospital nui-card-ico" aria-hidden="true"></i>
+        <h3>Touchless &amp; Medizin</h3>
+        <p>Im OP oder am öffentlichen Kiosk ist <em>berührungslos</em> ein Hygienegewinn:
+          Chirurg:innen blättern durch Bildmaterial, ohne das sterile Feld zu
+          verlassen.</p>
+      </div>
+      <div class="nui-card">
+        <i class="ph ph-game-controller nui-card-ico" aria-hidden="true"></i>
+        <h3>Gaming &amp; Entertainment</h3>
+        <p>Körper und Hände als Spiel-Controller passen direkt zu unserer
+          Demo, dem <a href="demo.html">pose- und gestengesteuerten T-Rex</a>.</p>
+      </div>
+    </div>
+  </div>
+  <div class="nui-carousel-foot">
+    <button class="nui-carousel-ctrl" id="nui-usecases-prev" aria-label="Vorherige Karte">
+      <i class="ph ph-caret-left" aria-hidden="true"></i>
+    </button>
+    <button class="nui-carousel-ctrl" id="nui-usecases-next" aria-label="Nächste Karte">
+      <i class="ph ph-caret-right" aria-hidden="true"></i>
+    </button>
+  </div>
+</div>
+<script>
+(function () {
+  'use strict';
+  var vp    = document.getElementById('nui-usecases-vp');
+  var track = document.getElementById('nui-usecases-track');
+  if (!vp || !track) return;
+
+  var originals = Array.from(track.children);
+  var n = originals.length;
+  originals.slice().reverse().forEach(function (c) {
+    track.insertBefore(c.cloneNode(true), track.firstChild);
+  });
+  originals.forEach(function (c) {
+    track.appendChild(c.cloneNode(true));
+  });
+
+  var cur         = n;
+  var cardW       = 0;
+  var gapPx       = 0;
+  var translateX  = 0;
+  var isAnimating = false;
+
+  function visCount() {
+    return vp.clientWidth >= 900 ? 3 : vp.clientWidth >= 540 ? 2 : 1;
+  }
+
+  function idealX(idx) {
+    return -(idx * (cardW + gapPx));
+  }
+
+  function setTranslate(x, animate) {
+    translateX = x;
+    track.style.transition = animate
+      ? 'transform 0.46s cubic-bezier(0.25,0,0.1,1)'
+      : 'none';
+    track.style.transform = 'translateX(' + x + 'px)';
+  }
+
+  function layout() {
+    gapPx = parseFloat(getComputedStyle(track).columnGap) || 14;
+    var vis = visCount();
+    cardW = Math.max(120, (vp.clientWidth - gapPx * (vis - 1)) / (vis + 0.25));
+    Array.from(track.children).forEach(function (c) {
+      c.style.flex = '0 0 ' + cardW + 'px';
+    });
+    setTranslate(idealX(cur), false);
+  }
+
+  function go(delta) {
+    if (isAnimating) return;
+    cur += delta;
+    isAnimating = true;
+    setTranslate(idealX(cur), true);
+  }
+
+  track.addEventListener('transitionend', function (e) {
+    if (e.propertyName !== 'transform' || e.target !== track) return;
+    isAnimating = false;
+    var jumped = false;
+    if      (cur < n)      { cur += n; jumped = true; }
+    else if (cur >= 2 * n) { cur -= n; jumped = true; }
+    if (jumped) {
+      track.style.transition = 'none';
+      translateX = idealX(cur);
+      track.style.transform = 'translateX(' + translateX + 'px)';
+      void track.offsetWidth;
+    }
+  });
+
+  var prevBtn = document.getElementById('nui-usecases-prev');
+  var nextBtn = document.getElementById('nui-usecases-next');
+  if (prevBtn) prevBtn.addEventListener('click', function () { go(-1); });
+  if (nextBtn) nextBtn.addEventListener('click', function () { go(1); });
+
+  var drag = { active: false, moved: false, axis: null, suppressClickUntil: 0,
+               startX: 0, startY: 0, baseX: 0 };
+
+  function readActualX() {
+    var t = getComputedStyle(track).transform;
+    if (!t || t === 'none') return translateX;
+    var x = new DOMMatrix(t).m41;
+    return isFinite(x) ? x : translateX;
+  }
+
+  track.addEventListener('pointerdown', function (e) {
+    if (e.button !== 0) return;
+    var actualX = readActualX();
+    cur = Math.round(-actualX / (cardW + gapPx));
+    cur = Math.max(n - 1, Math.min(2 * n, cur));
+    translateX   = actualX;
+    isAnimating  = false;
+    drag.active  = true;
+    drag.moved   = false;
+    drag.axis    = null;
+    drag.suppressClickUntil = 0;
+    drag.startX  = e.clientX;
+    drag.startY  = e.clientY;
+    drag.baseX   = actualX;
+    track.style.transition = 'none';
+    window.addEventListener('pointermove', onMove, { passive: false });
+    window.addEventListener('pointerup',     onUp);
+    window.addEventListener('pointercancel', onCancel);
+  });
+
+  function onMove(e) {
+    if (!drag.active) return;
+    var dx = e.clientX - drag.startX;
+    var dy = e.clientY - drag.startY;
+    if (!drag.axis) {
+      if (Math.sqrt(dx * dx + dy * dy) < 8) return;
+      drag.axis = Math.abs(dx) >= Math.abs(dy) ? 'h' : 'v';
+      if (drag.axis === 'v') { cancelDrag(); return; }
+    }
+    if (!drag.moved) {
+      drag.suppressClickUntil = Date.now() + 350;
+      track.classList.add('is-dragging');
+    }
+    drag.moved = true;
+    e.preventDefault();
+    translateX = drag.baseX + dx;
+    track.style.transform = 'translateX(' + translateX + 'px)';
+  }
+
+  function onUp(e) {
+    if (!drag.active) return;
+    endDrag();
+    if (!drag.moved || drag.axis !== 'h') {
+      setTranslate(idealX(cur), false);
+      return;
+    }
+    var dx = e.clientX - drag.startX;
+    var threshold = Math.max(50, cardW * 0.22);
+    if      (dx < -threshold) cur++;
+    else if (dx >  threshold) cur--;
+    isAnimating = true;
+    setTranslate(idealX(cur), true);
+  }
+
+  function onCancel() {
+    if (!drag.active) return;
+    endDrag();
+    isAnimating = true;
+    setTranslate(idealX(cur), true);
+  }
+
+  function endDrag() {
+    drag.active = false;
+    track.classList.remove('is-dragging');
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup',     onUp);
+    window.removeEventListener('pointercancel', onCancel);
+  }
+
+  function cancelDrag() {
+    drag.suppressClickUntil = 0;
+    endDrag();
+    setTranslate(idealX(cur), false);
+  }
+
+  track.addEventListener('click', function (e) {
+    if (Date.now() > drag.suppressClickUntil) return;
+    drag.suppressClickUntil = 0;
+    e.preventDefault();
+  }, true);
+
+  var raf;
+  window.addEventListener('resize', function () {
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(layout);
+  }, { passive: true });
+
+  layout();
+}());
+</script>
+```
+
+## Eine kurze Geschichte {#geschichte}
+
+Die Idee, den Körper selbst zur Schnittstelle zu machen, ist alt. Grob sieht man
+zwei Linien: *getragene* Sensorik und *kamerabasierte*, markerlose Verfahren.
+
+::: {.nui-reveal}
+- **1975: Videoplace** (Myron Krueger): einer der ersten interaktiven Räume, in
+  dem die *Silhouette* der Person ohne getragene Hardware mit virtuellen Inhalten
+  interagiert. Für markerlose Gestensteuerung ist das ein frühes Vorbild
+  [@friedrich_vc_xr].
+- **1987: VPL DataGlove:** Der Datenhandschuh macht Fingerbeugung direkt messbar.
+  Das ist präzise, aber *instrumentiert* (Hardware an der Hand) [@buxton1990threestate].
+- **2010: Microsoft Kinect:** erstmals **markerloses Ganzkörper-Skelett** für den
+  Massenmarkt, möglich durch eine aktive **Tiefenkamera**.
+- **2013: Leap Motion:** dedizierter IR-Stereo-Sensor für hochpräzises
+  Finger-Tracking im Nahbereich.
+- **2019: MediaPipe** (Google): Die hier genutzte Pipeline bringt Hand- und
+  Pose-Tracking *on-device* auf gewöhnliche RGB-Kameras und damit auch in den
+  **Browser** [@lugaresi2019mediapipe; @zhang2020mediapipehands].
+:::
+
+Der rote Faden: weg von Spezial-Hardware, hin zu markerloser, kamerabasierter
+Erkennung auf Alltagsgeräten. Genau diesen Schritt schaut sich die
+[Methode](methode.qmd) genauer an; die [Einordnung gegenüber verwandten Verfahren](methode.qmd#vergleich)
+zeigt, welche Nachteile dabei bleiben.
+
+```{=html}
+<nav class="nui-pagenav" aria-label="Seitennavigation">
+  <a class="nui-btn nui-btn-ghost" href="index.html">← Start</a>
+  <a class="nui-btn nui-btn-primary" href="methode.html">Weiter: Methode →</a>
+</nav>
+```
