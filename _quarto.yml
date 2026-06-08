@@ -2,6 +2,7 @@ project:
   type: website
   resources:
     - trex/**
+    - nui/**
 
 website:
   title: "NUI · Hand- & Pose-Tracking"
@@ -28,21 +29,25 @@ website:
 
 lang: de
 
+# Shared HTML format for every page (merged with each document's front matter).
+# The global camera dock + whole-page hand navigation are injected at end-of-body
+# via nui/dock.html, so they float in view on every page of the site.
 format:
   html:
-    theme: cosmo
+    theme: [default, nui/theme.scss]
+    css: [nui/nui.css]
     toc: true
     toc-location: left
     toc-depth: 2
     toc-title: "Auf dieser Seite"
     anchor-sections: true
     link-external-newwindow: true
+    include-in-header:
+      - text: |
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+          <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
 
 bibliography: references.bib
-
-jupyter:
-  kernelspec:
-    name: python3
-    language: python
-    display_name: Python 3
-  path: .venv/bin/python

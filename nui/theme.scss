@@ -1,0 +1,337 @@
+/*-- scss:defaults --*/
+// APPLE-1 foundation: light Apple-inspired product base for Quarto + shared UI.
+
+// Typography ------------------------------------------------------------------
+$font-family-sans-serif: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+  Roboto, "Helvetica Neue", Arial, sans-serif !default;
+$headings-font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+  Roboto, "Helvetica Neue", Arial, sans-serif !default;
+$headings-font-weight: 600 !default;
+$font-size-root: 17px !default;
+$line-height-base: 1.65 !default;
+
+// Core palette ----------------------------------------------------------------
+$primary: #0071e3 !default;
+$body-bg: #f5f5f7 !default;
+$body-color: #1d1d1f !default;
+$link-color: #0066cc !default;
+$link-hover-color: #004f9e !default;
+$border-color: rgba(0, 0, 0, 0.10) !default;
+
+// Bootstrap surfaces ----------------------------------------------------------
+$card-bg: #ffffff !default;
+$code-color: #0057b8 !default;
+$code-bg: rgba(0, 113, 227, 0.08) !default;
+$table-border-color: rgba(0, 0, 0, 0.10) !default;
+
+// Quarto chrome ---------------------------------------------------------------
+$navbar-bg: rgba(251, 251, 253, 0.86) !default;
+$navbar-fg: #1d1d1f !default;
+$toc-color: #6e6e73 !default;
+$toc-active-border: #0071e3 !default;
+
+/*-- scss:rules --*/
+:root {
+  --nui-bg-0: #f5f5f7;
+  --nui-bg-1: #fbfbfd;
+  --nui-bg-2: #ffffff;
+  --nui-bg-3: #f0f0f2;
+  --nui-line: rgba(0, 0, 0, 0.10);
+  --nui-line-strong: rgba(0, 0, 0, 0.16);
+
+  --nui-text: #1d1d1f;
+  --nui-text-strong: #0b0b0f;
+  --nui-text-muted: #6e6e73;
+
+  --nui-accent: #0071e3;
+  --nui-accent-2: #0066cc;
+  --nui-accent-3: #004f9e;
+  --nui-accent-4: #003f7f;
+  --nui-danger: #d70015;
+  --nui-warning: #b36b00;
+
+  --nui-shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.06);
+  --nui-shadow-panel: 0 18px 48px -28px rgba(0, 0, 0, 0.28);
+  --nui-material: rgba(255, 255, 255, 0.78);
+
+  --nui-space-1: 0.5rem;
+  --nui-space-2: 1rem;
+  --nui-space-3: 1.75rem;
+  --nui-space-4: 3rem;
+  --nui-space-5: 5rem;
+
+  --nui-radius: 8px;
+  --nui-radius-lg: 14px;
+
+  --nui-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --nui-ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+  --nui-dur: 0.7s;
+  --nui-dur-fast: 0.32s;
+}
+
+html,
+body {
+  background: var(--nui-bg-0);
+  color: var(--nui-text);
+  overflow-x: clip;
+}
+
+#quarto-document-content {
+  margin-top: 0;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(0, 113, 227, 0.18);
+  color: var(--nui-text-strong);
+}
+
+h1, h2, h3, h4, h5,
+.quarto-title-block .title {
+  color: var(--nui-text-strong);
+  letter-spacing: 0;
+}
+
+h2 { font-weight: 600; }
+
+#quarto-document-content h2 {
+  margin-top: var(--nui-space-4);
+  padding-top: var(--nui-space-2);
+  border-top: 1px solid var(--nui-line);
+}
+
+#quarto-document-content h2::before {
+  content: "";
+  display: block;
+  width: 34px;
+  height: 2px;
+  margin-bottom: 0.7rem;
+  border-radius: 2px;
+  background: var(--nui-accent);
+}
+
+.quarto-title-block .title {
+  font-size: clamp(2rem, 4.6vw, 3.2rem);
+  line-height: 1.08;
+  font-weight: 700;
+}
+
+.quarto-title-block .subtitle,
+.quarto-title .quarto-categories,
+.quarto-title-meta,
+.description,
+figcaption,
+.figure-caption,
+.table-caption {
+  color: var(--nui-text-muted);
+}
+
+a {
+  color: var(--nui-accent-2);
+  text-decoration-color: rgba(0, 102, 204, 0.32);
+  text-underline-offset: 0.16em;
+}
+
+a:hover {
+  color: var(--nui-accent-3);
+  text-decoration-color: var(--nui-accent-2);
+}
+
+// Navbar ----------------------------------------------------------------------
+.navbar {
+  background: var(--nui-material) !important;
+  border-bottom: 1px solid var(--nui-line);
+  box-shadow: none;
+  backdrop-filter: saturate(180%) blur(18px);
+  -webkit-backdrop-filter: saturate(180%) blur(18px);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.navbar .navbar-brand {
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--nui-text-strong) !important;
+}
+
+.navbar .navbar-brand:hover {
+  color: var(--nui-text-strong) !important;
+}
+
+.navbar .navbar-nav .nav-link {
+  font-size: 0.845rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--nui-text-muted) !important;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.navbar .navbar-nav .nav-link:hover,
+.navbar .navbar-nav .show > .nav-link {
+  color: var(--nui-text-strong) !important;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.navbar .navbar-nav .nav-link.active {
+  color: var(--nui-accent) !important;
+  font-weight: 600;
+}
+
+.navbar .quarto-navbar-tools .quarto-navigation-tool {
+  color: var(--nui-text-muted) !important;
+}
+
+.navbar-toggler {
+  border-color: var(--nui-line-strong);
+}
+
+// TOC -------------------------------------------------------------------------
+#TOC,
+.sidebar nav[role="doc-toc"] {
+  color: var(--nui-text-muted);
+  font-size: 0.86rem;
+}
+
+#TOC a,
+nav[role="doc-toc"] ul > li > a {
+  color: var(--nui-text-muted) !important;
+  text-decoration: none;
+}
+
+nav[role="doc-toc"] ul > li > a.active,
+nav[role="doc-toc"] ul > li > a:hover {
+  color: var(--nui-accent-2) !important;
+  border-left-color: var(--nui-accent) !important;
+}
+
+.sidebar-title,
+.toc-title {
+  color: var(--nui-text-strong);
+}
+
+// Tables ----------------------------------------------------------------------
+.table,
+table.table,
+table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--nui-text);
+  --bs-table-border-color: var(--nui-line);
+  color: var(--nui-text);
+  border-color: var(--nui-line);
+}
+
+table thead th,
+.table thead th {
+  color: var(--nui-text-strong);
+  background: var(--nui-bg-1);
+  border-bottom: 1px solid var(--nui-line-strong) !important;
+  font-family: $headings-font-family;
+  font-weight: 600;
+}
+
+.table > :not(caption) > * > *,
+table > :not(caption) > * > * {
+  border-color: var(--nui-line);
+}
+
+caption,
+.table caption {
+  color: var(--nui-text-muted);
+}
+
+// Callouts --------------------------------------------------------------------
+div.callout {
+  background: var(--nui-bg-2);
+  border-color: var(--nui-line) !important;
+  border-left-width: 4px;
+  border-radius: var(--nui-radius);
+  box-shadow: none;
+  color: var(--nui-text);
+}
+
+.callout.callout-style-simple {
+  background: var(--nui-bg-2);
+}
+
+.callout-title-container,
+.callout-title {
+  color: var(--nui-text-strong);
+}
+
+div.callout-note { border-left-color: var(--nui-accent) !important; }
+div.callout-tip { border-left-color: #2f855a !important; }
+div.callout-warning { border-left-color: var(--nui-warning) !important; }
+div.callout-important,
+div.callout-caution { border-left-color: var(--nui-danger) !important; }
+
+// Inline code + kbd -----------------------------------------------------------
+code:not(.sourceCode),
+p code,
+li code {
+  background: rgba(0, 113, 227, 0.08);
+  border: 1px solid rgba(0, 113, 227, 0.12);
+  border-radius: 5px;
+  color: #0057b8;
+  padding: 0.1em 0.36em;
+}
+
+kbd {
+  background: var(--nui-bg-2);
+  border: 1px solid var(--nui-line-strong);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  color: var(--nui-text-strong);
+  font: 600 0.8em/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  padding: 1px 6px;
+}
+
+// Code blocks -----------------------------------------------------------------
+div.sourceCode,
+pre.sourceCode {
+  background: #f6f8fa !important;
+  border: 1px solid var(--nui-line);
+  border-radius: var(--nui-radius);
+  box-shadow: none;
+  color: var(--nui-text);
+}
+
+pre code,
+pre.sourceCode code {
+  color: inherit;
+}
+
+// MathJax ---------------------------------------------------------------------
+mjx-container { color: var(--nui-text-strong); }
+mjx-container[display="true"] {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0.15rem;
+}
+
+blockquote {
+  border-left-color: var(--nui-line-strong);
+  color: var(--nui-text-muted);
+}
+
+hr {
+  border-color: var(--nui-line);
+  opacity: 1;
+}
+
+.nui-reveal { will-change: opacity, transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+}
