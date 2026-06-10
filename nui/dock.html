@@ -1,0 +1,70 @@
+<!-- nui/dock.html, shared at the end of every page via
+     `include-after-body` in _quarto.yml. It adds the camera dock and hand
+     navigation site-wide. The vendored T-Rex runner is loaded only on the
+     Live-Demo page; controller.js reads window.Runner lazily, so the dock is
+     harmless elsewhere.
+
+     Mouse and keyboard stay active as fallback. The camera starts only on an
+     explicit click. -->
+
+<!-- Whole-page hand cursor + the floating gesture legend/menu -->
+<div id="nui-cursor" aria-hidden="true"><span class="nui-cursor-dot"></span></div>
+<aside id="nui-nav-overlay" aria-hidden="true">
+  <div class="nui-nav-title">Hand-Navigation</div>
+  <ul>
+    <li><span><i class="ph ph-hand" aria-hidden="true"></i> Bewegen</span><span>Cursor</span></li>
+    <li><span><i class="ph ph-hand-grabbing" aria-hidden="true"></i> Pinch</span><span>Klick</span></li>
+    <li><span><i class="ph ph-hand-grabbing" aria-hidden="true"></i> + ziehen</span><span>Scrollen</span></li>
+    <li><span><i class="ph ph-hand-peace" aria-hidden="true"></i> Victory</span><span>Menü ein/aus</span></li>
+    <li><span><i class="ph ph-cursor-click" aria-hidden="true"></i> Navbar + Pinch</span><span>Seite wechseln</span></li>
+    <li><span><i class="ph ph-keyboard" aria-hidden="true"></i> Maus/Tastatur</span><span>immer aktiv</span></li>
+  </ul>
+</aside>
+
+<!-- Sticky global NUI dock: the camera feed + all controls -->
+<div id="nui-dock" class="is-collapsed" data-state="BOOT">
+  <div class="nui-dock-head">
+    <span class="nui-dock-dot" aria-hidden="true"></span>
+    <span class="nui-dock-title">NUI-Steuerung</span>
+    <button id="nui-dock-toggle" class="nui-dock-iconbtn" type="button" aria-expanded="false" aria-label="Dock ein-/ausklappen" title="Ein-/ausklappen"><i class="ph ph-caret-down" aria-hidden="true"></i></button>
+  </div>
+  <div class="nui-dock-body">
+    <div class="nui-feed">
+      <video id="nui-video" playsinline muted></video>
+      <canvas id="nui-overlay" class="nui-overlay"></canvas>
+      <div class="nui-feed-placeholder" aria-hidden="true">
+        <i class="ph ph-video-camera-slash nui-feed-cam"></i>
+        <span class="nui-feed-cap">Kamera ist aus</span>
+        <span class="nui-feed-sub">Klick auf „Kamera starten“</span>
+      </div>
+      <div class="nui-hud nui-hud-top">
+        <span id="nui-state" class="nui-state" data-state="BOOT">Boot</span>
+        <span id="nui-gesture">-</span>
+      </div>
+      <div class="nui-hud nui-hud-bottom">
+        <span id="nui-status">Initializing…</span>
+      </div>
+    </div>
+    <div class="nui-dock-controls">
+      <button id="nui-start" type="button">Kamera starten</button>
+      <div class="nui-modes" role="group" aria-label="Steuerungsmodus">
+        <button id="nui-mode-hand" class="nui-mode-btn" data-mode="hand" type="button" aria-pressed="false"><i class="ph ph-hand" aria-hidden="true"></i> Hand</button>
+        <button id="nui-mode-pose" class="nui-mode-btn" data-mode="pose" type="button" aria-pressed="false"><i class="ph ph-person-arms-spread" aria-hidden="true"></i> Pose</button>
+        <button id="nui-mode-off" class="nui-mode-btn is-active" data-mode="off" type="button" aria-pressed="true"><i class="ph ph-power" aria-hidden="true"></i> Off</button>
+      </div>
+      <button id="nui-nav-toggle" class="nui-navswitch" type="button" data-state="off" aria-pressed="false" title="Ganze Seite per Hand bedienen (Taste N)">
+        <span class="nui-navswitch-text">
+          <i class="ph ph-hand-pointing" aria-hidden="true"></i>
+          <span class="nui-navswitch-label">Seitensteuerung per Hand</span>
+        </span>
+        <span class="nui-navswitch-track" aria-hidden="true"><span class="nui-navswitch-thumb"></span></span>
+      </button>
+    </div>
+    <p class="nui-hint">
+      Taste <kbd>N</kbd> schaltet auch um ·
+      <i class="ph ph-hand-peace" aria-hidden="true"></i> Victory öffnet das Menü
+    </p>
+  </div>
+</div>
+
+<script type="module" src="nui/controller.js"></script>
