@@ -1,6 +1,6 @@
 // nui/controller.js
 // NUI controller for the gesture-driven T-Rex demo: camera + MediaPipe
-// recognition (hand gestures), a state machine + HUD, the
+// recognition (hand gestures / body pose), a state machine + HUD, the
 // whole-page hand cursor, and the sticky control dock. Constants, pure helpers,
 // the overlay renderer and the explainer modules live in sibling modules
 // (config / filters / overlay / explainer .js).
@@ -11,8 +11,8 @@
 //     defineProperty overrides on KeyboardEvent instances.
 //   • Request getUserMedia() before the long model-loading await chain. Otherwise
 //     Firefox may reject it because the click's user-activation has gone stale.
-//   • Mouse and keyboard stay as the fallback. This module only adds gesture
-//     controls on top.
+//   • Mouse and keyboard stay as the fallback. This module only adds gesture and
+//     pose controls on top.
 
 import {
     CAM_H,
@@ -86,6 +86,14 @@ let stableGesture    = "None";   // confirmed gesture currently in effect
 let duckHeld         = false;
 let lastJumpAt       = 0;
 
+// Pose path
+let calibrating   = false;
+let calibCount    = 0, calibSumSh = 0, calibSumHip = 0, calibSumTorso = 0;
+let baseShoulderY = null, baseHipY = null, baseTorso = null;
+let emaHeight     = null;            // smoothed torso height (up = +)
+const heightBuf   = [];              // recent { t, h } for windowed jump detection
+let duckCount     = 0;               // consecutive frames past DUCK_ON (debounce)
+let duckReleaseAt = 0;               // perf-time of the last duck release
 
 // Nav path. The old focus ring became a whole-page hand cursor.
 let navEnabled     = false;          // global hand-navigation toggle
@@ -147,8 +155,8 @@ function requestJump(cooldownMs, holdMs = 60) {
 }
 
 // hand: gesture -> intent mapping + skeleton overlay
-// Pull the primary detection, draw the shared skeleton overlay, then map to
-// game intent. The discrete
+// Deliberately mirrors handlePose(res, now): pull the primary detection, draw
+// the shared skeleton overlay, then map to game intent. The discrete
 // gesture is debounced (see commitGesture) so noisy single frames can't fire.
 function handleHand(res, now) {
   if (state !== State.RUNNING) setState(State.RUNNING);
@@ -447,6 +455,123 @@ function setNavEnabled(on) {
   if (gestureEl) gestureEl.textContent = "-";
 }
 
+// pose: torso extraction + control
+// Shoulders (11/12) and hips (23/24) are tracked separately so control
+// degrades gracefully: during a real hop the head/shoulders often leave the top
+// of the frame, but the hips usually stay visible and can still drive the jump.
+// Image Y grows downward, so a smaller y means the body sits higher up.
+function torso(lm) {
+  const ls = lm[LM.L_SHOULDER], rs = lm[LM.R_SHOULDER];
+  const lh = lm[LM.L_HIP],      rh = lm[LM.R_HIP];
+  const vis = p => !!p && (p.visibility == null || p.visibility >= POSE.VIS_MIN);
+  const visLs = vis(ls), visRs = vis(rs), visLh = vis(lh), visRh = vis(rh);
+  const haveSh = visLs && visRs, haveHip = visLh && visRh;
+  return {
+    haveSh, haveHip,
+    shY:  haveSh  ? (ls.y + rs.y) / 2 : null,
+    hipY: haveHip ? (lh.y + rh.y) / 2 : null,
+    ls, rs, lh, rh, visLs, visRs, visLh, visRh,
+  };
+}
+
+// Current torso height above the calibrated neutral (up = +, in torso units),
+// from whichever of shoulders / hips are reliably visible this frame.
+function torsoHeight(t) {
+  let sum = 0, n = 0;
+  if (t.haveSh  && baseShoulderY != null) { sum += (baseShoulderY - t.shY);  n++; }
+  if (t.haveHip && baseHipY     != null) { sum += (baseHipY     - t.hipY); n++; }
+  return n ? (sum / n) / baseTorso : null;
+}
+
+function resetPose() {
+  calibrating = false;
+  calibCount = 0; calibSumSh = 0; calibSumHip = 0; calibSumTorso = 0;
+  baseShoulderY = null; baseHipY = null; baseTorso = null;
+  emaHeight = null; heightBuf.length = 0;
+  duckCount = 0; duckReleaseAt = 0;
+  ov.clear();
+}
+
+function handlePose(res, now) {
+  const poses  = res && res.landmarks;
+  const poseLm = (poses && poses.length) ? poses[0] : null;
+  evalSawSubject(!!poseLm);
+  const t      = poseLm ? torso(poseLm) : null;
+  ov.drawPose(poseLm, baseShoulderY, baseHipY);
+
+  if (!t || !(t.haveSh || t.haveHip)) {
+    setDuck(false);
+    if (gestureEl) gestureEl.textContent = "no body";
+    if (calibrating) setState(State.CALIBRATING, "Step back until shoulders and hips are in view...");
+    return;
+  }
+
+  // Neutral calibration: average resting shoulder-Y, hip-Y and torso height.
+  if (calibrating) {
+    if (!(t.haveSh && t.haveHip)) {
+      setState(State.CALIBRATING, "Step back until shoulders and hips are in view...");
+      return;
+    }
+    calibCount++;
+    calibSumSh    += t.shY;
+    calibSumHip   += t.hipY;
+    calibSumTorso += Math.abs(t.hipY - t.shY);
+    setState(State.CALIBRATING, `Calibrating, stand neutral & still (${calibCount}/${POSE.CALIB_SAMPLES})`);
+    if (calibCount >= POSE.CALIB_SAMPLES) {
+      baseShoulderY = calibSumSh / calibCount;
+      baseHipY      = calibSumHip / calibCount;
+      baseTorso     = Math.max(calibSumTorso / calibCount, 1e-3);
+      emaHeight     = 0; heightBuf.length = 0;
+      calibrating   = false;
+      setState(State.RUNNING, "Go! · stand up / hop = jump · crouch = duck");
+    }
+    return;
+  }
+
+  // running control
+  const hRaw = torsoHeight(t);
+  if (hRaw == null) return;
+  emaHeight = (emaHeight == null) ? hRaw
+            : POSE.EMA_ALPHA * hRaw + (1 - POSE.EMA_ALPHA) * emaHeight;
+  const h = emaHeight;     // up = +,  crouch = -
+  const depth = -h;        // crouch depth, + = lower than neutral
+
+  if (state !== State.RUNNING) setState(State.RUNNING);
+
+  // Short look-back buffer gives the lowest recent body position for rise detection.
+  heightBuf.push({ t: now, h });
+  const cutoff = now - POSE.JUMP_WINDOW_MS;
+  while (heightBuf.length && heightBuf[0].t < cutoff) heightBuf.shift();
+  let minH = h;
+  for (const s of heightBuf) if (s.h < minH) minH = s.h;
+  const rise = h - minH;   // how far we have come up from the recent low
+
+  // Duck: crouch held, with debounce (engage) + hysteresis (release).
+  if (!duckHeld) {
+    duckCount = depth > POSE.DUCK_ON ? duckCount + 1 : 0;
+    if (duckCount >= POSE.DUCK_FRAMES) { setDuck(true); duckCount = 0; }
+  } else if (depth < POSE.DUCK_OFF) {
+    setDuck(false);
+    duckReleaseAt = now;   // lock out the stand-up rebound from firing a jump
+  }
+
+  // Jump: fast upward rise from the recent low, only near neutral and not right
+  // after a duck (this is what stops a crouch-then-stand-up mis-firing as a jump).
+  const justUnducked = now - duckReleaseAt < POSE.DUCK_JUMP_LOCK_MS;
+  if (!duckHeld && !justUnducked && depth < POSE.DUCK_OFF && rise > POSE.JUMP_RISE) {
+    requestJump(POSE.JUMP_COOLDOWN_MS, POSE.JUMP_HOLD_MS);
+    heightBuf.length = 0;  // consume the impulse so it fires once
+  }
+
+  if (gestureEl) {
+    gestureEl.textContent = duckHeld ? "Duck ↓" : (now - lastJumpAt < 200 ? "Jump ↑" : "ready");
+  }
+}
+
+// recognition loop (dispatches by active mode)
+// One synchronous inference per fresh camera frame; requestAnimationFrame plus
+// the (synchronous) detect call pace it naturally, so we no longer add an
+// artificial throttle. That was just adding input latency.
 function loop() {
   rafId = requestAnimationFrame(loop);
   if (!cameraReady || activeMode === "off") return;
@@ -457,6 +582,8 @@ function loop() {
   evalFrameStart(now);
   if (activeMode === "hand" && recognizer) {
     handleHand(recognizer.recognizeForVideo(video, now), now);
+  } else if (activeMode === "pose" && poseLandmarker) {
+    handlePose(poseLandmarker.detectForVideo(video, now), now);
   }
 }
 
@@ -489,8 +616,19 @@ async function ensureHand() {
     }));
   return recognizer;
 }
+async function ensurePose() {
+  if (poseLandmarker) return poseLandmarker;
+  const vision = await getVision();
+  poseLandmarker = await createWithFallback(delegate =>
+    PoseLandmarker.createFromOptions(vision, {
+      baseOptions: { modelAssetPath: POSE_MODEL_URL, delegate },
+      runningMode: "VIDEO",
+      numPoses: 1,
+    }));
+  return poseLandmarker;
+}
 
-// mode switching (Hand / Off)
+// mode switching (Hand / Pose / Off)
 async function applyMode(mode) {
   if (switching) return;
 
@@ -501,7 +639,7 @@ async function applyMode(mode) {
   // pause the loop (activeMode = off) while the target model loads.
   setDuck(false);
   candidateGesture = "None"; candidateFrames = 0; stableGesture = "None";
-  ov.clear();
+  resetPose();
   activeMode = "off";
   updateModeButtons(mode);
   if (gestureEl) gestureEl.textContent = "-";
@@ -518,6 +656,12 @@ async function applyMode(mode) {
       await ensureHand();
       activeMode = "hand";
       setState(State.READY, "Hand · offene Hand = Sprung · Faust = Ducken · Daumen hoch = Neustart");
+    } else {
+      setState(State.CALIBRATING, "Loading pose model…");
+      await ensurePose();
+      calibrating = true;
+      activeMode  = "pose";
+      setState(State.CALIBRATING, "Calibrating, stand neutral & still...");
     }
   } catch (err) {
     console.error(err);
@@ -586,11 +730,11 @@ function stopCamera() {
   switching     = false;
   lastVideoTime = -1;
 
-  // Drop any held game key + clear the gesture transients so nothing bleeds
+  // Drop any held game key + clear the gesture/pose transients so nothing bleeds
   // into the next session.
   setDuck(false);
   candidateGesture = "None"; candidateFrames = 0; stableGesture = "None";
-  ov.clear();
+  resetPose();
   ov.clear();
   if (gestureEl) gestureEl.textContent = "-";
 
