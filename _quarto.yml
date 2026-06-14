@@ -35,7 +35,7 @@ lang: de
 format:
   html:
     theme: [default, nui/theme.scss]
-    css: [nui/nui.css]
+    css: [nui/nui.css, nui/signature.css]
     toc: true
     toc-location: left
     toc-depth: 2
@@ -48,6 +48,7 @@ format:
           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
           <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
           <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+          <link rel="preconnect" href="https://cdn.babylonjs.com">
           <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
     include-after-body:
       - nui/dock.html
