@@ -21,6 +21,21 @@
   </ul>
 </aside>
 
+<!-- One-time onboarding coachmark (shown by onboarding.js on first visit) -->
+<div id="nui-coach" class="nui-coach" hidden>
+  <div class="nui-coach-card" role="dialog" aria-label="Hinweis zur Hand-Steuerung">
+    <button class="nui-coach-close" type="button" aria-label="Hinweis schließen"><i class="ph ph-x" aria-hidden="true"></i></button>
+    <p class="nui-coach-title"><i class="ph ph-hand-waving" aria-hidden="true"></i> Bediene die Seite mit der Hand</p>
+    <p class="nui-coach-text">
+      Aus Datenschutz startet die Kamera <strong>erst auf Klick</strong>. Tippe unten
+      auf <strong>„Kamera starten“</strong> (oder Taste <kbd>N</kbd>) und navigiere
+      die ganze Website per Handgeste. <strong>Maus &amp; Tastatur funktionieren
+      immer</strong>, die Kamera ist optional.
+    </p>
+    <button class="nui-coach-ok nui-btn nui-btn-primary" type="button">Verstanden</button>
+  </div>
+</div>
+
 <!-- Sticky global NUI dock: the camera feed + all controls -->
 <div id="nui-dock" class="is-collapsed" data-state="BOOT">
   <div class="nui-dock-head">
@@ -68,3 +83,5 @@
 </div>
 
 <script type="module" src="nui/controller.js"></script>
+<script type="module" src="nui/onboarding.js"></script>
+<script type="module" src="nui/signature.js"></script>
