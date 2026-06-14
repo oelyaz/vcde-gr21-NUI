@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Elias Seidl">
 
-<title>T-Rex Game</title>
+<title>mediapipe_functionality</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -27,22 +26,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-bba5ebae505b5c03f3f0d8040a416a6b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-1e273511d09b17b40736144097ac5380.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -83,256 +82,39 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">T-Rex Game</h1>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Elias Seidl </p>
-          </div>
-  </div>
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<p>Control the dinosaur with hand gestures via your webcam:</p>
-<ul>
-<li><strong>Open palm</strong> ✋ — jump</li>
-<li><strong>Closed fist</strong> ✊ — duck (hold)</li>
-<li><strong>Thumbs up</strong> 👍 — restart after a crash</li>
-</ul>
-<div class="trex-host">
-  <div id="main-frame-error" class="interstitial-wrapper">
-    <div id="main-content">
-      <div class="icon icon-offline" alt=""></div>
-    </div>
-    <div id="offline-resources">
-      <img id="offline-resources-1x" src="trex/assets/default_100_percent/100-offline-sprite.png">
-      <img id="offline-resources-2x" src="trex/assets/default_200_percent/200-offline-sprite.png">
-    </div>
-  </div>
-</div>
-
-<div class="nui-panel">
-  <button id="nui-start" type="button">Start camera</button>
-  <div class="nui-feed">
-    <video id="nui-video" playsinline="" muted=""></video>
-    <div class="nui-overlay">
-      <span id="nui-gesture">—</span>
-      <span id="nui-status">Camera off</span>
-    </div>
-  </div>
-</div>
-
-<style>
-  .trex-host {
-    position: relative;
-    width: 600px;
-    height: 150px;
-    margin: 1.5rem auto 0.5rem;
-    background: #f7f7f7;
-  }
-  .trex-host #offline-resources,
-  .trex-host #main-content,
-  .trex-host .icon { display: none; }
-  .trex-host .interstitial-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
-  .trex-host .runner-container {
-    position: absolute;
-    inset: 0;
-    width: 100% !important;
-    height: 100% !important;
-  }
-  .trex-host .runner-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    image-rendering: pixelated;
-  }
-
-  .nui-panel {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    margin: 0.5rem auto 2rem;
-  }
-  #nui-start {
-    padding: 0.5rem 1.25rem;
-    font-size: 0.95rem;
-    border: 1px solid #888;
-    background: #f4f4f4;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  #nui-start:hover { background: #e8e8e8; }
-  .nui-feed {
-    position: relative;
-    width: 280px;
-    height: 210px;
-    background: #111;
-    border-radius: 6px;
-    overflow: hidden;
-  }
-  #nui-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: scaleX(-1);
-  }
-  .nui-overlay {
-    position: absolute;
-    inset: auto 0 0 0;
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 8px;
-    background: rgba(0,0,0,0.55);
-    color: #fff;
-    font: 600 12px/1.2 monospace;
-  }
-</style>
-
-<script src="trex/trex-runner.js"></script>
-
-<script type="module">
-  const MP_VERSION = "0.10.35";
-  let GestureRecognizer, FilesetResolver;
-  try {
-    ({ GestureRecognizer, FilesetResolver } = await import(
-      `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MP_VERSION}/vision_bundle.mjs`
-    ));
-  } catch (err) {
-    document.getElementById('nui-status').textContent = 'Load failed: ' + err.message;
-    console.error('MediaPipe import failed', err);
-    throw err;
-  }
-
-  const video    = document.getElementById('nui-video');
-  const startBtn = document.getElementById('nui-start');
-  const gestureEl = document.getElementById('nui-gesture');
-  const statusEl  = document.getElementById('nui-status');
-
-  const KEY = { JUMP: 32, DUCK: 40, RESTART: 13 };
-  const JUMP_COOLDOWN_MS = 280;
-
-  let recognizer = null;
-  let lastVideoTime = -1;
-  let lastGesture = 'None';
-  let duckHeld = false;
-  let lastJumpAt = 0;
-
-  // Drive the game directly via its onKeyDown/onKeyUp methods. Synthetic
-  // KeyboardEvents are unreliable because the t-rex-runner reads the
-  // deprecated e.keyCode, and Firefox shadows defineProperty overrides on
-  // KeyboardEvent instances with the prototype getter.
-  function fireKey(type, keyCode) {
-    const runner = window.Runner && window.Runner.instance_;
-    if (!runner) return;
-    const evt = { keyCode, type, target: document, preventDefault() {} };
-    if (type === 'keydown') runner.onKeyDown(evt);
-    else if (type === 'keyup') runner.onKeyUp(evt);
-  }
-  function tapKey(keyCode) {
-    fireKey('keydown', keyCode);
-    setTimeout(() => fireKey('keyup', keyCode), 60);
-  }
-  function setDuck(active) {
-    if (active && !duckHeld)       { fireKey('keydown', KEY.DUCK); duckHeld = true; }
-    else if (!active && duckHeld)  { fireKey('keyup',   KEY.DUCK); duckHeld = false; }
-  }
-  function tryJump() {
-    const now = performance.now();
-    if (now - lastJumpAt < JUMP_COOLDOWN_MS) return;
-    lastJumpAt = now;
-    tapKey(KEY.JUMP);
-  }
-
-  function handleGesture(g) {
-    gestureEl.textContent = g;
-    // Edge-triggered actions on gesture transitions
-    if (g !== lastGesture) {
-      if (g === 'Open_Palm') tryJump();
-      if (g === 'Thumb_Up')  tapKey(KEY.RESTART);
-    }
-    setDuck(g === 'Closed_Fist');
-    lastGesture = g;
-  }
-
-  function loop() {
-    if (video.readyState >= 2 && video.currentTime !== lastVideoTime) {
-      lastVideoTime = video.currentTime;
-      const res = recognizer.recognizeForVideo(video, performance.now());
-      const g = (res.gestures && res.gestures.length) ? res.gestures[0][0].categoryName : 'None';
-      handleGesture(g);
-    }
-    requestAnimationFrame(loop);
-  }
-
-  async function start() {
-    startBtn.disabled = true;
-    statusEl.textContent = 'Requesting camera…';
-    try {
-      // Camera first while the click's user-activation is still fresh — Firefox
-      // can reject getUserMedia with NotAllowedError after a long await chain.
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { width: 320, height: 240, facingMode: 'user' },
-        audio: false
-      });
-      video.srcObject = stream;
-      await video.play();
-
-      statusEl.textContent = 'Loading model…';
-      const vision = await FilesetResolver.forVisionTasks(
-        `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MP_VERSION}/wasm`
-      );
-      recognizer = await GestureRecognizer.createFromOptions(vision, {
-        baseOptions: {
-          modelAssetPath: "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/latest/gesture_recognizer.task",
-          delegate: "CPU"
-        },
-        runningMode: "VIDEO",
-        numHands: 1
-      });
-      statusEl.textContent = 'Tracking';
-      startBtn.style.display = 'none';
-      requestAnimationFrame(loop);
-    } catch (err) {
-      console.error(err);
-      let msg = err.message || String(err);
-      if (err.name === 'NotAllowedError') {
-        msg = window.isSecureContext
-          ? 'Camera permission denied — allow it in the site settings.'
-          : 'Insecure context — open via http://localhost (e.g. `quarto preview`), not file:// or a LAN IP.';
-      } else if (err.name === 'NotFoundError') {
-        msg = 'No camera device found.';
-      }
-      statusEl.textContent = msg;
-      startBtn.disabled = false;
-    }
-  }
-
-  startBtn.addEventListener('click', start);
-</script>
+<p>I. The Core Architecture (The “How it works fast” part)</p>
+<ol type="1">
+<li><p>The Real-Time Perception Challenge High-fidelity hand and body tracking is traditionally a computationally heavy computer vision task, often requiring powerful desktop environments. MediaPipe’s primary achievement is bringing this to real-time performance on standard mobile devices, which is critical for seamless Natural User Interfaces.</p></li>
+<li><p>The Two-Step Pipeline Architecture Instead of analyzing the entire high-resolution frame continuously, MediaPipe divides the labor into a detector-tracker pipeline. A “Detector” model first locates the general Region of Interest (ROI), and a subsequent “Tracker” (or landmark model) operates only on that tightly cropped ROI to predict precise 3D coordinates.</p></li>
+<li><p>The Temporal Video Optimization To save processing power during continuous video, the expensive Detector is only invoked on the very first frame or when the system completely loses track of the subject. For all subsequent frames, the pipeline calculates the new ROI based on the landmarks identified in the previous frame.</p></li>
+</ol>
+<ol start="2" type="I">
+<li>MediaPipe Pose (BlazePose)</li>
+</ol>
+<ol start="4" type="1">
+<li><p>Alignment via the “Vitruvian Man” Before tracking the body, the pose detector explicitly predicts two additional virtual keypoints that describe the human body’s center, rotation, and scale as a circle. Inspired by Leonardo’s Vitruvian man, it uses the midpoint of the hips and the shoulder-hip incline to perfectly align the crop for the tracking network.</p></li>
+<li><p>33-Point Landmark Topology The pose landmark model takes the aligned crop and predicts the location of 33 specific 3D pose landmarks (covering the face, torso, and limbs).</p></li>
+<li><p>Solving Depth with Synthetic Data While X and Y coordinates map easily to the 2D image, estimating the Z-coordinate (depth) is inherently difficult. MediaPipe solves this by estimating the Z-value using synthetic data obtained via the GHUM model (an articulated 3D human shape model) fitted to 2D point projections.</p></li>
+</ol>
+<ol start="3" type="I">
+<li>MediaPipe Hands</li>
+</ol>
+<ol start="7" type="1">
+<li><p>The Unique Challenge of Hands Unlike faces, which have distinct, high-contrast features (eyes, mouths), hands are difficult to detect because they lack such features and constantly occlude themselves or each other during natural NUI gestures.</p></li>
+<li><p>The “Palm-First” Detection Strategy To overcome this, MediaPipe trains a palm detector rather than a full hand detector. Palms are rigid objects that are much simpler to bound than articulated fingers, allowing the system to use simple square bounding boxes (anchors) and ignore other aspect ratios, vastly reducing computation.</p></li>
+<li><p>21-Point High-Fidelity Tracking Once the palm is detected, the tightly cropped hand image is passed to a regression model that performs direct coordinate prediction. This model locates 21 precise 3D hand-knuckle coordinates. By feeding the network an accurately cropped image, the model dedicates its capacity entirely to coordinate accuracy rather than dealing with scale or rotation variance.</p></li>
+</ol>
+<ol start="4" type="I">
+<li>The NUI Connection</li>
+</ol>
+<ol start="10" type="1">
+<li>From Landmarks to Gestures Tracking the keypoints is only the first step in a Natural User Interface. The outputs from these landmark models (like the 21 hand coordinates) are then fed into downstream classification models. For example, the Hand Gesture Classification pipeline uses these coordinates to classify specific NUI inputs like an “Open Palm”, “Closed Fist”, or “Victory” sign, translating raw visual geometry into actionable computer commands.</li>
+</ol>
 
 
 
