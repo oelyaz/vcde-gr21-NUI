@@ -1,0 +1,58 @@
+---
+title: "Über & Referenzen"
+subtitle: "Team, Aufgabenverteilung, Lizenzen und die vollständige Literaturliste"
+nocite: |
+  @*
+---
+
+::: {.nui-pagehead}
+[Team · Lizenzen · Literatur]{.nui-eyebrow}
+
+::: {.nui-lead}
+Wer hat was gebaut? Welche fremden Bausteine stecken im Projekt? Und worauf
+stützt sich die Theorie? Hier stehen **Aufgabenverteilung**, **Lizenzen** der
+Drittanbieter-Assets und die **vollständige Literaturliste**.
+:::
+:::
+
+## Wer hat was gemacht {#team}
+
+## Lizenzen & Drittanbieter-Assets {#lizenzen}
+
+- **Chrome-Dino / T-Rex-Runner** (`trex/trex-runner.js`): © 2014 The Chromium
+  Authors, BSD-Style-Lizenz (siehe Header der Datei). Unverändert eingebunden,
+  also vendored Asset und nicht refaktoriert.
+- **MediaPipe Tasks-Vision** (`@mediapipe/tasks-vision`, GestureRecognizer & Pose
+  Landmarker): Google, Apache-2.0; zur Laufzeit per CDN geladen.
+- **GSAP / ScrollTrigger** und **Lenis**: clientseitige Animations- und
+  Smooth-Scroll-Bibliotheken, zur Laufzeit per CDN geladen (Scroll-Story der
+  Methode-Seite). **Babylon.js** treibt die 3D-Hand der Startseite.
+- **Quarto** als Publishing-System [@quarto2024].
+
+## Projektdaten & Reproduzierbarkeit {#reproduzierbarkeit}
+
+- **Publishing:** Statische Website mit Quarto, lokal via `quarto preview` mit
+  Live-Reload, Rendern mit `quarto render` [@quarto2024].
+- **Build:** Kein Bundler, kein `node_modules`, kein zusätzlicher Build-Schritt.
+  Animations- und Tracking-Libs werden zur Laufzeit per CDN/ESM geladen.
+- **Tracking:** MediaPipe Tasks-Vision mit GestureRecognizer und Pose Landmarker,
+  on-device im Browser. Frames verlassen das Gerät nicht.
+- **Front-end:** Handgeschriebene ES-Module unter `nui/`: config, controller,
+  filters, overlay, explainer, eval, signature, onboarding. Kein Framework.
+- **Browser:** Lauffähig in Chrome, Edge und Firefox. Die Kamera startet nur auf
+  Klick, in einem Secure Context über `getUserMedia`.
+
+## Referenzen {#referenzen}
+
+Die folgende Liste sammelt die zitierte Fachliteratur: Vorlesungsfolien (Visual
+Computing), MediaPipe-/BlazePose-Paper, NUI-Grundlagen und den 1-Euro-Filter.
+
+::: {#refs}
+:::
+
+```{=html}
+<nav class="nui-pagenav" aria-label="Seitennavigation">
+  <a class="nui-btn nui-btn-ghost" href="evaluation.html">← Evaluation & Quiz</a>
+  <a class="nui-btn nui-btn-primary" href="index.html">Zur Startseite →</a>
+</nav>
+```
