@@ -3,6 +3,10 @@ Dieses Repository enthält unsere Quarto-Webseite zum Thema Natural User Interfa
 Quarto übernimmt das Rendern der Seiten, Python wird für Auswertungen und
 Abbildungen genutzt. Für interaktive 3D-Visualisierungen ist Babylon.js eingebunden.
 
+---
+https://oelyaz.github.io/vcde-gr21-NUI/
+---
+
 ## Konfigurationsschritte (Setup)
 Für eine eigene Arbeitsumgebung reichen diese Schritte. Am besten in der Reihenfolge
 durchgehen, sonst scheitert später oft der Pages-Build.
