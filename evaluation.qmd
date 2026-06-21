@@ -10,9 +10,9 @@ jupyter: python3
 
 ::: {.nui-lead}
 Wie schnell und zuverlässig ist die Steuerung, und wo hakt es? Unsere Evaluation
-bleibt bewusst **leichtgewichtig**. Es gibt ein paar echte Messwerte und eine
+bleibt **leichtgewichtig**. Es gibt ein paar echte Messwerte und eine
 ehrliche Einordnung, aber keine formale Nutzerstudie (das war nicht Ziel des
-Projekts). Am Ende kannst du die Kernbotschaften im **Quiz** selbst prüfen.
+Projekts). Am Ende prüfen wir die Kernbotschaften gemeinsam in einem kurzen **Live-Quiz**.
 :::
 :::
 
@@ -82,38 +82,48 @@ das ist der Kern des Midas-Touch-Problems (s. u.).
 
 ```{python}
 #| label: fig-eval-latency
-#| fig-cap: "Verteilung der Verarbeitungslatenz Frame → Aktion (Inferenz + Steuerlogik); gestrichelt Median und 95-%-Perzentil. Die Verteilung ist als Lognormal modelliert (illustrativ, an der im Harness gemessenen Median-Latenz verankert)."
+#| fig-cap: "Latenz-Budget Frame → Aktion, additiv aus drei realen Beiträgen: Kamera-Frame-Intervall (≈ 33 ms bei 30 fps), gemessene Median-Verarbeitung (≈ 50 ms aus dem Eval-Harness) und – nur bei den diskreten Hand-Gesten – das Debounce-Fenster von drei stabilen Frames (≈ 100 ms). Der Pose-Pfad nutzt Anstiegserkennung ohne Debounce."
 #| echo: false
 import matplotlib.pyplot as plt
 
-rng = np.random.default_rng(21)
-latency_ms = np.clip(rng.lognormal(mean=np.log(50), sigma=0.40, size=300), 20, 240)
-med = float(np.median(latency_ms))
-p95 = float(np.percentile(latency_ms, 95))
+# Reale, additive Budget-Komponenten in ms: Frame-Intervall @30 fps, gemessene
+# Median-Verarbeitung, Debounce = 3 stabile Frames (nur diskrete Hand-Gesten).
+t_frame, t_proc, t_debounce = 33, 50, 100
+paths     = ["Pose\n(kontinuierlich)", "Hand\n(diskret)"]
+frame     = [t_frame, t_frame]
+proc      = [t_proc,  t_proc]
+deb       = [0,       t_debounce]
+left_deb  = [f + p for f, p in zip(frame, proc)]
+totals    = [f + p + d for f, p, d in zip(frame, proc, deb)]
 
-# Dark slide-deck figure: transparent canvas, light type, red accent bars and
-# readable markers against the near-black page. Data is unchanged.
-TXT = "#c7cbd2"
-LINE = "#3a3f4a"
-GRID = "#23262d"
-fig, ax = plt.subplots(figsize=(7, 3.2))
+TXT, LINE, GRID = "#c7cbd2", "#3a3f4a", "#23262d"
+C_FRAME, C_PROC, C_DEB = "#5b6b7a", "#ec3a2e", "#e0a23c"
+
+fig, ax = plt.subplots(figsize=(7, 2.8))
 fig.patch.set_alpha(0.0)
 ax.set_facecolor("none")
-ax.hist(latency_ms, bins=26, color="#ec3a2e", edgecolor="#0d0e12", linewidth=0.7, alpha=0.85)
-ax.axvline(med, color="#f1f1f3", ls="--", lw=1.6, label=f"Median {med:.0f} ms")
-ax.axvline(p95, color="#e0a23c", ls="--", lw=1.6, label=f"p95 {p95:.0f} ms")
-ax.set_xlabel("Verarbeitungslatenz Frame → Aktion (ms)", color=TXT)
-ax.set_ylabel("Anzahl Frames", color=TXT)
+ax.barh(paths, frame, color=C_FRAME, edgecolor="#0d0e12", linewidth=0.7,
+        label=f"Kamera-Frame ≈ {t_frame} ms")
+ax.barh(paths, proc, left=frame, color=C_PROC, edgecolor="#0d0e12", linewidth=0.7,
+        label=f"Verarbeitung (Median) ≈ {t_proc} ms")
+ax.barh(paths, deb, left=left_deb, color=C_DEB, edgecolor="#0d0e12", linewidth=0.7,
+        label=f"Debounce (3 Frames) ≈ {t_debounce} ms")
+for i, total in enumerate(totals):
+    ax.text(total + 4, i, f"{total} ms", va="center", color=TXT, fontsize=10)
+
+ax.set_xlabel("Spürbare Latenz Frame → Aktion (ms)", color=TXT)
+ax.set_xlim(0, 210)
 ax.tick_params(colors=TXT)
-ax.grid(axis="y", color=GRID, linewidth=0.8)
+ax.grid(axis="x", color=GRID, linewidth=0.8)
 ax.set_axisbelow(True)
-leg = ax.legend(frameon=True, facecolor="#14171c", edgecolor=LINE, framealpha=0.96)
+leg = ax.legend(frameon=True, facecolor="#14171c", edgecolor=LINE, framealpha=0.96,
+                loc="lower right", fontsize=8)
 for t in leg.get_texts():
     t.set_color(TXT)
 for s in ("top", "right"):
     ax.spines[s].set_visible(False)
 for s in ("bottom", "left"):
-  ax.spines[s].set_color(LINE)
+    ax.spines[s].set_color(LINE)
 plt.tight_layout()
 plt.show()
 ```
@@ -127,7 +137,7 @@ merkt (@fig-eval-latency). Grob kommen drei Dinge zusammen: Kamera-Frame-Interva
 $$t_{\text{spürbar}} \approx t_{\text{Frame}} + t_{\text{Verarbeitung}} + t_{\text{Debounce}}.$$
 
 Der Debounce-Term entfällt für den **Pose**-Pfad (er nutzt Anstiegs- statt
-Klassen-Erkennung) und ist der bewusste Preis für Stabilität bei den diskreten
+Klassen-Erkennung) und ist der Preis für Stabilität bei den diskreten
 Hand-Gesten: drei stabile Frames gegen Fehltrigger kosten ~100 ms Reaktionszeit.
 
 ## Grenzen des Ansatzes {#grenzen}
@@ -145,12 +155,12 @@ an. Spürbar wird vor allem das Debounce-Fenster der diskreten Gesten. GPU-Deleg
 und der Verzicht auf künstliches Throttling halten die Inferenz schnell. Der
 1-Euro-Filter glättet den Cursor *geschwindigkeitsadaptiv* und fügt absichtlich
 kaum Verzögerung hinzu
-[@casiez2012euro; @friedrich_vc_nonlinear]. Einzelne p95-Ausreißer entstehen durch
+[@casiez2012euro]. Einzelne p95-Ausreißer entstehen durch
 Garbage-Collection und gelegentliche Modell-Hänger.
 
 **Gorilla-Arm & Ermüdung.** Hand-Gesten in der Luft und wiederholtes
 Aufstehen/Hocken ermüden schneller, als man denkt. Das ist das klassische
-*Gorilla-Arm*-Problem. Für kurze Demos ist es okay. Für längere Nutzung braucht es
+*Gorilla-Arm*-Problem. Für kurze Demos ist das vertretbar. Für längere Nutzung braucht es
 kurze, diskrete Gesten, einen klar abgegrenzten Interaktionsraum und den
 Maus/Tastatur-Fallback.
 
@@ -158,9 +168,9 @@ Maus/Tastatur-Fallback.
 Befehl verstanden werden. Dagegen helfen explizites **Engagement** (globaler
 Toggle), Confidence-Gate, Debounce/Hysterese, Cooldowns und die Trennung von Spiel-
 und Navigationskanal [@buxton1990threestate; @norman2010nui]. Die
-Fehltrigger-Spalte in @tbl-eval zeigt, was übrig bleibt: wenig, aber nicht null.
+Fehltrigger-Spalte in @tbl-eval zeigt, dass trotzdem vereinzelt Fehltrigger übrig bleiben.
 
-Aus genau diesem Grund ist der **Maus/Tastatur-Fallback Pflicht und immer aktiv**:
+Deshalb ist der **Maus/Tastatur-Fallback Pflicht und immer aktiv**:
 Er sichert Bedienbarkeit und Bewertung unabhängig von Licht, Kamera und Tagesform.
 
 ### Bedrohungen der Validität {#validitaet}
@@ -172,15 +182,101 @@ Aussagekraft ein, und es lohnt sich, sie zu nennen:
   *einem* Laptop mit *einer* Webcam zeigen Tendenzen, keine statistisch belastbaren
   Unterschiede. Andere Hände, Hauttöne, Kleidung, Hintergründe und Lichtsituationen
   können die Erkennung verschieben.
-- **Modellierte statt geloggte Latenzkurve.** Die Verteilung in @fig-eval-latency
-  ist an der gemessenen Median-Latenz verankert und als Lognormal modelliert, um die
-  typische rechtsschiefe Form mit p95-Ausreißern zu zeigen. Median und Latenz-Budget
-  sind real, die einzelnen Balken sind illustrativ.
+- **Median-Budget statt voller Verteilung.** @fig-eval-latency zeigt die drei realen,
+  additiven Latenzbeiträge am Median, nicht die vollständige Verteilung. Einzelne
+  p95-Ausreißer (Garbage-Collection, Modell-Hänger) liegen darüber und sind hier nicht
+  abgebildet.
 - **Intent ist nicht direkt messbar.** Ob eine Bewegung als Befehl gemeint war, weiß
   nur die Person. Erkennungs- und Fehltrigger-Rate kommen deshalb aus dem bewusst
   strukturierten Versuch, nicht aus dem passiven Harness, das nur den Takt der
   Pipeline und ausgelöste Aktionen zählt.
 
+## Fazit {#fazit}
+
+Vier Punkte fassen das Projekt zusammen:
+
+::: {.nui-reveal}
+1. **NUI ist berührungslose, körperbasierte Eingabe** und vor allem dort relevant, wo
+   Kontakt unmöglich, unhygienisch oder unpraktisch ist (siehe
+   [Use-Cases](grundlagen.qmd#use-cases)).
+2. **Das Funktionsprinzip ist eine klassische CV-Pipeline:** Bild → CNN-Landmarks →
+   Klassifikation/Heuristik → Mapping → Aktion (siehe [Methode](methode.qmd#pipeline)).
+   Kein einzelnes großes Netz, sondern spezialisierte Stufen mit Tracking-Optimierung.
+3. **Eine gewöhnliche Webcam plus MediaPipe genügt**, ohne Spezial-Hardware und
+   vollständig on-device im Browser. Das ist der Kompromiss aus dem
+   [Methodenvergleich](methode.qmd#vergleich): nicht die höchste Genauigkeit, aber
+   markerlose Echtzeit ohne Installation.
+4. **Die Grenzen bleiben real:** Licht und Verdeckung, Latenz, Ergonomie
+   („Gorilla-Arm") und das Midas-Touch-Problem. Wir begegnen ihnen technisch
+   (Confidence-Gate, Debounce, Hysterese, 1-Euro-Filter) und mit dem Pflicht-Fallback
+   auf Maus und Tastatur, lösen sie aber nicht vollständig. Der [Ausblick](#ausblick)
+   unten zeigt, wohin die Entwicklung geht.
+:::
+
+## Ausblick & neue Entwicklungen {#ausblick}
+
+Die genannten Grenzen sind kein Endzustand, sondern aktive Forschungsfelder. Mehrere
+Entwicklungen deuten darauf hin, dass berührungslose Eingabe künftig breiter genutzt wird.
+
+::: {.nui-reveal}
+- **Transformer-Pose-Modelle.** Aufmerksamkeitsbasierte Architekturen lösen reine
+  CNN-Detektoren zunehmend ab. Sie versprechen mehr Robustheit gegen Verdeckung und
+  eine stabilere 3D-Schätzung als die heutige Pipeline.
+- **Tiefe aus Mono-RGB.** Gelernte monokulare Tiefenschätzung bringt echte 3D-Gesten
+  ohne Extra-Sensor in Reichweite und entschärft die zentrale Schwäche, die der
+  Webcam-Ansatz heute gegenüber Tiefenkameras hat (siehe
+  [Vergleich](methode.qmd#vergleich)).
+- **WebGPU.** Als Nachfolger von WebGL erlaubt es schnellere On-device-Inferenz direkt
+  im Browser und drückt die in der [Latenz-Diskussion](#grenzen) gemessenen
+  Verarbeitungszeiten weiter nach unten.
+- **Multimodale Eingabe.** Hand, Blick und Sprache werden kombiniert statt einzeln
+  ausgewertet. Aktuelle Spatial-Computing-Geräte (Apple Vision Pro) zeigen das Muster:
+  Der Blick zielt, ein Pinch bestätigt.
+- **Sensorfusion jenseits der Kamera.** EMG-Armbänder lesen Muskelsignale, Radar-Chips
+  wie Googles *Soli* erfassen feine Bewegungen. Beide ergänzen das Kamerabild und
+  umgehen dessen Licht- und Verdeckungsprobleme.
+:::
+
+Die Richtung ist dieselbe wie in der
+[kurzen Geschichte](grundlagen.qmd#geschichte): von Spezial-Hardware hin zu
+berührungsloser Eingabe auf Alltagsgeräten. Die hier gezeigte Webcam-Demo ist dafür
+ein früher, aber schon heute lauffähiger Schritt.
+
+## Mach mit: Live-Quiz {#quiz}
+
+Die Kernbotschaften dieser Seite prüfen wir am Ende des Vortrags gemeinsam in einem
+kurzen **Live-Quiz** über Mentimeter. Mitmachen kannst du mit Smartphone oder Laptop,
+solange die Session im Vortrag läuft.
+
+```{=html}
+<div class="nui-menti nui-reveal">
+  <div class="nui-menti-body">
+    <p class="nui-menti-eyebrow">Live im Vortrag · Mentimeter</p>
+    <h3 class="nui-menti-title">Geh auf <span class="nui-menti-host">menti.com</span> und gib den Code ein</h3>
+    <p class="nui-menti-code" aria-label="Mentimeter-Code">3442 3119</p>
+    <a class="nui-btn nui-btn-primary" href="https://www.menti.com/" target="_blank" rel="noopener">
+      <i class="ph ph-device-mobile" aria-hidden="true"></i><span>Quiz beitreten</span>
+    </a>
+    <p class="nui-menti-note">Der Code kann je Session abweichen. Antworten nimmt das
+      Quiz nur während einer laufenden Live-Session an.</p>
+  </div>
+  <figure class="nui-menti-qr">
+    <img src="nui/assets/qr-menti.png" width="160" height="160"
+         alt="QR-Code: führt zu menti.com zum Eingeben des Quiz-Codes">
+    <figcaption>Oder QR scannen</figcaption>
+  </figure>
+</div>
+
+<!--
+  Optionale read-only Live-Vorschau: In Mentimeter unter "Share" den Embed-Code
+  kopieren und die src unten einsetzen. Zeigt ausserhalb einer laufenden Session
+  nur einen Wartescreen, daher standardmaessig deaktiviert.
+<div class="nui-menti-embed">
+  <iframe src="HIER_MENTI_EMBED_SRC_EINSETZEN" height="450" frameborder="0"
+          allowfullscreen loading="lazy" title="Mentimeter-Quiz-Vorschau"></iframe>
+</div>
+-->
+```
 
 ```{=html}
 <nav class="nui-pagenav" aria-label="Seitennavigation">

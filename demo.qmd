@@ -115,8 +115,7 @@ Pinch nutzt **Hysterese** (zwei Schwellen) gegen Flattern, also gegen
 Ohne Kamera jederzeit per Tastatur/Maus spielbar (Fallback aus dem vendored Runner).
 
 Die folgende Tabelle fasst den **Mapping-Layer** zusammen, also unsere Übersetzung
-*Quelle → Intent → Aktion*. Dieselbe Quelle kann je nach Modus anders belegt sein,
-genau das ist der Sinn der Entkopplung.
+*Quelle → Intent → Aktion*. Dieselbe Quelle kann je nach Modus anders belegt sein; das ist der Sinn der Entkopplung.
 
 ::: {.nui-table-wrap}
 | Quelle (Geste / Pose) | Modus | Intent | Aktion |
@@ -165,8 +164,9 @@ genau das ist der Sinn der Entkopplung.
 ::: {.callout-note appearance="simple"}
 **Lizenz & Attribution (Demo).** Die T-Rex-Demo nutzt den quelloffenen
 *Chrome-Dino*-Runner (`trex/trex-runner.js`), © 2014 The Chromium Authors,
-BSD-Lizenz; unverändert eingebunden (vendored). Die Gesten-/Pose-Steuerung darüber
-ist Eigenleistung. Tracking läuft über *MediaPipe Tasks-Vision* (Google, Apache-2.0), zur
+BSD-Lizenz; vendored mit kleinen Einbettungs-Guards für die lokale Demo.
+Die Gesten-/Pose-Steuerung darüber ist Eigenleistung. Tracking läuft über
+*MediaPipe Tasks-Vision* (Google, Apache-2.0), zur
 Laufzeit per CDN geladen [@lugaresi2019mediapipe]. Vollständige Hinweise unter
 [Über & Referenzen](ueber.qmd#referenzen).
 :::

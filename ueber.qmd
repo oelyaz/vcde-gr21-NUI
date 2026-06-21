@@ -9,7 +9,7 @@ nocite: |
 [Team · Lizenzen · Literatur]{.nui-eyebrow}
 
 ::: {.nui-lead}
-Wer hat was gebaut? Welche fremden Bausteine stecken im Projekt? Und worauf
+Wer hat was gebaut, welche fremden Bausteine stecken im Projekt, und worauf
 stützt sich die Theorie? Hier stehen **Aufgabenverteilung**, **Lizenzen** der
 Drittanbieter-Assets und die **vollständige Literaturliste**.
 :::
@@ -17,22 +17,66 @@ Drittanbieter-Assets und die **vollständige Literaturliste**.
 
 ## Wer hat was gemacht {#team}
 
+```{=html}
+<div class="nui-modules">
+  <section class="nui-module">
+    <header class="nui-module-head">
+      <h3>Alex</h3>
+    </header>
+    <dl class="nui-module-readout">
+      <div><dt>Präsentation</dt><dd>Teil 3 · Demo, Ausblick &amp; Quiz</dd></div>
+      <div><dt>Website</dt><dd>Live-Demo Gestensteuerung</dd></div>
+      <div><dt>Code</dt><dd>Gesten-Mapping &amp; Browser-Integration</dd></div>
+    </dl>
+  </section>
+
+  <section class="nui-module">
+    <header class="nui-module-head">
+      <h3>Elias</h3>
+    </header>
+    <dl class="nui-module-readout">
+      <div><dt>Präsentation</dt><dd>Teil 2 · Funktionsprinzip</dd></div>
+      <div><dt>Website</dt><dd>Theorie &amp; Methode</dd></div>
+      <div><dt>Code</dt><dd>MediaPipe-Integration &amp; Klassifikation</dd></div>
+    </dl>
+  </section>
+
+  <section class="nui-module">
+    <header class="nui-module-head">
+      <h3>Egzon</h3>
+    </header>
+    <dl class="nui-module-readout">
+      <div><dt>Präsentation</dt><dd>Teil 1 · Problem &amp; Motivation</dd></div>
+      <div><dt>Website</dt><dd>Einführung &amp; verwandte Arbeiten</dd></div>
+      <div><dt>Code</dt><dd>Dino-Pose-Demo</dd></div>
+    </dl>
+  </section>
+</div>
+```
+
+## KI-Nutzung {#ki-nutzung}
+
+Im Rahmen des Projekts wurden KI-gestützte Werkzeuge unterstützend eingesetzt.
+Die finalen Inhalte, Entscheidungen und Ergebnisse wurden vom Projektteam geprüft
+und verantwortet.
+
 ## Lizenzen & Drittanbieter-Assets {#lizenzen}
 
 - **Chrome-Dino / T-Rex-Runner** (`trex/trex-runner.js`): © 2014 The Chromium
-  Authors, BSD-Style-Lizenz (siehe Header der Datei). Unverändert eingebunden,
-  also vendored Asset und nicht refaktoriert.
+  Authors, BSD-Style-Lizenz (siehe Header der Datei). Vendored Asset; die
+  Spiellogik bleibt unverändert, ergänzt sind nur kleine Einbettungs-Guards für
+  diese lokale Demo.
 - **MediaPipe Tasks-Vision** (`@mediapipe/tasks-vision`, GestureRecognizer & Pose
   Landmarker): Google, Apache-2.0; zur Laufzeit per CDN geladen.
 - **GSAP / ScrollTrigger** und **Lenis**: clientseitige Animations- und
   Smooth-Scroll-Bibliotheken, zur Laufzeit per CDN geladen (Scroll-Story der
   Methode-Seite). **Babylon.js** treibt die 3D-Hand der Startseite.
-- **Quarto** als Publishing-System [@quarto2024].
+- **Quarto** als Publishing-System.
 
 ## Projektdaten & Reproduzierbarkeit {#reproduzierbarkeit}
 
 - **Publishing:** Statische Website mit Quarto, lokal via `quarto preview` mit
-  Live-Reload, Rendern mit `quarto render` [@quarto2024].
+  Live-Reload, Rendern mit `quarto render`.
 - **Build:** Kein Bundler, kein `node_modules`, kein zusätzlicher Build-Schritt.
   Animations- und Tracking-Libs werden zur Laufzeit per CDN/ESM geladen.
 - **Tracking:** MediaPipe Tasks-Vision mit GestureRecognizer und Pose Landmarker,
@@ -44,8 +88,10 @@ Drittanbieter-Assets und die **vollständige Literaturliste**.
 
 ## Referenzen {#referenzen}
 
-Die folgende Liste sammelt die zitierte Fachliteratur: Vorlesungsfolien (Visual
-Computing), MediaPipe-/BlazePose-Paper, NUI-Grundlagen und den 1-Euro-Filter.
+Die folgende Liste sammelt die zitierte Fachliteratur: das MediaPipe-Framework mit
+seinen Modellen (Hands, BlazePose, GHUM) und den zugehörigen Model Cards, die
+Detektions- und Effizienz-Grundlagen (SSD, MobileNets, Knowledge Distillation), die
+NUI-/HCI-Literatur (Norman, Buxton, Wigdor) und den 1-Euro-Filter.
 
 ::: {#refs}
 :::

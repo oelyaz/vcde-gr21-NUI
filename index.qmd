@@ -58,9 +58,9 @@ Tastatur oder Controller. Wir zeigen, dass dafür eine gewöhnliche Webcam reich
 diesen Landmarks bauen wir zwei Steuerungen. Erstens einen pose- und
 gestengesteuerten Chrome-T-Rex (Springen, Ducken, Neustart). Zweitens eine komplett
 handbedienbare Website mit Cursor, Pinch-Klick und Scrollen als *einem*
-kontinuierlichen Kanal. Den Kern bildet ein eigener **Mapping-Layer**, der Geste
+kontinuierlichen Kanal. Der Kern ist ein eigener **Mapping-Layer**, der Geste
 oder Pose über einen abstrakten Intent auf Befehle abbildet. Gegen das
-Midas-Touch-Problem setzen wir Engagement-Toggle, Confidence-Gate, Debounce,
+Midas-Touch-Problem nutzen wir Engagement-Toggle, Confidence-Gate, Debounce,
 Hysterese und den 1-Euro-Filter [@buxton1990threestate; @casiez2012euro]. Eine
 leichte Evaluation misst Latenz, Erkennungs- und Fehltrigger-Rate und benennt die
 Grenzen offen. Maus und Tastatur bleiben jederzeit aktiv.
@@ -71,17 +71,17 @@ Grenzen offen. Maus und Tastatur bleiben jederzeit aktiv.
 In der Landkarte des Visual Computing sitzt dieses Projekt zwischen **Bildanalyse**
 (*Image Analysis → Recognition*) und **Human-Computer Interaction**. Die Erkennung
 von Gesten und Landmarks ist überwacht gelerntes Sehen, ein Modell $h_\theta$, das
-zu einem Bild eine Prädiktion liefert [@friedrich_vc_recognition]. Die eigentliche
+zu einem Bild eine Prädiktion liefert. Die eigentliche
 Frage ist aber keine reine CV-Frage: Wann *meint* eine Bewegung einen Befehl, und
-wann ist sie beiläufig? Genau hier wird ein Interface, das technisch funktioniert,
+wann ist sie beiläufig? Hier wird ein technisch funktionierendes Interface
 trotzdem unbenutzbar, wenn jede Handbewegung ungewollt auslöst.
 
-„Natürlich" ist deshalb ein Designziel und kein Naturgesetz: Auch Gesten sind
-erlernt, und ein NUI funktioniert erst mit sichtbaren Affordances, Discoverability
-und Feedback [@norman2010nui; @wigdor2011brave]. Webcam-Tracking ist dabei ein
-bewusster Kompromiss. Wir verzichten auf Spezialhardware und metrische Tiefe und
-bekommen dafür etwas, das kein anderes Verfahren so bietet: markerlose Echtzeit
-ohne Installation, direkt im Browser [@lugaresi2019mediapipe]. Was dabei an
+„Natürlich" heißt nicht automatisch gut bedienbar. Auch Gesten sind erlernt. Ein NUI
+funktioniert erst, wenn die Nutzer sehen, welche Gesten möglich sind (Discoverability),
+und unmittelbar Feedback bekommen [@norman2010nui; @wigdor2011brave]. Webcam-Tracking
+ist dabei ein Kompromiss: Wir verzichten auf Spezialhardware und metrische Tiefe.
+Dafür bekommen wir markerlose Echtzeit ohne Installation, direkt im Browser
+[@lugaresi2019mediapipe]. Was dabei an
 Genauigkeit und Robustheit verloren geht, diskutieren wir in der
 [Evaluation](evaluation.qmd#grenzen).
 
@@ -110,7 +110,7 @@ Folgende Eigenleistung:
 |---|---|
 | Tracking | MediaPipe Tasks-Vision: GestureRecognizer + Pose Landmarker, on-device |
 | Landmarks | 21 pro Hand, 33 für die Körperpose |
-| Auslieferung | statische Quarto-Website, Libs zur Laufzeit per CDN, kein Build [@quarto2024] |
+| Auslieferung | statische Quarto-Website, Libs zur Laufzeit per CDN, kein Build |
 | Browser | Chrome, Edge, Firefox |
 | Datenschutz | Frames verlassen das Gerät nicht |
 

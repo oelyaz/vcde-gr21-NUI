@@ -16,10 +16,10 @@ Diskussion der Grenzen in der [Evaluation](evaluation.qmd).
 :::
 
 ::: {.callout-note appearance="simple"}
-**Kurzfassung:** Ein Interface wirkt „natürlich", wenn es vorhandene menschliche Fähigkeiten verständlich nutzbar macht, es ist aber ein Designziel und kein Naturgesetz [@norman2010nui].
+**Kurzfassung:** Ein Interface wirkt „natürlich", wenn es vorhandene menschliche Fähigkeiten verständlich nutzbar macht. Das gelingt aber nicht von selbst, sondern ist ein Designziel [@norman2010nui].
 Für die Umsetzung ist wichtig, diskrete Gesten als einzelne Ereignisse von kontinuierlichen Kanälen wie Position, Abstand oder Haltung zu trennen.
 Engagement und Disengagement bestimmen, wann eine Bewegung wirklich als Befehl gilt, sonst entsteht das Midas-Touch-Problem [@buxton1990threestate].
-Typische Use-Cases reichen von XR und Accessibility bis Medizin und Gaming, historisch verschiebt sich das Feld von getragenen Sensoren und Handschuhen zu markerlosem kamera-basiertem Tracking.
+Typische Use-Cases reichen von XR und Accessibility bis Medizin und Gaming. Historisch verschiebt sich das Feld von getragenen Sensoren und Handschuhen hin zu markerlosem, kamerabasiertem Tracking.
 :::
 
 ## Von der leeren Hand zum Befehl {#motivation}
@@ -31,13 +31,13 @@ Körperhaltung, sollen *direkt* zur Eingabe werden. Hand- und Pose-Tracking lief
 dafür die technische Grundlage. Eine gewöhnliche RGB-Kamera genügt, um die Hand
 bzw. den ganzen Körper als Eingabegerät zu erkennen. In der Landkarte des Visual
 Computing liegt dieses Projekt damit zwischen **Human-Computer Interaction** und
-der **Bildanalyse** (*Image Analysis → Recognition*) [@friedrich_vc_recognition].
+der **Bildanalyse** (*Image Analysis → Recognition*).
 
-„Natural" ist dabei ein **Designziel, kein Naturgesetz**: Auch Gesten sind
-erlernt und kulturell konventioniert, und ein NUI wird erst dann „natürlich",
-wenn es klassische Usability-Prinzipien erfüllt: sichtbare *Affordances*,
-*Discoverability* (welche Gesten sind überhaupt möglich?) und unmittelbares
-*Feedback* [@norman2010nui; @wigdor2011brave]. Zwei Begriffe strukturieren das
+Dabei ist „natürlich" ein Designziel, kein Automatismus. Auch Gesten sind erlernt
+und kulturell geprägt. Ein NUI wird erst dann gut bedienbar, wenn es übliche
+Usability-Prinzipien erfüllt: Die Nutzer müssen erkennen können, welche Gesten möglich
+sind (*Discoverability*), und unmittelbares *Feedback* bekommen
+[@norman2010nui; @wigdor2011brave]. Zwei Begriffe strukturieren das
 ganze Projekt:
 
 - **Diskrete vs. kontinuierliche Gesten.** Eine diskrete Geste ist ein
@@ -47,9 +47,9 @@ ganze Projekt:
   wann ist sie beiläufig? Ohne saubere Zustände entsteht das **Midas-Touch-Problem**:
   Jede Bewegung löst ungewollt aus. Buxtons *Three-State-Model* (Out-of-Range →
   Tracking → Aktiv) liefert das passende Vokabular, um Erkennen und Auslösen
-  bewusst zu trennen [@buxton1990threestate].
+  sauber zu trennen [@buxton1990threestate].
 
-Das merkt man direkt in der Technik, zum Beispiel bei Debounce, Hysterese und
+Das zeigt sich direkt in der Technik, zum Beispiel bei Debounce, Hysterese und
 Kalibrierung in der [Methode](methode.qmd). Die Grenzen besprechen wir später auch
 offen: *Gorilla-Arm*, Ermüdung und Fehltrigger in der [Evaluation](evaluation.qmd).
 
@@ -66,7 +66,7 @@ Vier Felder zeigen, warum berührungsloses Tracking mehr ist als eine Spielerei:
         <h3>AR/VR &amp; Spatial Computing</h3>
         <p>Aktuelle Headsets (Meta Quest, Apple Vision Pro) ersetzen Controller
           zunehmend durch <strong>markerloses Hand-Tracking</strong> als primäre
-          Eingabe, passend zur XR-Pipeline der Vorlesung.</p>
+          Eingabe.</p>
       </div>
       <div class="nui-card">
         <i class="ph ph-wheelchair nui-card-ico" aria-hidden="true"></i>
@@ -283,8 +283,7 @@ zwei Linien: *getragene* Sensorik und *kamerabasierte*, markerlose Verfahren.
 ::: {.nui-reveal}
 - **1975: Videoplace** (Myron Krueger): einer der ersten interaktiven Räume, in
   dem die *Silhouette* der Person ohne getragene Hardware mit virtuellen Inhalten
-  interagiert. Für markerlose Gestensteuerung ist das ein frühes Vorbild
-  [@friedrich_vc_xr].
+  interagiert. Für markerlose Gestensteuerung ist das ein frühes Vorbild.
 - **1987: VPL DataGlove:** Der Datenhandschuh macht Fingerbeugung direkt messbar.
   Das ist präzise, aber *instrumentiert* (Hardware an der Hand) [@buxton1990threestate].
 - **2010: Microsoft Kinect:** erstmals **markerloses Ganzkörper-Skelett** für den
@@ -296,8 +295,8 @@ zwei Linien: *getragene* Sensorik und *kamerabasierte*, markerlose Verfahren.
   **Browser** [@lugaresi2019mediapipe; @zhang2020mediapipehands].
 :::
 
-Der rote Faden: weg von Spezial-Hardware, hin zu markerloser, kamerabasierter
-Erkennung auf Alltagsgeräten. Genau diesen Schritt schaut sich die
+Über die Jahrzehnte geht der Trend von Spezial-Hardware zu markerloser Erkennung auf
+Alltagsgeräten. Diesen Schritt schaut sich die
 [Methode](methode.qmd) genauer an; die [Einordnung gegenüber verwandten Verfahren](methode.qmd#vergleich)
 zeigt, welche Nachteile dabei bleiben.
 
