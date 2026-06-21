@@ -6,11 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Alexander Restle">
-<meta name="author" content="Elias Seidl">
-<meta name="author" content="Egzon Kastrati">
 
-<title>Gestensteuerung mit Hand- &amp; Pose-Tracking – NUI · Hand- &amp; Pose-Tracking</title>
+<title>Über &amp; Referenzen – NUI · Hand- &amp; Pose-Tracking</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,7 +23,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -35,6 +51,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-6b6957c917596b414ec0b78690761e87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
@@ -62,41 +79,12 @@ ul.task-list li input[type="checkbox"] {
 <link rel="preconnect" href="https://cdn.babylonjs.com">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="nui/nui.css">
 <link rel="stylesheet" href="nui/signature.css">
 </head>
 
-<body class="floating nav-fixed fullcontent quarto-light">
+<body class="floating nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -113,7 +101,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="./index.html"> 
 <span class="menu-text">Start</span></a>
   </li>  
   <li class="nav-item">
@@ -133,7 +121,7 @@ window.Quarto = {
 <span class="menu-text">Evaluation &amp; Quiz</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./ueber.html"> 
+    <a class="nav-link active" href="./ueber.html" aria-current="page"> 
 <span class="menu-text">Über &amp; Referenzen</span></a>
   </li>  
 </ul>
@@ -147,32 +135,34 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Auf dieser Seite</h2>
+   
+  <ul class="collapse">
+  <li><a href="#team" id="toc-team" class="nav-link active" data-scroll-target="#team">Wer hat was gemacht</a></li>
+  <li><a href="#lizenzen" id="toc-lizenzen" class="nav-link" data-scroll-target="#lizenzen">Lizenzen &amp; Drittanbieter-Assets</a></li>
+  <li><a href="#reproduzierbarkeit" id="toc-reproduzierbarkeit" class="nav-link" data-scroll-target="#reproduzierbarkeit">Projektdaten &amp; Reproduzierbarkeit</a></li>
+  <li><a href="#referenzen" id="toc-referenzen" class="nav-link" data-scroll-target="#referenzen">Referenzen</a></li>
+  </ul>
+</nav>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
-<main class="content page-columns page-full" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Gestensteuerung mit Hand- &amp; Pose-Tracking</h1>
-<p class="subtitle lead">Natural User Interfaces mit MediaPipe: ein interaktives Visual-Computing-Projekt</p>
+<h1 class="title">Über &amp; Referenzen</h1>
+<p class="subtitle lead">Team, Aufgabenverteilung, Lizenzen und die vollständige Literaturliste</p>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Autor:innen</div>
-    <div class="quarto-title-meta-contents">
-             <p>Alexander Restle </p>
-             <p>Elias Seidl </p>
-             <p>Egzon Kastrati </p>
-          </div>
-  </div>
     
   
     
@@ -183,353 +173,97 @@ window.Quarto = {
 </header>
 
 
-<style>header#title-block-header{display:none;}</style>
-<div class="column-screen">
-<div class="nui-hero" id="hero-stage">
-  <canvas id="nui-hero-canvas" class="nui-hero-canvas" aria-hidden="true"></canvas>
-  <div class="nui-hero-veil" aria-hidden="true"></div>
-  <div class="nui-hero-inner">
-    <p class="nui-hero-eyebrow">Visual Computing · Natural User Interfaces</p>
-    <p class="nui-hero-title">Die leere Hand wird zur <span class="nui-grad">Schnittstelle</span>.</p>
-    <p class="nui-hero-sub">Markerloses <strong>Hand- &amp; Pose-Tracking</strong> mit
-      <em>MediaPipe</em>: Eine gewöhnliche Webcam genügt, um Gesten und Körperhaltung
-      in Echtzeit in Befehle umzusetzen. Damit lässt sich sogar der Dinosaurier nur mit
-      Bewegung steuern.</p>
-    <div class="nui-hero-cta">
-      <a class="nui-btn nui-btn-primary" href="demo.html"><i class="ph ph-game-controller" aria-hidden="true"></i><span>Live-Demo starten</span></a>
-      <a class="nui-btn nui-btn-ghost" href="methode.html"><i class="ph ph-gear-six" aria-hidden="true"></i><span>Wie es funktioniert</span></a>
-    </div>
-    <p class="nui-hero-note">Die Kamera startet erst auf Klick · Maus &amp; Tastatur funktionieren immer.</p>
-  </div>
-  <div class="nui-hero-scrollcue" aria-hidden="true"><span></span></div>
-</div>
-</div>
+<div class="nui-pagehead">
+<p><span class="nui-eyebrow">Team · Lizenzen · Literatur</span></p>
 <div class="nui-lead">
-<p>Dieses Projekt zeigt, wie <strong>Hand- und Pose-Tracking</strong> mit <em>MediaPipe</em> ein <strong>Natural User Interface (NUI)</strong> möglich macht: vom Funktionsprinzip <em>unter der Haube</em> bis zur spielbaren Live-Demo. Du steuerst den Dinosaurier mit Körperbewegung und Handgesten. Die Seite lässt sich außerdem <strong>per Handgeste bedienen</strong> (Taste <kbd>N</kbd> oder Button im Dock unten rechts). Maus und Tastatur bleiben jederzeit aktiv.</p>
-</div>
-<section id="kurzfassung" class="level2">
-<h2 data-anchor-id="kurzfassung">Kurzfassung</h2>
-<div class="callout callout-style-simple callout-note">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>Natural User Interfaces wollen den Körper selbst zur Eingabe machen, statt Maus, Tastatur oder Controller. Wir zeigen, dass dafür eine gewöhnliche Webcam reicht: <em>MediaPipe</em> schätzt Hand- und Körper-Landmarks on-device direkt im Browser <span class="citation" data-cites="lugaresi2019mediapipe zhang2020mediapipehands bazarevsky2020blazepose">(Lugaresi u.&nbsp;a. 2019; Zhang u.&nbsp;a. 2020; Bazarevsky u.&nbsp;a. 2020)</span>. Aus diesen Landmarks bauen wir zwei Steuerungen. Erstens einen pose- und gestengesteuerten Chrome-T-Rex (Springen, Ducken, Neustart). Zweitens eine komplett handbedienbare Website mit Cursor, Pinch-Klick und Scrollen als <em>einem</em> kontinuierlichen Kanal. Den Kern bildet ein eigener <strong>Mapping-Layer</strong>, der Geste oder Pose über einen abstrakten Intent auf Befehle abbildet. Gegen das Midas-Touch-Problem setzen wir Engagement-Toggle, Confidence-Gate, Debounce, Hysterese und den 1-Euro-Filter <span class="citation" data-cites="buxton1990threestate casiez2012euro">(Buxton 1990; Casiez u.&nbsp;a. 2012)</span>. Eine leichte Evaluation misst Latenz, Erkennungs- und Fehltrigger-Rate und benennt die Grenzen offen. Maus und Tastatur bleiben jederzeit aktiv.</p>
+<p>Wer hat was gebaut? Welche fremden Bausteine stecken im Projekt? Und worauf stützt sich die Theorie? Hier stehen <strong>Aufgabenverteilung</strong>, <strong>Lizenzen</strong> der Drittanbieter-Assets und die <strong>vollständige Literaturliste</strong>.</p>
 </div>
 </div>
-</div>
+<section id="team" class="level2">
+<h2 class="anchored" data-anchor-id="team">Wer hat was gemacht</h2>
 </section>
-<section id="problem" class="level2">
-<h2 data-anchor-id="problem">Hintergrund &amp; Problem</h2>
-<p>In der Landkarte des Visual Computing sitzt dieses Projekt zwischen <strong>Bildanalyse</strong> (<em>Image Analysis → Recognition</em>) und <strong>Human-Computer Interaction</strong>. Die Erkennung von Gesten und Landmarks ist überwacht gelerntes Sehen, ein Modell <span class="math inline">\(h_\theta\)</span>, das zu einem Bild eine Prädiktion liefert <span class="citation" data-cites="friedrich_vc_recognition">(Friedrich 2025)</span>. Die eigentliche Frage ist aber keine reine CV-Frage: Wann <em>meint</em> eine Bewegung einen Befehl, und wann ist sie beiläufig? Genau hier wird ein Interface, das technisch funktioniert, trotzdem unbenutzbar, wenn jede Handbewegung ungewollt auslöst.</p>
-<p>„Natürlich” ist deshalb ein Designziel und kein Naturgesetz: Auch Gesten sind erlernt, und ein NUI funktioniert erst mit sichtbaren Affordances, Discoverability und Feedback <span class="citation" data-cites="norman2010nui wigdor2011brave">(Norman 2010; Wigdor und Wixon 2011)</span>. Webcam-Tracking ist dabei ein bewusster Kompromiss. Wir verzichten auf Spezialhardware und metrische Tiefe und bekommen dafür etwas, das kein anderes Verfahren so bietet: markerlose Echtzeit ohne Installation, direkt im Browser <span class="citation" data-cites="lugaresi2019mediapipe">(Lugaresi u.&nbsp;a. 2019)</span>. Was dabei an Genauigkeit und Robustheit verloren geht, diskutieren wir in der <a href="./evaluation.html#grenzen">Evaluation</a>.</p>
-</section>
-<section id="beitrag" class="level2">
-<h2 data-anchor-id="beitrag">Unser Beitrag</h2>
-<p>Über den vendored T-Rex-Runner hinaus (BSD-Asset, unverändert) ist alles Folgende Eigenleistung:</p>
+<section id="lizenzen" class="level2">
+<h2 class="anchored" data-anchor-id="lizenzen">Lizenzen &amp; Drittanbieter-Assets</h2>
 <ul>
-<li><strong>Pose-gesteuerter T-Rex.</strong> Neutral-Kalibrierung der Schulter-/Hüft-Baseline, Springen über einen vertikalen Impuls, Ducken als gehaltene Hocke. Schwellen in Torso-Höhen, also distanz-invariant <span class="citation" data-cites="bazarevsky2020blazepose">(Bazarevsky u.&nbsp;a. 2020)</span>.</li>
-<li><strong>Ganzseiten-Handnavigation.</strong> Cursor an der Zeigefingerspitze, der Pinch als einziger kontinuierlicher Kanal (Klick und Scroll), Posture-Gate gegen Fehlauslösung, läuft beim Seitenwechsel automatisch weiter.</li>
-<li><strong>Eigener Mapping-Layer</strong> Quelle → Intent → Aktion, der den Runner über <code>Runner.instance_.onKeyDown/onKeyUp</code> ansteuert, nicht über synthetische Events.</li>
-<li><strong>Interaktive Lernbausteine.</strong> Live-Skelett-Overlay, Landmark-Explorer und Gesten-Playground machen Pipeline-Schritte direkt anfassbar.</li>
-<li><strong>Leichte Evaluation</strong> mit eigenem Harness (<code>nui/eval.js</code>) plus ehrlicher Diskussion von Latenz, Fehltriggern und Ermüdung.</li>
-<li><strong>Progressive Enhancement.</strong> Maus und Tastatur sind Pflicht-Fallback und immer aktiv; die Demo bleibt ohne 3D, Animationen oder Kamera bedienbar.</li>
+<li><strong>Chrome-Dino / T-Rex-Runner</strong> (<code>trex/trex-runner.js</code>): © 2014 The Chromium Authors, BSD-Style-Lizenz (siehe Header der Datei). Unverändert eingebunden, also vendored Asset und nicht refaktoriert.</li>
+<li><strong>MediaPipe Tasks-Vision</strong> (<code>@mediapipe/tasks-vision</code>, GestureRecognizer &amp; Pose Landmarker): Google, Apache-2.0; zur Laufzeit per CDN geladen.</li>
+<li><strong>GSAP / ScrollTrigger</strong> und <strong>Lenis</strong>: clientseitige Animations- und Smooth-Scroll-Bibliotheken, zur Laufzeit per CDN geladen (Scroll-Story der Methode-Seite). <strong>Babylon.js</strong> treibt die 3D-Hand der Startseite.</li>
+<li><strong>Quarto</strong> als Publishing-System <span class="citation" data-cites="quarto2024">(<a href="#ref-quarto2024" role="doc-biblioref">Allaire und Teague 2024</a>)</span>.</li>
 </ul>
-<div class="nui-table-wrap">
-<div id="tbl-stack" class="quarto-float quarto-figure quarto-figure-center">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-stack-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabelle&nbsp;1: Technischer Rahmen des Projekts.
-</figcaption>
-<div aria-describedby="tbl-stack-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Auf einen Blick</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Tracking</td>
-<td>MediaPipe Tasks-Vision: GestureRecognizer + Pose Landmarker, on-device</td>
-</tr>
-<tr class="even">
-<td>Landmarks</td>
-<td>21 pro Hand, 33 für die Körperpose</td>
-</tr>
-<tr class="odd">
-<td>Auslieferung</td>
-<td>statische Quarto-Website, Libs zur Laufzeit per CDN, kein Build <span class="citation" data-cites="quarto2024">(Allaire und Teague 2024)</span></td>
-</tr>
-<tr class="even">
-<td>Browser</td>
-<td>Chrome, Edge, Firefox</td>
-</tr>
-<tr class="odd">
-<td>Datenschutz</td>
-<td>Frames verlassen das Gerät nicht</td>
-</tr>
-</tbody>
-</table>
-</div>
-</figure>
-</div>
-</div>
 </section>
-<section id="rundgang" class="level2">
-<h2 data-anchor-id="rundgang">Der Rundgang</h2>
-<div class="nui-carousel-root nui-reveal" id="nui-rundgang">
-  <div class="nui-carousel-viewport" id="nui-rundgang-vp">
-    <div class="nui-carousel-track" id="nui-rundgang-track">
-      <div class="nui-card">
-        <i class="ph ph-graduation-cap nui-card-ico" aria-hidden="true"></i>
-        <h3>Grundlagen</h3>
-        <p>Was ein NUI ausmacht: diskrete vs. kontinuierliche Gesten, das
-          Midas-Touch-Problem, Use-Cases und eine kurze Geschichte.</p>
-        <a class="nui-card-go" href="grundlagen.html">Mehr erfahren →</a>
-      </div>
-      <div class="nui-card">
-        <i class="ph ph-gear-six nui-card-ico" aria-hidden="true"></i>
-        <h3>Methode im Detail</h3>
-        <p>Die MediaPipe-Pipeline von der Kamera bis zur Aktion, in neun Stufen
-          animiert und beim Scrollen Schritt für Schritt erklärt.</p>
-        <a class="nui-card-go" href="methode.html">Zur Pipeline →</a>
-      </div>
-      <div class="nui-card">
-        <i class="ph ph-game-controller nui-card-ico" aria-hidden="true"></i>
-        <h3>Live-Demo</h3>
-        <p>Steuere den Chrome-T-Rex per Handgeste oder Körperpose. Mit
-          Live-Skelett-Overlay und Ganzseiten-NUI.</p>
-        <a class="nui-card-go" href="demo.html">Jetzt spielen →</a>
-      </div>
-      <div class="nui-card">
-        <i class="ph ph-chart-bar nui-card-ico" aria-hidden="true"></i>
-        <h3>Evaluation &amp; Quiz</h3>
-        <p>Wie zuverlässig und schnell ist die Steuerung? Plus ein Selbsttest
-          zu den Lernzielen.</p>
-        <a class="nui-card-go" href="evaluation.html">Testen →</a>
-      </div>
-      <div class="nui-card">
-        <i class="ph ph-books nui-card-ico" aria-hidden="true"></i>
-        <h3>Über &amp; Referenzen</h3>
-        <p>Team, Aufgabenverteilung, Lizenzen der Drittanbieter-Assets und
-          die vollständige Literaturliste.</p>
-        <a class="nui-card-go" href="ueber.html">Mehr erfahren →</a>
-      </div>
-    </div>
-  </div>
-  <div class="nui-carousel-foot">
-    <button class="nui-carousel-ctrl" id="nui-rundgang-prev" aria-label="Vorherige Karte">
-      <i class="ph ph-caret-left" aria-hidden="true"></i>
-    </button>
-    <button class="nui-carousel-ctrl" id="nui-rundgang-next" aria-label="Nächste Karte">
-      <i class="ph ph-caret-right" aria-hidden="true"></i>
-    </button>
-  </div>
+<section id="reproduzierbarkeit" class="level2">
+<h2 class="anchored" data-anchor-id="reproduzierbarkeit">Projektdaten &amp; Reproduzierbarkeit</h2>
+<ul>
+<li><strong>Publishing:</strong> Statische Website mit Quarto, lokal via <code>quarto preview</code> mit Live-Reload, Rendern mit <code>quarto render</code> <span class="citation" data-cites="quarto2024">(<a href="#ref-quarto2024" role="doc-biblioref">Allaire und Teague 2024</a>)</span>.</li>
+<li><strong>Build:</strong> Kein Bundler, kein <code>node_modules</code>, kein zusätzlicher Build-Schritt. Animations- und Tracking-Libs werden zur Laufzeit per CDN/ESM geladen.</li>
+<li><strong>Tracking:</strong> MediaPipe Tasks-Vision mit GestureRecognizer und Pose Landmarker, on-device im Browser. Frames verlassen das Gerät nicht.</li>
+<li><strong>Front-end:</strong> Handgeschriebene ES-Module unter <code>nui/</code>: config, controller, filters, overlay, explainer, eval, signature, onboarding. Kein Framework.</li>
+<li><strong>Browser:</strong> Lauffähig in Chrome, Edge und Firefox. Die Kamera startet nur auf Klick, in einem Secure Context über <code>getUserMedia</code>.</li>
+</ul>
+</section>
+<section id="referenzen" class="level2">
+<h2 class="anchored" data-anchor-id="referenzen">Referenzen</h2>
+<p>Die folgende Liste sammelt die zitierte Fachliteratur: Vorlesungsfolien (Visual Computing), MediaPipe-/BlazePose-Paper, NUI-Grundlagen und den 1-Euro-Filter.</p>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-quarto2024" class="csl-entry" role="listitem">
+Allaire, J. J., und Charles Teague. 2024. <span>„Quarto: An Open-Source Scientific and Technical Publishing System“</span>. <em>Proceedings of the Scientific Computing Conference</em>.
 </div>
-<script>
-(function () {
-  'use strict';
-  var vp    = document.getElementById('nui-rundgang-vp');
-  var track = document.getElementById('nui-rundgang-track');
-  if (!vp || !track) return;
-
-  /* 1. Clone all cards on both ends for seamless infinite loop.
-        Track layout: [clone_0…n-1] [orig_0…n-1] [clone_0…n-1]  (total 3n)
-        "Real" zone = indices n … 2n-1. Clones look identical to originals. */
-  var originals = Array.from(track.children);
-  var n = originals.length;
-  originals.slice().reverse().forEach(function (c) {
-    track.insertBefore(c.cloneNode(true), track.firstChild);
-  });
-  originals.forEach(function (c) {
-    track.appendChild(c.cloneNode(true));
-  });
-
-  var cur         = n;    /* start at first original */
-  var cardW       = 0;
-  var gapPx       = 0;
-  var translateX  = 0;
-  var isAnimating = false;
-
-  function visCount() {
-    return vp.clientWidth >= 900 ? 3 : vp.clientWidth >= 540 ? 2 : 1;
-  }
-
-  /* Cards start flush-left; right card peeks naturally (cardW sized to vis+0.25). */
-  function idealX(idx) {
-    return -(idx * (cardW + gapPx));
-  }
-
-  function setTranslate(x, animate) {
-    translateX = x;
-    track.style.transition = animate
-      ? 'transform 0.46s cubic-bezier(0.25,0,0.1,1)'
-      : 'none';
-    track.style.transform = 'translateX(' + x + 'px)';
-  }
-
-  /* 2. Layout: called on init and resize. */
-  function layout() {
-    gapPx = parseFloat(getComputedStyle(track).columnGap) || 14;
-    var vis = visCount();
-    /* vis full cards + ~25% of next card peeking on the right. */
-    cardW = Math.max(120, (vp.clientWidth - gapPx * (vis - 1)) / (vis + 0.25));
-    Array.from(track.children).forEach(function (c) {
-      c.style.flex = '0 0 ' + cardW + 'px';
-    });
-    setTranslate(idealX(cur), false);
-  }
-
-  /* 3. Advance by delta (±1). */
-  function go(delta) {
-    if (isAnimating) return;
-    cur += delta;
-    isAnimating = true;
-    setTranslate(idealX(cur), true);
-  }
-
-  /* 4. After each animation, if cur landed in a clone zone, instantly
-        jump to the visually identical position in the real zone. */
-  track.addEventListener('transitionend', function (e) {
-    if (e.propertyName !== 'transform' || e.target !== track) return;
-    isAnimating = false;
-    var jumped = false;
-    if      (cur < n)      { cur += n; jumped = true; }
-    else if (cur >= 2 * n) { cur -= n; jumped = true; }
-    if (jumped) {
-      track.style.transition = 'none';
-      translateX = idealX(cur);
-      track.style.transform = 'translateX(' + translateX + 'px)';
-      void track.offsetWidth; /* flush so the next transition starts clean */
-    }
-  });
-
-  /* 5. Prev / Next buttons. */
-  var prevBtn = document.getElementById('nui-rundgang-prev');
-  var nextBtn = document.getElementById('nui-rundgang-next');
-  if (prevBtn) prevBtn.addEventListener('click', function () { go(-1); });
-  if (nextBtn) nextBtn.addEventListener('click', function () { go(1); });
-
-  /* 6. Drag / swipe: pointer events work for both mouse and touch.
-        Axis detection: vertical movement hands back to page scroll. */
-  var drag = { active: false, moved: false, axis: null, suppressClickUntil: 0,
-               startX: 0, startY: 0, baseX: 0 };
-
-  function readActualX() {
-    var t = getComputedStyle(track).transform;
-    if (!t || t === 'none') return translateX;
-    var x = new DOMMatrix(t).m41;
-    return isFinite(x) ? x : translateX;
-  }
-
-  track.addEventListener('pointerdown', function (e) {
-    if (e.button !== 0) return;
-    /* Sync cur to the actual on-screen position (animation may be mid-flight). */
-    var actualX = readActualX();
-    cur = Math.round(-actualX / (cardW + gapPx));
-    cur = Math.max(n - 1, Math.min(2 * n, cur));
-    translateX   = actualX;
-    isAnimating  = false;
-    drag.active  = true;
-    drag.moved   = false;
-    drag.axis    = null;
-    drag.suppressClickUntil = 0;
-    drag.startX  = e.clientX;
-    drag.startY  = e.clientY;
-    drag.baseX   = actualX;
-    track.style.transition = 'none';
-    window.addEventListener('pointermove', onMove, { passive: false });
-    window.addEventListener('pointerup',     onUp);
-    window.addEventListener('pointercancel', onCancel);
-  });
-
-  function onMove(e) {
-    if (!drag.active) return;
-    var dx = e.clientX - drag.startX;
-    var dy = e.clientY - drag.startY;
-    if (!drag.axis) {
-      if (Math.sqrt(dx * dx + dy * dy) < 8) return;
-      drag.axis = Math.abs(dx) >= Math.abs(dy) ? 'h' : 'v';
-      if (drag.axis === 'v') { cancelDrag(); return; }
-    }
-    if (!drag.moved) {
-      drag.suppressClickUntil = Date.now() + 350;
-      track.classList.add('is-dragging');
-    }
-    drag.moved = true;
-    e.preventDefault(); /* block page-scroll while dragging horizontally */
-    translateX = drag.baseX + dx;
-    track.style.transform = 'translateX(' + translateX + 'px)';
-  }
-
-  function onUp(e) {
-    if (!drag.active) return;
-    endDrag();
-    if (!drag.moved || drag.axis !== 'h') {
-      setTranslate(idealX(cur), false);
-      return;
-    }
-    var dx = e.clientX - drag.startX;
-    var threshold = Math.max(50, cardW * 0.22);
-    if      (dx < -threshold) cur++;
-    else if (dx >  threshold) cur--;
-    isAnimating = true;
-    setTranslate(idealX(cur), true);
-  }
-
-  function onCancel() {
-    if (!drag.active) return;
-    endDrag();
-    isAnimating = true;
-    setTranslate(idealX(cur), true);
-  }
-
-  function endDrag() {
-    drag.active = false;
-    track.classList.remove('is-dragging');
-    window.removeEventListener('pointermove', onMove);
-    window.removeEventListener('pointerup',     onUp);
-    window.removeEventListener('pointercancel', onCancel);
-  }
-
-  function cancelDrag() {
-    drag.suppressClickUntil = 0;
-    endDrag();
-    setTranslate(idealX(cur), false);
-  }
-
-  /* Suppress link navigation if the gesture was a real horizontal drag. */
-  track.addEventListener('click', function (e) {
-    if (Date.now() > drag.suppressClickUntil) return;
-    drag.suppressClickUntil = 0;
-    e.preventDefault();
-  }, true);
-
-  /* 7. Resize. */
-  var raf;
-  window.addEventListener('resize', function () {
-    cancelAnimationFrame(raf);
-    raf = requestAnimationFrame(layout);
-  }, { passive: true });
-
-  layout();
-}());
-</script>
-<div class="nui-quiz-cta nui-reveal">
-  <div class="nui-quiz-cta-body">
-    <h3>Bereit? Steuere den Dino mit deinem Körper.</h3>
-    <p>Kamera an, Modus wählen (Handgesten oder Ganzkörper-Pose) und losspielen.
-      On-device, nichts verlässt dein Gerät. Ohne Kamera per Tastatur spielbar.</p>
-  </div>
-  <a class="nui-btn nui-btn-primary" href="demo.html"><i class="ph ph-game-controller" aria-hidden="true"></i><span>Zur Live-Demo</span></a>
+<div id="ref-babylonjs2026" class="csl-entry" role="listitem">
+Babylon.js Team. 2026. <span>„Babylon.js Documentation“</span>. <a href="https://doc.babylonjs.com/">https://doc.babylonjs.com/</a>.
 </div>
+<div id="ref-bazarevsky2020blazepose" class="csl-entry" role="listitem">
+Bazarevsky, Valentin, Ivan Grishchenko, Karthik Raveendran, Tyler Zhu, Fan Zhang, und Matthias Grundmann. 2020. <span>„<span>BlazePose</span>: On-device Real-time Body Pose Tracking“</span>. <em>CVPR Workshop on Computer Vision for Augmented and Virtual Reality</em>. <a href="https://arxiv.org/abs/2006.10204">https://arxiv.org/abs/2006.10204</a>.
+</div>
+<div id="ref-buxton1990threestate" class="csl-entry" role="listitem">
+Buxton, William. 1990. <span>„A Three-State Model of Graphical Input“</span>. <em>Human-Computer Interaction – INTERACT ’90</em>, 449–56.
+</div>
+<div id="ref-casiez2012euro" class="csl-entry" role="listitem">
+Casiez, Géry, Nicolas Roussel, und Daniel Vogel. 2012. <span>„<span>1€</span> Filter: A Simple Speed-based Low-pass Filter for Noisy Input in Interactive Systems“</span>. <em>Proceedings of the SIGCHI Conference on Human Factors in Computing Systems (CHI ’12)</em>, 2527–30. <a href="https://doi.org/10.1145/2207676.2208639">https://doi.org/10.1145/2207676.2208639</a>.
+</div>
+<div id="ref-friedrich_vc_affine" class="csl-entry" role="listitem">
+Friedrich, Markus. 2024. <em>Affine Transformationen in <span>2D</span></em>. Vorlesungsfolien, Modul Visual Computing, Hochschule M<span>ü</span>nchen.
+</div>
+<div id="ref-friedrich_vc_recognition" class="csl-entry" role="listitem">
+Friedrich, Markus. 2025a. <em>Erkennung: Klassifikation, Segmentierung, Objekterkennung</em>. Vorlesungsfolien, Modul Visual Computing, Hochschule M<span>ü</span>nchen.
+</div>
+<div id="ref-friedrich_vc_xr" class="csl-entry" role="listitem">
+Friedrich, Markus. 2025b. <em>Extended Reality</em>. Vorlesungsfolien, Modul Visual Computing, Hochschule M<span>ü</span>nchen.
+</div>
+<div id="ref-friedrich_vc_neural" class="csl-entry" role="listitem">
+Friedrich, Markus. 2025c. <em>Neural Rendering</em>. Vorlesungsfolien, Modul Visual Computing, Hochschule M<span>ü</span>nchen.
+</div>
+<div id="ref-friedrich_vc_nonlinear" class="csl-entry" role="listitem">
+Friedrich, Markus. 2025d. <em>Nichtlineare Filter</em>. Vorlesungsfolien, Modul Visual Computing, Hochschule M<span>ü</span>nchen.
+</div>
+<div id="ref-hinton2015distilling" class="csl-entry" role="listitem">
+Hinton, Geoffrey, Oriol Vinyals, und Jeff Dean. 2015. <span>„Distilling the Knowledge in a Neural Network“</span>. <em>arXiv preprint arXiv:1503.02531</em>.
+</div>
+<div id="ref-howard2017mobilenets" class="csl-entry" role="listitem">
+Howard, Andrew G., Menglong Zhu, Bo Chen, u.&nbsp;a. 2017. <span>„<span>MobileNets</span>: Efficient Convolutional Neural Networks for Mobile Vision Applications“</span>. <em>arXiv preprint arXiv:1704.04861</em>.
+</div>
+<div id="ref-liu2016ssd" class="csl-entry" role="listitem">
+Liu, Wei, Dragomir Anguelov, Dumitru Erhan, u.&nbsp;a. 2016. <span>„<span>SSD</span>: Single Shot MultiBox Detector“</span>. <em>Computer Vision – ECCV 2016</em>, 21–37. <a href="https://doi.org/10.1007/978-3-319-46448-0_2">https://doi.org/10.1007/978-3-319-46448-0_2</a>.
+</div>
+<div id="ref-lugaresi2019mediapipe" class="csl-entry" role="listitem">
+Lugaresi, Camillo, Jiuqiang Tang, Hadon Nash, u.&nbsp;a. 2019. <span>„<span>MediaPipe</span>: A Framework for Building Perception Pipelines“</span>. <em>arXiv preprint arXiv:1906.08172</em>.
+</div>
+<div id="ref-norman2010nui" class="csl-entry" role="listitem">
+Norman, Donald A. 2010. <span>„Natural User Interfaces Are Not Natural“</span>. <em>interactions</em> 17 (3): 6–10. <a href="https://doi.org/10.1145/1744161.1744163">https://doi.org/10.1145/1744161.1744163</a>.
+</div>
+<div id="ref-wigdor2011brave" class="csl-entry" role="listitem">
+Wigdor, Daniel, und Dennis Wixon. 2011. <em>Brave <span>NUI</span> World: Designing Natural User Interfaces for Touch and Gesture</em>. Morgan Kaufmann.
+</div>
+<div id="ref-xu2020ghum" class="csl-entry" role="listitem">
+Xu, Hongyi, Eduard Gabriel Bazavan, Andrei Zanfir, William T. Freeman, Rahul Sukthankar, und Cristian Sminchisescu. 2020. <span>„<span>GHUM</span> &amp; <span>GHUML</span>: Generative <span>3D</span> Human Shape and Articulated Pose Models“</span>. <em>Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)</em>, 6184–93.
+</div>
+<div id="ref-zhang2020mediapipehands" class="csl-entry" role="listitem">
+Zhang, Fan, Valentin Bazarevsky, Andrey Vakunov, u.&nbsp;a. 2020. <span>„<span>MediaPipe Hands</span>: On-device Real-time Hand Tracking“</span>. <em>CVPR Workshop on Computer Vision for Augmented and Virtual Reality</em>. <a href="https://arxiv.org/abs/2006.10214">https://arxiv.org/abs/2006.10214</a>.
+</div>
+</div>
+<nav class="nui-pagenav" aria-label="Seitennavigation">
+  <a class="nui-btn nui-btn-ghost" href="evaluation.html">← Evaluation &amp; Quiz</a>
+  <a class="nui-btn nui-btn-primary" href="index.html">Zur Startseite →</a>
+</nav>
 
 
 </section>
@@ -665,6 +399,13 @@ Tabelle&nbsp;1: Technischer Rahmen des Projekts.
 <script type="module" src="nui/signature.js"></script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     

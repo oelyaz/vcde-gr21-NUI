@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>mediapipe_functionality</title>
+<title>mediapipe_functionality – NUI · Hand- &amp; Pose-Tracking</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -28,59 +28,100 @@ ul.task-list li input[type="checkbox"] {
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-6b6957c917596b414ec0b78690761e87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-1e273511d09b17b40736144097ac5380.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f5d616e91874b996f63908e227898ed2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
-  "location": "sidebar",
-  "copy-button": false,
-  "collapse-after": 3,
-  "panel-placement": "start",
-  "type": "textbox",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
   "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
+    "search-no-results-text": "Keine Treffer",
+    "search-matching-documents-text": "Treffer",
+    "search-copy-link-title": "Link in die Suche kopieren",
+    "search-hide-matches-text": "Zusätzliche Treffer verbergen",
+    "search-more-match-text": "weitere Treffer in diesem Dokument",
+    "search-more-matches-text": "weitere Treffer in diesem Dokument",
+    "search-clear-button-title": "Zurücksetzen",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
+    "search-detached-cancel-button-title": "Abbrechen",
+    "search-submit-button-title": "Abschicken",
+    "search-label": "Suchen"
   }
 }</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="">
+<link rel="preconnect" href="https://cdn.babylonjs.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css">
 
 
+<link rel="stylesheet" href="../nui/nui.css">
+<link rel="stylesheet" href="../nui/signature.css">
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="floating nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">NUI · Hand- &amp; Pose-Tracking</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Navigation umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Start</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../grundlagen.html"> 
+<span class="menu-text">Grundlagen</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../methode.html"> 
+<span class="menu-text">Methode</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../demo.html"> 
+<span class="menu-text">Live-Demo</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../evaluation.html"> 
+<span class="menu-text">Evaluation &amp; Quiz</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../ueber.html"> 
+<span class="menu-text">Über &amp; Referenzen</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-<!-- margin-sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
@@ -119,6 +160,134 @@ ul.task-list li input[type="checkbox"] {
 
 
 </main> <!-- /main -->
+<!-- nui/dock.html, shared at the end of every page via
+     `include-after-body` in _quarto.yml. It adds the camera dock and hand
+     navigation site-wide. The vendored T-Rex runner is loaded only on the
+     Live-Demo page; controller.js reads window.Runner lazily, so the dock is
+     harmless elsewhere.
+
+     Mouse and keyboard stay active as fallback. The camera starts only on an
+     explicit click. -->
+
+<!-- Whole-page hand cursor + the floating gesture legend/menu -->
+<div id="nui-cursor" aria-hidden="true"><span class="nui-cursor-dot"></span></div>
+<aside id="nui-nav-overlay" aria-hidden="true">
+  <div class="nui-nav-title">Hand-Navigation</div>
+  <ul>
+    <li><span><i class="ph ph-hand" aria-hidden="true"></i> Bewegen</span><span>Cursor</span></li>
+    <li><span><i class="ph ph-hand-grabbing" aria-hidden="true"></i> Pinch</span><span>Klick</span></li>
+    <li><span><i class="ph ph-hand-grabbing" aria-hidden="true"></i> + ziehen</span><span>Scrollen</span></li>
+    <li><span><i class="ph ph-hand-peace" aria-hidden="true"></i> Victory</span><span>Menü ein/aus</span></li>
+    <li><span><i class="ph ph-cursor-click" aria-hidden="true"></i> Navbar + Pinch</span><span>Seite wechseln</span></li>
+    <li><span><i class="ph ph-keyboard" aria-hidden="true"></i> Maus/Tastatur</span><span>immer aktiv</span></li>
+  </ul>
+</aside>
+
+<!-- One-time onboarding coachmark (shown by onboarding.js on first visit) -->
+<div id="nui-coach" class="nui-coach" hidden="">
+  <div class="nui-coach-card" role="dialog" aria-label="Hinweis zur Hand-Steuerung">
+    <button class="nui-coach-close" type="button" aria-label="Hinweis schließen"><i class="ph ph-x" aria-hidden="true"></i></button>
+    <p class="nui-coach-title"><i class="ph ph-hand-waving" aria-hidden="true"></i> Bediene die Seite mit der Hand</p>
+    <p class="nui-coach-text">
+      Aus Datenschutz startet die Kamera <strong>erst auf Klick</strong>. Tippe unten
+      auf <strong>„Kamera starten“</strong> (oder Taste <kbd>N</kbd>) und navigiere
+      die ganze Website per Handgeste. <strong>Maus &amp; Tastatur funktionieren
+      immer</strong>, die Kamera ist optional.
+    </p>
+    <button class="nui-coach-ok nui-btn nui-btn-primary" type="button">Verstanden</button>
+  </div>
+</div>
+
+<!-- Sticky global NUI dock: the camera feed + all controls -->
+<div id="nui-dock" class="is-collapsed" data-state="BOOT">
+  <div class="nui-dock-head">
+    <span class="nui-dock-dot" aria-hidden="true"></span>
+    <span class="nui-dock-title">NUI-Steuerung</span>
+    <button id="nui-help-toggle" class="nui-dock-iconbtn" type="button" aria-expanded="false" aria-haspopup="dialog" aria-controls="nui-help" aria-label="Steuerung erklären" title="Steuerung erklären"><i class="ph ph-question" aria-hidden="true"></i></button>
+    <button id="nui-dock-toggle" class="nui-dock-iconbtn" type="button" aria-expanded="false" aria-label="Dock ein-/ausklappen" title="Ein-/ausklappen"><i class="ph ph-caret-down" aria-hidden="true"></i></button>
+  </div>
+  <div class="nui-dock-body">
+    <div class="nui-feed">
+      <video id="nui-video" playsinline="" muted=""></video>
+      <canvas id="nui-overlay" class="nui-overlay"></canvas>
+      <div class="nui-feed-placeholder" aria-hidden="true">
+        <i class="ph ph-video-camera-slash nui-feed-cam"></i>
+        <span class="nui-feed-cap">Kamera ist aus</span>
+        <span class="nui-feed-sub">Klick auf „Kamera starten“</span>
+      </div>
+      <div class="nui-hud nui-hud-top">
+        <span id="nui-state" class="nui-state" data-state="BOOT">Boot</span>
+        <span id="nui-gesture">-</span>
+      </div>
+      <div class="nui-hud nui-hud-bottom">
+        <span id="nui-status">Initializing…</span>
+      </div>
+    </div>
+    <div class="nui-dock-controls">
+      <button id="nui-start" type="button">Kamera starten</button>
+      <div class="nui-modes" role="group" aria-label="Steuerungsmodus">
+        <button id="nui-mode-hand" class="nui-mode-btn" data-mode="hand" type="button" aria-pressed="false"><i class="ph ph-hand" aria-hidden="true"></i> Hand</button>
+        <button id="nui-mode-pose" class="nui-mode-btn" data-mode="pose" type="button" aria-pressed="false"><i class="ph ph-person-arms-spread" aria-hidden="true"></i> Pose</button>
+        <button id="nui-mode-off" class="nui-mode-btn is-active" data-mode="off" type="button" aria-pressed="true"><i class="ph ph-power" aria-hidden="true"></i> Off</button>
+      </div>
+      <button id="nui-nav-toggle" class="nui-navswitch" type="button" data-state="off" aria-pressed="false" title="Ganze Seite per Hand bedienen (Taste N)">
+        <span class="nui-navswitch-text">
+          <i class="ph ph-hand-pointing" aria-hidden="true"></i>
+          <span class="nui-navswitch-label">Seitensteuerung per Hand</span>
+        </span>
+        <span class="nui-navswitch-track" aria-hidden="true"><span class="nui-navswitch-thumb"></span></span>
+      </button>
+    </div>
+    <p class="nui-hint">
+      Taste <kbd>N</kbd> schaltet auch um ·
+      <i class="ph ph-hand-peace" aria-hidden="true"></i> Victory öffnet das Menü
+    </p>
+  </div>
+</div>
+
+<!-- Help popout: opened from the "?" tooltip in the dock head. Explains every
+     control of the NUI dock and the whole-page hand navigation. -->
+<div id="nui-help" class="nui-help" role="dialog" aria-modal="false" aria-labelledby="nui-help-title" hidden="">
+  <div class="nui-help-card">
+    <button class="nui-help-close" type="button" aria-label="Hilfe schließen"><i class="ph ph-x" aria-hidden="true"></i></button>
+    <p id="nui-help-title" class="nui-help-title"><i class="ph ph-question" aria-hidden="true"></i> NUI-Steuerung erklärt</p>
+    <p class="nui-help-intro">
+      So bedienst du diese Website per Kamera und Hand. <strong>Maus &amp; Tastatur
+      funktionieren immer</strong> – die Kamera ist optional und startet aus
+      Datenschutz erst auf Klick.
+    </p>
+
+    <section class="nui-help-sec">
+      <h3 class="nui-help-h"><i class="ph ph-video-camera" aria-hidden="true"></i> Kamera &amp; Modus</h3>
+      <ul class="nui-help-list">
+        <li><span><strong>Kamera starten</strong></span><span>startet/stoppt die Kamera · Taste <kbd>N</kbd></span></li>
+        <li><span><i class="ph ph-hand" aria-hidden="true"></i> Hand</span><span>Handgesten erkennen</span></li>
+        <li><span><i class="ph ph-person-arms-spread" aria-hidden="true"></i> Pose</span><span>Körperhaltung erkennen</span></li>
+        <li><span><i class="ph ph-power" aria-hidden="true"></i> Off</span><span>Erkennung aus</span></li>
+      </ul>
+    </section>
+
+    <section class="nui-help-sec">
+      <h3 class="nui-help-h"><i class="ph ph-hand-pointing" aria-hidden="true"></i> Seitensteuerung per Hand</h3>
+      <p class="nui-help-text">
+        Der Schalter (oder Taste <kbd>N</kbd>) steuert die ganze Seite per Hand.
+        Diese Gesten stehen dann zur Verfügung:
+      </p>
+      <ul class="nui-help-list">
+        <li><span><i class="ph ph-hand" aria-hidden="true"></i> Hand bewegen</span><span>Cursor bewegen</span></li>
+        <li><span><i class="ph ph-hand-grabbing" aria-hidden="true"></i> Pinch</span><span>Klick</span></li>
+        <li><span><i class="ph ph-hand-grabbing" aria-hidden="true"></i> Pinch + ziehen</span><span>Scrollen</span></li>
+        <li><span><i class="ph ph-hand-peace" aria-hidden="true"></i> Victory</span><span>Menü ein/aus</span></li>
+        <li><span><i class="ph ph-cursor-click" aria-hidden="true"></i> Navbar + Pinch</span><span>Seite wechseln</span></li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<script type="module" src="nui/controller.js"></script>
+<script type="module" src="nui/onboarding.js"></script>
+<script type="module" src="nui/help.js"></script>
+<script type="module" src="nui/signature.js"></script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -144,12 +313,12 @@ ul.task-list li input[type="checkbox"] {
       // flash "checked"
       button.classList.add('code-copy-button-checked');
       var currentTitle = button.getAttribute("title");
-      button.setAttribute("title", "Copied!");
+      button.setAttribute("title", "Kopiert");
       let tooltip;
       if (window.bootstrap) {
         button.setAttribute("data-bs-toggle", "tooltip");
         button.setAttribute("data-bs-placement", "left");
-        button.setAttribute("data-bs-title", "Copied!");
+        button.setAttribute("data-bs-title", "Kopiert");
         tooltip = new bootstrap.Tooltip(button, 
           { trigger: "manual", 
             customClass: "code-copy-button-tooltip",
@@ -206,6 +375,11 @@ ul.task-list li input[type="checkbox"] {
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -520,6 +694,19 @@ ul.task-list li input[type="checkbox"] {
   });
   </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Visual Computing · Natural User Interfaces mit MediaPipe - Restle · Seidl · Kastrati</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 
 
 

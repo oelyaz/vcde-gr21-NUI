@@ -6,11 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Alexander Restle">
-<meta name="author" content="Elias Seidl">
-<meta name="author" content="Egzon Kastrati">
 
-<title>Gestensteuerung mit Hand- &amp; Pose-Tracking – NUI · Hand- &amp; Pose-Tracking</title>
+<title>Live-Demo – NUI · Hand- &amp; Pose-Tracking</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -35,6 +32,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-6b6957c917596b414ec0b78690761e87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
@@ -96,7 +94,7 @@ window.Quarto = {
 <link rel="stylesheet" href="nui/signature.css">
 </head>
 
-<body class="floating nav-fixed fullcontent quarto-light">
+<body class="floating nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -113,7 +111,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="./index.html"> 
 <span class="menu-text">Start</span></a>
   </li>  
   <li class="nav-item">
@@ -125,7 +123,7 @@ window.Quarto = {
 <span class="menu-text">Methode</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./demo.html"> 
+    <a class="nav-link active" href="./demo.html" aria-current="page"> 
 <span class="menu-text">Live-Demo</span></a>
   </li>  
   <li class="nav-item">
@@ -147,32 +145,32 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Auf dieser Seite</h2>
+   
+  <ul class="collapse">
+  <li><a href="#interaktiv" id="toc-interaktiv" class="nav-link active" data-scroll-target="#interaktiv">Live-Skelett-Overlay</a></li>
+  <li><a href="#demo" id="toc-demo" class="nav-link" data-scroll-target="#demo">Pose-gesteuerter T-Rex &amp; NUI-Modus</a></li>
+  </ul>
+</nav>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
-<main class="content page-columns page-full" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Gestensteuerung mit Hand- &amp; Pose-Tracking</h1>
-<p class="subtitle lead">Natural User Interfaces mit MediaPipe: ein interaktives Visual-Computing-Projekt</p>
+<h1 class="title">Live-Demo</h1>
+<p class="subtitle lead">Pose- und gestengesteuerter T-Rex, Live-Skelett-Overlay und Ganzseiten-NUI</p>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Autor:innen</div>
-    <div class="quarto-title-meta-contents">
-             <p>Alexander Restle </p>
-             <p>Elias Seidl </p>
-             <p>Egzon Kastrati </p>
-          </div>
-  </div>
     
   
     
@@ -183,97 +181,136 @@ window.Quarto = {
 </header>
 
 
-<style>header#title-block-header{display:none;}</style>
-<div class="column-screen">
-<div class="nui-hero" id="hero-stage">
-  <canvas id="nui-hero-canvas" class="nui-hero-canvas" aria-hidden="true"></canvas>
-  <div class="nui-hero-veil" aria-hidden="true"></div>
-  <div class="nui-hero-inner">
-    <p class="nui-hero-eyebrow">Visual Computing · Natural User Interfaces</p>
-    <p class="nui-hero-title">Die leere Hand wird zur <span class="nui-grad">Schnittstelle</span>.</p>
-    <p class="nui-hero-sub">Markerloses <strong>Hand- &amp; Pose-Tracking</strong> mit
-      <em>MediaPipe</em>: Eine gewöhnliche Webcam genügt, um Gesten und Körperhaltung
-      in Echtzeit in Befehle umzusetzen. Damit lässt sich sogar der Dinosaurier nur mit
-      Bewegung steuern.</p>
-    <div class="nui-hero-cta">
-      <a class="nui-btn nui-btn-primary" href="demo.html"><i class="ph ph-game-controller" aria-hidden="true"></i><span>Live-Demo starten</span></a>
-      <a class="nui-btn nui-btn-ghost" href="methode.html"><i class="ph ph-gear-six" aria-hidden="true"></i><span>Wie es funktioniert</span></a>
-    </div>
-    <p class="nui-hero-note">Die Kamera startet erst auf Klick · Maus &amp; Tastatur funktionieren immer.</p>
-  </div>
-  <div class="nui-hero-scrollcue" aria-hidden="true"><span></span></div>
-</div>
-</div>
+<div class="nui-pagehead">
+<p><span class="nui-eyebrow">Interaktiv · Spielbar</span></p>
 <div class="nui-lead">
-<p>Dieses Projekt zeigt, wie <strong>Hand- und Pose-Tracking</strong> mit <em>MediaPipe</em> ein <strong>Natural User Interface (NUI)</strong> möglich macht: vom Funktionsprinzip <em>unter der Haube</em> bis zur spielbaren Live-Demo. Du steuerst den Dinosaurier mit Körperbewegung und Handgesten. Die Seite lässt sich außerdem <strong>per Handgeste bedienen</strong> (Taste <kbd>N</kbd> oder Button im Dock unten rechts). Maus und Tastatur bleiben jederzeit aktiv.</p>
-</div>
-<section id="kurzfassung" class="level2">
-<h2 data-anchor-id="kurzfassung">Kurzfassung</h2>
-<div class="callout callout-style-simple callout-note">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>Natural User Interfaces wollen den Körper selbst zur Eingabe machen, statt Maus, Tastatur oder Controller. Wir zeigen, dass dafür eine gewöhnliche Webcam reicht: <em>MediaPipe</em> schätzt Hand- und Körper-Landmarks on-device direkt im Browser <span class="citation" data-cites="lugaresi2019mediapipe zhang2020mediapipehands bazarevsky2020blazepose">(Lugaresi u.&nbsp;a. 2019; Zhang u.&nbsp;a. 2020; Bazarevsky u.&nbsp;a. 2020)</span>. Aus diesen Landmarks bauen wir zwei Steuerungen. Erstens einen pose- und gestengesteuerten Chrome-T-Rex (Springen, Ducken, Neustart). Zweitens eine komplett handbedienbare Website mit Cursor, Pinch-Klick und Scrollen als <em>einem</em> kontinuierlichen Kanal. Den Kern bildet ein eigener <strong>Mapping-Layer</strong>, der Geste oder Pose über einen abstrakten Intent auf Befehle abbildet. Gegen das Midas-Touch-Problem setzen wir Engagement-Toggle, Confidence-Gate, Debounce, Hysterese und den 1-Euro-Filter <span class="citation" data-cites="buxton1990threestate casiez2012euro">(Buxton 1990; Casiez u.&nbsp;a. 2012)</span>. Eine leichte Evaluation misst Latenz, Erkennungs- und Fehltrigger-Rate und benennt die Grenzen offen. Maus und Tastatur bleiben jederzeit aktiv.</p>
+<p>Auf dieser Seite probieren wir die <a href="./methode.html">Methode</a> aus: mit Live-Skelett-Overlay, zwei kleinen Modulen und dem per Hand oder Körperpose gesteuerten <strong>Chrome-T-Rex</strong>. Die Kamera startest du im <strong>NUI-Dock unten rechts</strong>. Sie läuft <em>on-device</em>, nichts verlässt dein Gerät. Maus und Tastatur funktionieren weiterhin.</p>
 </div>
 </div>
+<section id="interaktiv" class="level2">
+<h2 class="anchored" data-anchor-id="interaktiv">Live-Skelett-Overlay</h2>
+<p>Die erste interaktive Visualisierung ist das <strong>Live-Skelett-Overlay</strong>. Im Kamerabild zeichnet ein Canvas die von <em>MediaPipe</em> erkannten <strong>Landmarks als Knoten und Kanten</strong> nach: 21 Punkte pro Hand bzw. ein Ganzkörper-Skelett aus den 33 Pose-Landmarks. <strong>Blaue</strong> Knoten und Kanten stehen für <em>sicher erkannt</em>, <strong>rote</strong> für <em>unsicher</em>. Im Pose-Modus markiert eine <strong>blaue Linie</strong> die kalibrierte Neutral-Höhe. Dieser Landmark-Graph taucht deshalb auch im Design der Seite wieder auf.</p>
+<p>Über die Visualisierung hinaus lässt sich die <strong>ganze Seite per Hand bedienen</strong>: Ein global an-/abschaltbarer Modus blendet einen <strong>Hand-Cursor</strong> ein, der der <strong>Zeigefingerspitze</strong> folgt; ein <strong>Pinch</strong> (Daumen- zu Zeigefingerspitze, auf die Handgröße normiert: <span class="math inline">\(\hat{d}=\lVert \mathbf{p}_{\text{thumb}}-\mathbf{p}_{\text{index}}\rVert_2 / s_{\text{hand}}\)</span>, siehe <a href="./methode.html#pipeline">Methode</a>) wird zum <strong>Klick</strong>, ein <strong>Pinch + Ziehen</strong> zum <strong>Scrollen</strong>. Den Cursor glättet der <strong>1-Euro-Filter</strong>. <strong>Maus und Tastatur bleiben jederzeit nutzbar</strong> (Pflicht-Fallback).</p>
+<p>Zum Ausprobieren zweier Bausteine aus der <a href="./methode.html#pipeline">Methode</a> gibt es unten zwei Module: <strong>Pinch-Distanz</strong> <span class="math inline">\(d\)</span> und <strong>Beugungswinkel</strong> <span class="math inline">\(\theta\)</span>. Beide laufen <strong>auch ohne Kamera</strong> mit einem statischen Beispiel. Sobald die Kamera aktiv ist, zeigen sie <strong>Live-Daten</strong>.</p>
+<div class="nui-modules">
+  <section class="nui-module" id="nui-explorer">
+    <header class="nui-module-head">
+      <h3 class="anchored">Landmark-Explorer</h3>
+      <button id="nui-explorer-freeze" type="button" data-state="off" aria-pressed="false">Freeze</button>
+    </header>
+    <canvas id="nui-explorer-canvas" width="360" height="300" role="img" aria-label="Hand-Skelett mit nummerierten Landmarks und Pinch-Distanz"></canvas>
+    <dl class="nui-module-readout">
+      <div><dt>Quelle</dt><dd id="nui-explorer-src">Sample</dd></div>
+      <div><dt>Pinch d</dt><dd id="nui-ex-pinch">-</dd></div>
+      <div><dt>Winkel θ</dt><dd id="nui-ex-angle">-</dd></div>
+    </dl>
+    <p class="nui-module-note">Knoten = Landmarks (0 Handgelenk · 4 Daumenspitze ·
+      8 Zeigefingerspitze), gestrichelt = Pinch-Distanz. „Freeze“ hält das aktuelle
+      Bild zum Inspizieren an.</p>
+  </section>
+
+  <section class="nui-module" id="nui-playground">
+    <header class="nui-module-head">
+      <h3 class="anchored">Gesten-Playground</h3>
+    </header>
+    <ul id="nui-pg-chips" class="nui-pg-chips" aria-label="Erkannte Geste">
+      <li data-g="Closed_Fist"><i class="ph ph-hand-fist" aria-hidden="true"></i> Fist</li>
+      <li data-g="Open_Palm"><i class="ph ph-hand-palm" aria-hidden="true"></i> Open palm</li>
+      <li data-g="Pointing_Up"><i class="ph ph-hand-pointing" aria-hidden="true"></i> Point</li>
+      <li data-g="Thumb_Up"><i class="ph ph-thumbs-up" aria-hidden="true"></i> Thumbs up</li>
+      <li data-g="Thumb_Down"><i class="ph ph-thumbs-down" aria-hidden="true"></i> Thumbs down</li>
+      <li data-g="Victory"><i class="ph ph-hand-peace" aria-hidden="true"></i> Victory</li>
+    </ul>
+    <div class="nui-pg-pinch">
+      <span class="nui-pg-pinch-label">Pinch offen</span>
+      <div class="nui-pg-bar"><div id="nui-pg-pinch-bar" class="nui-pg-bar-fill"></div></div>
+      <span id="nui-pg-pinch-val" class="nui-pg-pinch-val">-</span>
+    </div>
+    <p id="nui-pg-hint" class="nui-module-note">Zeig der Kamera eine Hand, oder erkunde das Beispiel.</p>
+  </section>
 </div>
 </section>
-<section id="problem" class="level2">
-<h2 data-anchor-id="problem">Hintergrund &amp; Problem</h2>
-<p>In der Landkarte des Visual Computing sitzt dieses Projekt zwischen <strong>Bildanalyse</strong> (<em>Image Analysis → Recognition</em>) und <strong>Human-Computer Interaction</strong>. Die Erkennung von Gesten und Landmarks ist überwacht gelerntes Sehen, ein Modell <span class="math inline">\(h_\theta\)</span>, das zu einem Bild eine Prädiktion liefert <span class="citation" data-cites="friedrich_vc_recognition">(Friedrich 2025)</span>. Die eigentliche Frage ist aber keine reine CV-Frage: Wann <em>meint</em> eine Bewegung einen Befehl, und wann ist sie beiläufig? Genau hier wird ein Interface, das technisch funktioniert, trotzdem unbenutzbar, wenn jede Handbewegung ungewollt auslöst.</p>
-<p>„Natürlich” ist deshalb ein Designziel und kein Naturgesetz: Auch Gesten sind erlernt, und ein NUI funktioniert erst mit sichtbaren Affordances, Discoverability und Feedback <span class="citation" data-cites="norman2010nui wigdor2011brave">(Norman 2010; Wigdor und Wixon 2011)</span>. Webcam-Tracking ist dabei ein bewusster Kompromiss. Wir verzichten auf Spezialhardware und metrische Tiefe und bekommen dafür etwas, das kein anderes Verfahren so bietet: markerlose Echtzeit ohne Installation, direkt im Browser <span class="citation" data-cites="lugaresi2019mediapipe">(Lugaresi u.&nbsp;a. 2019)</span>. Was dabei an Genauigkeit und Robustheit verloren geht, diskutieren wir in der <a href="./evaluation.html#grenzen">Evaluation</a>.</p>
-</section>
-<section id="beitrag" class="level2">
-<h2 data-anchor-id="beitrag">Unser Beitrag</h2>
-<p>Über den vendored T-Rex-Runner hinaus (BSD-Asset, unverändert) ist alles Folgende Eigenleistung:</p>
+<section id="demo" class="level2">
+<h2 class="anchored" data-anchor-id="demo">Pose-gesteuerter T-Rex &amp; NUI-Modus</h2>
+<p>Die eigene Ergänzung ist der Chrome-T-Rex, gesteuert per Handgeste <strong>oder</strong> per Körperpose über die Webcam. Im Dock wählst du den <strong>Steuerungsmodus</strong>. Es läuft immer nur <em>ein</em> Modell zugleich, damit die CPU nicht unnötig arbeitet:</p>
 <ul>
-<li><strong>Pose-gesteuerter T-Rex.</strong> Neutral-Kalibrierung der Schulter-/Hüft-Baseline, Springen über einen vertikalen Impuls, Ducken als gehaltene Hocke. Schwellen in Torso-Höhen, also distanz-invariant <span class="citation" data-cites="bazarevsky2020blazepose">(Bazarevsky u.&nbsp;a. 2020)</span>.</li>
-<li><strong>Ganzseiten-Handnavigation.</strong> Cursor an der Zeigefingerspitze, der Pinch als einziger kontinuierlicher Kanal (Klick und Scroll), Posture-Gate gegen Fehlauslösung, läuft beim Seitenwechsel automatisch weiter.</li>
-<li><strong>Eigener Mapping-Layer</strong> Quelle → Intent → Aktion, der den Runner über <code>Runner.instance_.onKeyDown/onKeyUp</code> ansteuert, nicht über synthetische Events.</li>
-<li><strong>Interaktive Lernbausteine.</strong> Live-Skelett-Overlay, Landmark-Explorer und Gesten-Playground machen Pipeline-Schritte direkt anfassbar.</li>
-<li><strong>Leichte Evaluation</strong> mit eigenem Harness (<code>nui/eval.js</code>) plus ehrlicher Diskussion von Latenz, Fehltriggern und Ermüdung.</li>
-<li><strong>Progressive Enhancement.</strong> Maus und Tastatur sind Pflicht-Fallback und immer aktiv; die Demo bleibt ohne 3D, Animationen oder Kamera bedienbar.</li>
+<li><i class="ph ph-hand" aria-hidden="true"></i> <strong>Hand</strong>: Handgesten steuern das Spiel. <strong>Open palm</strong> = Sprung · <strong>Closed fist</strong> = Ducken (halten) · <strong>Thumbs up</strong> = Neustart nach einem Crash. Das HUD zeigt die <strong>erkannte Geste samt Konfidenz</strong>; ein kurzes Debounce/Hysterese unterdrückt Fehltrigger. Bei aktiver <strong>Hand-Nav</strong> (s. u.) treiben dieselben Landmarks stattdessen den <strong>Seiten-Cursor</strong>.</li>
+<li><i class="ph ph-person-arms-spread" aria-hidden="true"></i> <strong>Pose</strong>: Ganzkörper-Steuerung. Erst kurz <strong>neutral und ruhig stehen</strong> (Kalibrierung der Schulter-/Hüft-Baseline), danach <strong>hochspringen / aufrichten = Sprung</strong> und <strong>in die Hocke gehen = Ducken (halten)</strong>. <em>Tipp:</em> Stell dich <strong>~2-3 m zurück</strong>, sodass <strong>Schultern und Hüfte</strong> im Kamerabild sind. Die <strong>blaue Linie</strong> ist deine kalibrierte Neutral-Höhe.</li>
+<li><i class="ph ph-power" aria-hidden="true"></i> <strong>Off</strong>: Steuerung pausiert (Kamerabild bleibt sichtbar).</li>
 </ul>
+<p><strong>NUI-Navigation (ganze Seite).</strong> Mit dem Button <strong>„Hand-Nav“</strong> (oder Taste <kbd>N</kbd>) schaltest du die <strong>Handsteuerung der ganzen Seite</strong> ein. Dann steuern die Handgesten nicht das Spiel, sondern einen <strong>Hand-Cursor</strong> (1-Euro-geglättet). Der <strong>Pinch</strong> ist der <strong>eine kontinuierliche Kanal</strong>: <strong>kurzer Pinch = Klick</strong>, <strong>Pinch + Ziehen = Scrollen</strong>; <strong>Victory</strong> blendet das <strong>NUI-Menü</strong> ein/aus. Zum <strong>Seitenwechsel</strong> zeigst du mit dem Cursor auf einen <strong>Navbar-Link</strong> und <strong>pinchst</strong> ihn an. Die Handsteuerung läuft auf der neuen Seite automatisch weiter. Cursor und Pinch reagieren nur bei <strong>gestrecktem Zeigefinger</strong> (Posture-Gate). Eine Faust friert den Cursor ein, statt ungewollt zu klicken. Der Pinch nutzt <strong>Hysterese</strong> (zwei Schwellen) gegen Flattern, also gegen „Midas-Touch“. <strong>Maus und Tastatur funktionieren weiterhin jederzeit</strong>, auch zum Spielen selbst (Pflicht-Fallback).</p>
+<p>Ohne Kamera jederzeit per Tastatur/Maus spielbar (Fallback aus dem vendored Runner).</p>
+<p>Die folgende Tabelle fasst den <strong>Mapping-Layer</strong> zusammen, also unsere Übersetzung <em>Quelle → Intent → Aktion</em>. Dieselbe Quelle kann je nach Modus anders belegt sein, genau das ist der Sinn der Entkopplung.</p>
 <div class="nui-table-wrap">
-<div id="tbl-stack" class="quarto-float quarto-figure quarto-figure-center">
+<div id="tbl-mapping" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-stack-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabelle&nbsp;1: Technischer Rahmen des Projekts.
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-mapping-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabelle&nbsp;1: Mapping-Layer der Steuerung: Quelle, Intent und ausgelöste Aktion je Modus.
 </figcaption>
-<div aria-describedby="tbl-stack-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="tbl-mapping-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
 <thead>
 <tr class="header">
-<th>Auf einen Blick</th>
-<th></th>
+<th>Quelle (Geste / Pose)</th>
+<th>Modus</th>
+<th>Intent</th>
+<th>Aktion</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Tracking</td>
-<td>MediaPipe Tasks-Vision: GestureRecognizer + Pose Landmarker, on-device</td>
+<td>Open palm</td>
+<td>Spiel</td>
+<td>Jump</td>
+<td>Sprung</td>
 </tr>
 <tr class="even">
-<td>Landmarks</td>
-<td>21 pro Hand, 33 für die Körperpose</td>
+<td>Closed fist</td>
+<td>Spiel</td>
+<td>Duck (halten)</td>
+<td>Ducken</td>
 </tr>
 <tr class="odd">
-<td>Auslieferung</td>
-<td>statische Quarto-Website, Libs zur Laufzeit per CDN, kein Build <span class="citation" data-cites="quarto2024">(Allaire und Teague 2024)</span></td>
+<td>Thumbs up</td>
+<td>Spiel</td>
+<td>Restart</td>
+<td>Neustart nach Crash</td>
 </tr>
 <tr class="even">
-<td>Browser</td>
-<td>Chrome, Edge, Firefox</td>
+<td>Aufrichten / Hochspringen</td>
+<td>Spiel (Pose)</td>
+<td>Jump</td>
+<td>Sprung</td>
 </tr>
 <tr class="odd">
-<td>Datenschutz</td>
-<td>Frames verlassen das Gerät nicht</td>
+<td>In die Hocke gehen</td>
+<td>Spiel (Pose)</td>
+<td>Duck (halten)</td>
+<td>Ducken</td>
+</tr>
+<tr class="even">
+<td>Zeigefingerspitze</td>
+<td>Navigation</td>
+<td>Pointer</td>
+<td>Cursor bewegen</td>
+</tr>
+<tr class="odd">
+<td>Pinch (kurz)</td>
+<td>Navigation</td>
+<td>Click</td>
+<td>Klick</td>
+</tr>
+<tr class="even">
+<td>Pinch + Ziehen</td>
+<td>Navigation</td>
+<td>Drag</td>
+<td>Scrollen</td>
+</tr>
+<tr class="odd">
+<td>Victory</td>
+<td>Navigation</td>
+<td>Menu</td>
+<td>NUI-Menü ein/aus</td>
 </tr>
 </tbody>
 </table>
@@ -281,255 +318,45 @@ Tabelle&nbsp;1: Technischer Rahmen des Projekts.
 </figure>
 </div>
 </div>
-</section>
-<section id="rundgang" class="level2">
-<h2 data-anchor-id="rundgang">Der Rundgang</h2>
-<div class="nui-carousel-root nui-reveal" id="nui-rundgang">
-  <div class="nui-carousel-viewport" id="nui-rundgang-vp">
-    <div class="nui-carousel-track" id="nui-rundgang-track">
-      <div class="nui-card">
-        <i class="ph ph-graduation-cap nui-card-ico" aria-hidden="true"></i>
-        <h3>Grundlagen</h3>
-        <p>Was ein NUI ausmacht: diskrete vs. kontinuierliche Gesten, das
-          Midas-Touch-Problem, Use-Cases und eine kurze Geschichte.</p>
-        <a class="nui-card-go" href="grundlagen.html">Mehr erfahren →</a>
+<div class="trex-stage">
+  <div class="trex-stage-sheen" aria-hidden="true"></div>
+  <div class="trex-host">
+    <div id="main-frame-error" class="interstitial-wrapper">
+      <div id="main-content">
+        <div class="icon icon-offline" alt=""></div>
       </div>
-      <div class="nui-card">
-        <i class="ph ph-gear-six nui-card-ico" aria-hidden="true"></i>
-        <h3>Methode im Detail</h3>
-        <p>Die MediaPipe-Pipeline von der Kamera bis zur Aktion, in neun Stufen
-          animiert und beim Scrollen Schritt für Schritt erklärt.</p>
-        <a class="nui-card-go" href="methode.html">Zur Pipeline →</a>
-      </div>
-      <div class="nui-card">
-        <i class="ph ph-game-controller nui-card-ico" aria-hidden="true"></i>
-        <h3>Live-Demo</h3>
-        <p>Steuere den Chrome-T-Rex per Handgeste oder Körperpose. Mit
-          Live-Skelett-Overlay und Ganzseiten-NUI.</p>
-        <a class="nui-card-go" href="demo.html">Jetzt spielen →</a>
-      </div>
-      <div class="nui-card">
-        <i class="ph ph-chart-bar nui-card-ico" aria-hidden="true"></i>
-        <h3>Evaluation &amp; Quiz</h3>
-        <p>Wie zuverlässig und schnell ist die Steuerung? Plus ein Selbsttest
-          zu den Lernzielen.</p>
-        <a class="nui-card-go" href="evaluation.html">Testen →</a>
-      </div>
-      <div class="nui-card">
-        <i class="ph ph-books nui-card-ico" aria-hidden="true"></i>
-        <h3>Über &amp; Referenzen</h3>
-        <p>Team, Aufgabenverteilung, Lizenzen der Drittanbieter-Assets und
-          die vollständige Literaturliste.</p>
-        <a class="nui-card-go" href="ueber.html">Mehr erfahren →</a>
+      <div id="offline-resources">
+        <img id="offline-resources-1x" src="trex/assets/default_100_percent/100-offline-sprite.png">
+        <img id="offline-resources-2x" src="trex/assets/default_200_percent/200-offline-sprite.png">
       </div>
     </div>
   </div>
-  <div class="nui-carousel-foot">
-    <button class="nui-carousel-ctrl" id="nui-rundgang-prev" aria-label="Vorherige Karte">
-      <i class="ph ph-caret-left" aria-hidden="true"></i>
-    </button>
-    <button class="nui-carousel-ctrl" id="nui-rundgang-next" aria-label="Nächste Karte">
-      <i class="ph ph-caret-right" aria-hidden="true"></i>
-    </button>
-  </div>
+  <p class="trex-stage-caption">Chrome Dino · vendored runner, unveränderte Canvas-Pixel</p>
 </div>
-<script>
-(function () {
-  'use strict';
-  var vp    = document.getElementById('nui-rundgang-vp');
-  var track = document.getElementById('nui-rundgang-track');
-  if (!vp || !track) return;
 
-  /* 1. Clone all cards on both ends for seamless infinite loop.
-        Track layout: [clone_0…n-1] [orig_0…n-1] [clone_0…n-1]  (total 3n)
-        "Real" zone = indices n … 2n-1. Clones look identical to originals. */
-  var originals = Array.from(track.children);
-  var n = originals.length;
-  originals.slice().reverse().forEach(function (c) {
-    track.insertBefore(c.cloneNode(true), track.firstChild);
-  });
-  originals.forEach(function (c) {
-    track.appendChild(c.cloneNode(true));
-  });
+<p class="nui-dock-pointer">
+  Die Steuerung sitzt im schwebenden <strong>NUI-Dock</strong> unten rechts.
+  Es bleibt auch beim Scrollen sichtbar. Dort die <strong>Kamera starten</strong>,
+  den Modus wählen und <strong>Hand-Nav</strong> ein-/ausschalten (Taste <kbd>N</kbd>).
+  Auch ohne Kamera spielbar:
+  <kbd>Space</kbd>/<kbd>↑</kbd> Sprung · <kbd>↓</kbd> ducken · <kbd>Enter</kbd> Neustart.
+</p>
 
-  var cur         = n;    /* start at first original */
-  var cardW       = 0;
-  var gapPx       = 0;
-  var translateX  = 0;
-  var isAnimating = false;
-
-  function visCount() {
-    return vp.clientWidth >= 900 ? 3 : vp.clientWidth >= 540 ? 2 : 1;
-  }
-
-  /* Cards start flush-left; right card peeks naturally (cardW sized to vis+0.25). */
-  function idealX(idx) {
-    return -(idx * (cardW + gapPx));
-  }
-
-  function setTranslate(x, animate) {
-    translateX = x;
-    track.style.transition = animate
-      ? 'transform 0.46s cubic-bezier(0.25,0,0.1,1)'
-      : 'none';
-    track.style.transform = 'translateX(' + x + 'px)';
-  }
-
-  /* 2. Layout: called on init and resize. */
-  function layout() {
-    gapPx = parseFloat(getComputedStyle(track).columnGap) || 14;
-    var vis = visCount();
-    /* vis full cards + ~25% of next card peeking on the right. */
-    cardW = Math.max(120, (vp.clientWidth - gapPx * (vis - 1)) / (vis + 0.25));
-    Array.from(track.children).forEach(function (c) {
-      c.style.flex = '0 0 ' + cardW + 'px';
-    });
-    setTranslate(idealX(cur), false);
-  }
-
-  /* 3. Advance by delta (±1). */
-  function go(delta) {
-    if (isAnimating) return;
-    cur += delta;
-    isAnimating = true;
-    setTranslate(idealX(cur), true);
-  }
-
-  /* 4. After each animation, if cur landed in a clone zone, instantly
-        jump to the visually identical position in the real zone. */
-  track.addEventListener('transitionend', function (e) {
-    if (e.propertyName !== 'transform' || e.target !== track) return;
-    isAnimating = false;
-    var jumped = false;
-    if      (cur < n)      { cur += n; jumped = true; }
-    else if (cur >= 2 * n) { cur -= n; jumped = true; }
-    if (jumped) {
-      track.style.transition = 'none';
-      translateX = idealX(cur);
-      track.style.transform = 'translateX(' + translateX + 'px)';
-      void track.offsetWidth; /* flush so the next transition starts clean */
-    }
-  });
-
-  /* 5. Prev / Next buttons. */
-  var prevBtn = document.getElementById('nui-rundgang-prev');
-  var nextBtn = document.getElementById('nui-rundgang-next');
-  if (prevBtn) prevBtn.addEventListener('click', function () { go(-1); });
-  if (nextBtn) nextBtn.addEventListener('click', function () { go(1); });
-
-  /* 6. Drag / swipe: pointer events work for both mouse and touch.
-        Axis detection: vertical movement hands back to page scroll. */
-  var drag = { active: false, moved: false, axis: null, suppressClickUntil: 0,
-               startX: 0, startY: 0, baseX: 0 };
-
-  function readActualX() {
-    var t = getComputedStyle(track).transform;
-    if (!t || t === 'none') return translateX;
-    var x = new DOMMatrix(t).m41;
-    return isFinite(x) ? x : translateX;
-  }
-
-  track.addEventListener('pointerdown', function (e) {
-    if (e.button !== 0) return;
-    /* Sync cur to the actual on-screen position (animation may be mid-flight). */
-    var actualX = readActualX();
-    cur = Math.round(-actualX / (cardW + gapPx));
-    cur = Math.max(n - 1, Math.min(2 * n, cur));
-    translateX   = actualX;
-    isAnimating  = false;
-    drag.active  = true;
-    drag.moved   = false;
-    drag.axis    = null;
-    drag.suppressClickUntil = 0;
-    drag.startX  = e.clientX;
-    drag.startY  = e.clientY;
-    drag.baseX   = actualX;
-    track.style.transition = 'none';
-    window.addEventListener('pointermove', onMove, { passive: false });
-    window.addEventListener('pointerup',     onUp);
-    window.addEventListener('pointercancel', onCancel);
-  });
-
-  function onMove(e) {
-    if (!drag.active) return;
-    var dx = e.clientX - drag.startX;
-    var dy = e.clientY - drag.startY;
-    if (!drag.axis) {
-      if (Math.sqrt(dx * dx + dy * dy) < 8) return;
-      drag.axis = Math.abs(dx) >= Math.abs(dy) ? 'h' : 'v';
-      if (drag.axis === 'v') { cancelDrag(); return; }
-    }
-    if (!drag.moved) {
-      drag.suppressClickUntil = Date.now() + 350;
-      track.classList.add('is-dragging');
-    }
-    drag.moved = true;
-    e.preventDefault(); /* block page-scroll while dragging horizontally */
-    translateX = drag.baseX + dx;
-    track.style.transform = 'translateX(' + translateX + 'px)';
-  }
-
-  function onUp(e) {
-    if (!drag.active) return;
-    endDrag();
-    if (!drag.moved || drag.axis !== 'h') {
-      setTranslate(idealX(cur), false);
-      return;
-    }
-    var dx = e.clientX - drag.startX;
-    var threshold = Math.max(50, cardW * 0.22);
-    if      (dx < -threshold) cur++;
-    else if (dx >  threshold) cur--;
-    isAnimating = true;
-    setTranslate(idealX(cur), true);
-  }
-
-  function onCancel() {
-    if (!drag.active) return;
-    endDrag();
-    isAnimating = true;
-    setTranslate(idealX(cur), true);
-  }
-
-  function endDrag() {
-    drag.active = false;
-    track.classList.remove('is-dragging');
-    window.removeEventListener('pointermove', onMove);
-    window.removeEventListener('pointerup',     onUp);
-    window.removeEventListener('pointercancel', onCancel);
-  }
-
-  function cancelDrag() {
-    drag.suppressClickUntil = 0;
-    endDrag();
-    setTranslate(idealX(cur), false);
-  }
-
-  /* Suppress link navigation if the gesture was a real horizontal drag. */
-  track.addEventListener('click', function (e) {
-    if (Date.now() > drag.suppressClickUntil) return;
-    drag.suppressClickUntil = 0;
-    e.preventDefault();
-  }, true);
-
-  /* 7. Resize. */
-  var raf;
-  window.addEventListener('resize', function () {
-    cancelAnimationFrame(raf);
-    raf = requestAnimationFrame(layout);
-  }, { passive: true });
-
-  layout();
-}());
-</script>
-<div class="nui-quiz-cta nui-reveal">
-  <div class="nui-quiz-cta-body">
-    <h3>Bereit? Steuere den Dino mit deinem Körper.</h3>
-    <p>Kamera an, Modus wählen (Handgesten oder Ganzkörper-Pose) und losspielen.
-      On-device, nichts verlässt dein Gerät. Ohne Kamera per Tastatur spielbar.</p>
-  </div>
-  <a class="nui-btn nui-btn-primary" href="demo.html"><i class="ph ph-game-controller" aria-hidden="true"></i><span>Zur Live-Demo</span></a>
+<script src="trex/trex-runner.js"></script>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
+<div class="callout-body-container">
+<p><strong>Lizenz &amp; Attribution (Demo).</strong> Die T-Rex-Demo nutzt den quelloffenen <em>Chrome-Dino</em>-Runner (<code>trex/trex-runner.js</code>), © 2014 The Chromium Authors, BSD-Lizenz; unverändert eingebunden (vendored). Die Gesten-/Pose-Steuerung darüber ist Eigenleistung. Tracking läuft über <em>MediaPipe Tasks-Vision</em> (Google, Apache-2.0), zur Laufzeit per CDN geladen <span class="citation" data-cites="lugaresi2019mediapipe">(Lugaresi u.&nbsp;a. 2019)</span>. Vollständige Hinweise unter <a href="./ueber.html#referenzen">Über &amp; Referenzen</a>.</p>
+</div>
+</div>
+</div>
+<nav class="nui-pagenav" aria-label="Seitennavigation">
+  <a class="nui-btn nui-btn-ghost" href="methode.html">← Methode</a>
+  <a class="nui-btn nui-btn-primary" href="evaluation.html">Weiter: Evaluation &amp; Quiz →</a>
+</nav>
 
 
 </section>
@@ -665,6 +492,13 @@ Tabelle&nbsp;1: Technischer Rahmen des Projekts.
 <script type="module" src="nui/signature.js"></script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
