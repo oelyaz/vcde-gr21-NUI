@@ -91,23 +91,23 @@ latency_ms = np.clip(rng.lognormal(mean=np.log(50), sigma=0.40, size=300), 20, 2
 med = float(np.median(latency_ms))
 p95 = float(np.percentile(latency_ms, 95))
 
-# Light Apple-style figure: transparent canvas, dark type, quiet blue bars and
-# readable warning/danger markers. Data is unchanged.
-TXT = "#1d1d1f"
-LINE = "#d2d2d7"
-GRID = "#e5e5ea"
+# Dark slide-deck figure: transparent canvas, light type, red accent bars and
+# readable markers against the near-black page. Data is unchanged.
+TXT = "#c7cbd2"
+LINE = "#3a3f4a"
+GRID = "#23262d"
 fig, ax = plt.subplots(figsize=(7, 3.2))
 fig.patch.set_alpha(0.0)
 ax.set_facecolor("none")
-ax.hist(latency_ms, bins=26, color="#0071e3", edgecolor="#ffffff", linewidth=0.7, alpha=0.82)
-ax.axvline(med, color="#d70015", ls="--", lw=1.6, label=f"Median {med:.0f} ms")
-ax.axvline(p95, color="#b36b00", ls="--", lw=1.6, label=f"p95 {p95:.0f} ms")
+ax.hist(latency_ms, bins=26, color="#ec3a2e", edgecolor="#0d0e12", linewidth=0.7, alpha=0.85)
+ax.axvline(med, color="#f1f1f3", ls="--", lw=1.6, label=f"Median {med:.0f} ms")
+ax.axvline(p95, color="#e0a23c", ls="--", lw=1.6, label=f"p95 {p95:.0f} ms")
 ax.set_xlabel("Verarbeitungslatenz Frame → Aktion (ms)", color=TXT)
 ax.set_ylabel("Anzahl Frames", color=TXT)
 ax.tick_params(colors=TXT)
 ax.grid(axis="y", color=GRID, linewidth=0.8)
 ax.set_axisbelow(True)
-leg = ax.legend(frameon=True, facecolor="#ffffff", edgecolor=LINE, framealpha=0.96)
+leg = ax.legend(frameon=True, facecolor="#14171c", edgecolor=LINE, framealpha=0.96)
 for t in leg.get_texts():
     t.set_color(TXT)
 for s in ("top", "right"):

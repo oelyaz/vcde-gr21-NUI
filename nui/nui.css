@@ -74,16 +74,17 @@
   margin: 0.5rem auto 2rem;
   font-size: 0.9rem;
   line-height: 1.5;
-  color: #475569;
+  color: var(--nui-text-muted);
   text-align: center;
 }
 .nui-dock-pointer kbd {
   font: 600 0.75rem/1 monospace;
   padding: 1px 5px;
-  border: 1px solid #bbb;
+  border: 1px solid var(--nui-line-strong);
   border-bottom-width: 2px;
   border-radius: 4px;
-  background: #fafafa;
+  background: var(--nui-bg-2);
+  color: var(--nui-text-strong);
 }
 #nui-dock {
   position: fixed;
@@ -147,7 +148,7 @@
   transition: transform .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease, color .15s ease;
 }
 .nui-dock-iconbtn .ph { line-height: 1; }
-.nui-dock-iconbtn:hover { background: rgba(0,113,227,0.06); border-color: var(--nui-accent); color: var(--nui-accent); }
+.nui-dock-iconbtn:hover { background: rgba(236,58,46,0.12); border-color: var(--nui-accent); color: var(--nui-accent); }
 #nui-dock.is-collapsed #nui-dock-toggle { transform: rotate(180deg); }
 /* A hairline under the head separates it from the body when the dock is open. */
 #nui-dock:not(.is-collapsed) .nui-dock-head { border-bottom: 1px solid var(--nui-line); }
@@ -222,7 +223,7 @@
   transition: background .15s ease, color .15s ease;
 }
 .nui-mode-btn .ph { font-size: 1.02em; line-height: 1; }
-.nui-mode-btn:hover { background: rgba(255,255,255,0.76); color: var(--nui-text-strong); }
+.nui-mode-btn:hover { background: rgba(255,255,255,0.08); color: var(--nui-text-strong); }
 .nui-mode-btn.is-active {
   background: var(--nui-accent);
   border-color: transparent;
@@ -283,7 +284,7 @@
   align-items: center;
   gap: 8px;
   padding: 4px 8px;
-  background: rgba(255,255,255,0.74);
+  background: rgba(13,14,18,0.66);
   color: var(--nui-text-strong);
   font: 600 12px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
   -webkit-backdrop-filter: saturate(160%) blur(10px);
@@ -333,7 +334,7 @@
   font: 600 0.8rem/1.1 "Inter", system-ui, sans-serif;
   transition: background .15s ease, border-color .15s ease;
 }
-.nui-navswitch:hover { border-color: var(--nui-line-strong); background: rgba(0,113,227,0.04); }
+.nui-navswitch:hover { border-color: var(--nui-line-strong); background: rgba(236,58,46,0.08); }
 .nui-navswitch-text { display: inline-flex; align-items: center; gap: 0.45rem; min-width: 0; }
 .nui-navswitch-text .ph { flex: 0 0 auto; color: var(--nui-accent); font-size: 1.05em; }
 .nui-navswitch-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -342,7 +343,7 @@
   position: relative;
   width: 38px; height: 22px;
   border-radius: 999px;
-  background: #d7d7dc;
+  background: #3a3f4a;
   border: 1px solid var(--nui-line-strong);
   transition: background .15s ease, border-color .15s ease;
 }
@@ -354,7 +355,7 @@
   background: #fff;
   transition: transform .16s var(--nui-ease), background .16s ease;
 }
-.nui-navswitch[data-state="on"] { border-color: rgba(0,113,227,0.28); background: rgba(0,113,227,0.06); }
+.nui-navswitch[data-state="on"] { border-color: rgba(236,58,46,0.34); background: rgba(236,58,46,0.10); }
 .nui-navswitch[data-state="on"] .nui-navswitch-track { background: var(--nui-accent); border-color: transparent; }
 .nui-navswitch[data-state="on"] .nui-navswitch-thumb { transform: translateX(16px); background: #fff; }
 #nui-cursor {
@@ -376,13 +377,13 @@
   transition: transform .08s ease, background .08s ease, box-shadow .08s ease;
 }
 #nui-cursor.is-hover .nui-cursor-dot {
-  background: rgba(0,113,227,0.14);
-  box-shadow: 0 0 0 5px rgba(0,113,227,0.16);
+  background: rgba(236,58,46,0.18);
+  box-shadow: 0 0 0 5px rgba(236,58,46,0.18);
 }
 #nui-cursor.is-pinch .nui-cursor-dot {
   transform: scale(0.6);
   background: var(--nui-accent);
-  box-shadow: 0 0 0 5px rgba(0,113,227,0.18);
+  box-shadow: 0 0 0 5px rgba(236,58,46,0.22);
 }
 #nui-cursor.is-click .nui-cursor-dot {
   transform: scale(1.25);
@@ -421,6 +422,118 @@
   padding: 2px 0;
 }
 
+/* Help popout: opened from the "?" tooltip in the dock head. Sits just left of
+   the 300px-wide dock and points at it, like the onboarding coachmark. */
+.nui-help {
+  position: fixed;
+  right: 332px;
+  bottom: 16px;
+  z-index: 1061;
+  width: min(340px, calc(100vw - 32px));
+  max-height: min(76vh, 620px);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  animation: nui-help-in 0.34s var(--nui-ease) both;
+}
+.nui-help[hidden] { display: none; }
+@keyframes nui-help-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.nui-help-card {
+  position: relative;
+  padding: 14px 16px 16px;
+  border-radius: var(--nui-radius-lg);
+  background: var(--nui-bg-2);
+  border: 1px solid var(--nui-line-strong);
+  box-shadow: var(--nui-shadow-panel);
+  color: var(--nui-text);
+  font: 500 0.82rem/1.45 "Inter", -apple-system, system-ui, sans-serif;
+}
+.nui-help-close {
+  position: absolute;
+  top: 9px;
+  right: 10px;
+  width: 28px; height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid var(--nui-line-strong);
+  border-radius: 999px;
+  background: var(--nui-bg-2);
+  color: var(--nui-text-muted);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color .15s ease, background .15s ease, border-color .15s ease;
+}
+.nui-help-close .ph { line-height: 1; }
+.nui-help-close:hover { color: var(--nui-accent); border-color: var(--nui-accent); background: rgba(236,58,46,0.12); }
+.nui-help-title {
+  margin: 0 36px 8px 0;
+  font: 700 1rem/1.3 "Inter", system-ui, sans-serif;
+  color: var(--nui-text-strong);
+}
+.nui-help-title .ph { color: var(--nui-accent); vertical-align: -0.1em; }
+.nui-help-intro {
+  margin: 0 0 14px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--nui-text-muted);
+}
+.nui-help-sec { margin: 0 0 14px; }
+.nui-help-sec:last-child { margin-bottom: 0; }
+.nui-help-h {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--nui-accent);
+}
+.nui-help-h .ph { font-size: 1.05em; line-height: 1; }
+.nui-help-text {
+  margin: 0 0 8px;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--nui-text-muted);
+}
+.nui-help-list { margin: 0; padding: 0; list-style: none; }
+.nui-help-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 14px;
+  padding: 3px 0;
+  border-top: 1px solid var(--nui-line);
+}
+.nui-help-list li:first-child { border-top: none; }
+.nui-help-list li > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--nui-text-strong);
+  white-space: nowrap;
+}
+.nui-help-list li > span:last-child {
+  text-align: right;
+  color: var(--nui-text-muted);
+}
+.nui-help-list .ph { color: var(--nui-accent); vertical-align: -0.1em; }
+.nui-help kbd {
+  font: 600 0.7rem/1 monospace;
+  padding: 1px 5px;
+  border: 1px solid var(--nui-line-strong);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--nui-bg-2);
+  color: var(--nui-text-strong);
+}
+@media (max-width: 680px) {
+  .nui-help { right: 16px; left: 16px; bottom: 72px; width: auto; }
+}
+
 /* Interactive explainer modules */
 .nui-modules {
   display: grid;
@@ -453,8 +566,8 @@
 #nui-explorer-canvas {
   display: block; width: 100%; height: auto; aspect-ratio: 6 / 5;
   background:
-    linear-gradient(rgba(0, 0, 0, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
     var(--nui-bg-1);
   background-size: 24px 24px;
   border: 1px solid var(--nui-line); border-radius: var(--nui-radius);

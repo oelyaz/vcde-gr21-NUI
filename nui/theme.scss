@@ -1,5 +1,6 @@
 /*-- scss:defaults --*/
-// APPLE-1 foundation: light Apple-inspired product base for Quarto + shared UI.
+// SLIDE-DECK foundation: dark base with a vivid red accent, matching the
+// presentation slides (near-black #0d0e12 background, #ec3a2e red, white heads).
 
 // Typography ------------------------------------------------------------------
 $font-family-sans-serif: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -11,48 +12,63 @@ $font-size-root: 17px !default;
 $line-height-base: 1.65 !default;
 
 // Core palette ----------------------------------------------------------------
-$primary: #0071e3 !default;
-$body-bg: #f5f5f7 !default;
-$body-color: #1d1d1f !default;
-$link-color: #0066cc !default;
-$link-hover-color: #004f9e !default;
-$border-color: rgba(0, 0, 0, 0.10) !default;
+$primary: #ec3a2e !default;
+$body-bg: #0d0e12 !default;
+$body-color: #c7cbd2 !default;
+$link-color: #ff5347 !default;
+$link-hover-color: #ff7a70 !default;
+$border-color: rgba(255, 255, 255, 0.12) !default;
 
 // Bootstrap surfaces ----------------------------------------------------------
-$card-bg: #ffffff !default;
-$code-color: #0057b8 !default;
-$code-bg: rgba(0, 113, 227, 0.08) !default;
-$table-border-color: rgba(0, 0, 0, 0.10) !default;
+$card-bg: #14171c !default;
+$code-color: #ff8c80 !default;
+$code-bg: rgba(236, 58, 46, 0.14) !default;
+$table-border-color: rgba(255, 255, 255, 0.10) !default;
+
+// Dark-mode component surfaces so Bootstrap chrome doesn't stay light ---------
+$body-secondary-color: #868d97 !default;
+$body-tertiary-bg: #14171c !default;
+$secondary: #22262f !default;
+$light: #22262f !default;
+$dark: #0d0e12 !default;
+$emphasis-color: #f1f1f3 !default;
+$headings-color: #f1f1f3 !default;
+$dropdown-bg: #14171c !default;
+$dropdown-link-color: #c7cbd2 !default;
+$dropdown-link-hover-bg: rgba(255, 255, 255, 0.06) !default;
+$input-bg: #14171c !default;
+$input-color: #e8eaee !default;
+$input-border-color: rgba(255, 255, 255, 0.16) !default;
 
 // Quarto chrome ---------------------------------------------------------------
-$navbar-bg: rgba(251, 251, 253, 0.86) !default;
-$navbar-fg: #1d1d1f !default;
-$toc-color: #6e6e73 !default;
-$toc-active-border: #0071e3 !default;
+$navbar-bg: rgba(13, 14, 18, 0.86) !default;
+$navbar-fg: #f1f1f3 !default;
+$toc-color: #868d97 !default;
+$toc-active-border: #ec3a2e !default;
 
 /*-- scss:rules --*/
 :root {
-  --nui-bg-0: #f5f5f7;
-  --nui-bg-1: #fbfbfd;
-  --nui-bg-2: #ffffff;
-  --nui-bg-3: #f0f0f2;
-  --nui-line: rgba(0, 0, 0, 0.10);
-  --nui-line-strong: rgba(0, 0, 0, 0.16);
+  --nui-bg-0: #0d0e12;   /* page background (slide bg) */
+  --nui-bg-1: #101218;   /* slightly raised surface */
+  --nui-bg-2: #14171c;   /* cards / panels (slide card) */
+  --nui-bg-3: #22262f;   /* raised inputs / chips (slide sub-card) */
+  --nui-line: rgba(255, 255, 255, 0.09);
+  --nui-line-strong: rgba(255, 255, 255, 0.17);
 
-  --nui-text: #1d1d1f;
-  --nui-text-strong: #0b0b0f;
-  --nui-text-muted: #6e6e73;
+  --nui-text: #c7cbd2;
+  --nui-text-strong: #f1f1f3;
+  --nui-text-muted: #868d97;
 
-  --nui-accent: #0071e3;
-  --nui-accent-2: #0066cc;
-  --nui-accent-3: #004f9e;
-  --nui-accent-4: #003f7f;
-  --nui-danger: #d70015;
-  --nui-warning: #b36b00;
+  --nui-accent: #ec3a2e;
+  --nui-accent-2: #ff5347;
+  --nui-accent-3: #ff7a70;
+  --nui-accent-4: #ff9488;
+  --nui-danger: #ff5f57;
+  --nui-warning: #e0a23c;
 
-  --nui-shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.06);
-  --nui-shadow-panel: 0 18px 48px -28px rgba(0, 0, 0, 0.28);
-  --nui-material: rgba(255, 255, 255, 0.78);
+  --nui-shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.5), 0 10px 28px rgba(0, 0, 0, 0.5);
+  --nui-shadow-panel: 0 22px 60px -22px rgba(0, 0, 0, 0.85);
+  --nui-material: rgba(16, 18, 24, 0.8);
 
   --nui-space-1: 0.5rem;
   --nui-space-2: 1rem;
@@ -86,7 +102,7 @@ body {
 }
 
 ::selection {
-  background: rgba(0, 113, 227, 0.18);
+  background: rgba(236, 58, 46, 0.30);
   color: var(--nui-text-strong);
 }
 
@@ -132,7 +148,7 @@ figcaption,
 
 a {
   color: var(--nui-accent-2);
-  text-decoration-color: rgba(0, 102, 204, 0.32);
+  text-decoration-color: rgba(255, 83, 71, 0.38);
   text-underline-offset: 0.16em;
 }
 
@@ -175,7 +191,7 @@ a:hover {
 .navbar .navbar-nav .nav-link:hover,
 .navbar .navbar-nav .show > .nav-link {
   color: var(--nui-text-strong) !important;
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.07);
 }
 
 .navbar .navbar-nav .nav-link.active {
@@ -265,7 +281,7 @@ div.callout {
 }
 
 div.callout-note { border-left-color: var(--nui-accent) !important; }
-div.callout-tip { border-left-color: #2f855a !important; }
+div.callout-tip { border-left-color: #3fb27f !important; }
 div.callout-warning { border-left-color: var(--nui-warning) !important; }
 div.callout-important,
 div.callout-caution { border-left-color: var(--nui-danger) !important; }
@@ -274,10 +290,10 @@ div.callout-caution { border-left-color: var(--nui-danger) !important; }
 code:not(.sourceCode),
 p code,
 li code {
-  background: rgba(0, 113, 227, 0.08);
-  border: 1px solid rgba(0, 113, 227, 0.12);
+  background: rgba(236, 58, 46, 0.14);
+  border: 1px solid rgba(236, 58, 46, 0.30);
   border-radius: 5px;
-  color: #0057b8;
+  color: #ff8c80;
   padding: 0.1em 0.36em;
 }
 
@@ -294,17 +310,25 @@ kbd {
 // Code blocks -----------------------------------------------------------------
 div.sourceCode,
 pre.sourceCode {
-  background: #f6f8fa !important;
+  background: #0f1116 !important;
   border: 1px solid var(--nui-line);
   border-radius: var(--nui-radius);
   box-shadow: none;
-  color: var(--nui-text);
+  color: #e8eaee;
 }
 
 pre code,
 pre.sourceCode code {
   color: inherit;
 }
+
+// Quarto page footer on the dark base.
+.nav-footer {
+  border-top: 1px solid var(--nui-line);
+  color: var(--nui-text-muted);
+}
+.nav-footer a { color: var(--nui-text-muted); }
+.nav-footer a:hover { color: var(--nui-accent-2); }
 
 // MathJax ---------------------------------------------------------------------
 mjx-container { color: var(--nui-text-strong); }

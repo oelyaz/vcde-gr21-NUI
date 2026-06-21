@@ -101,8 +101,8 @@ async function initHero() {
 
 
 
-  const accent = color3FromToken(B, '--nui-accent', '#0071e3');
-  const accent2 = color3FromToken(B, '--nui-accent-2', '#0066cc');
+  const accent = color3FromToken(B, '--nui-accent', '#ec3a2e');
+  const accent2 = color3FromToken(B, '--nui-accent-2', '#ff5347');
 
   const root = new B.TransformNode('root', scene);
   // Park the constellation on the right so the headline + body copy on the left
@@ -114,7 +114,10 @@ async function initHero() {
     // Below 900px the copy spans full width (CSS drops the reserved column), so
     // centre the hand behind the veil instead of pushing it onto the text.
     if (w < 900) { root.position.x = 0; return; }
-    const target = 0.77 * w;
+    // The copy lives in a centred max-1320px band. On ultra-wide screens 0.77*w
+    // drifts the hand far past that band (it floats off to the right and the
+    // composition looks off-centre), so keep it near the band's right edge.
+    const target = Math.min(0.77 * w, w * 0.5 + 360);
     root.position.x = (0.536 * w - target) / (h / 6.05);
   };
   layoutHero();

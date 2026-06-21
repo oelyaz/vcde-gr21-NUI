@@ -60,7 +60,7 @@ aus, wir synthetisieren sie nicht.
 
 ## Die Pipeline: von der Kamera zur Aktion {#pipeline}
 
-::::: {#nui-flow .nui-flow}
+::::: {#nui-flow .nui-flow .column-page-right}
 
 :::: {.nui-flow-figure}
 ```{=html}

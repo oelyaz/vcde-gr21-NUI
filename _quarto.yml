@@ -8,7 +8,7 @@ website:
   title: "NUI · Hand- & Pose-Tracking"
   search: false
   navbar:
-    background: light
+    background: dark
     pinned: true
     left:
       - text: "Start"
@@ -36,6 +36,9 @@ format:
   html:
     theme: [default, nui/theme.scss]
     css: [nui/nui.css, nui/signature.css]
+    highlight-style: github-dark
+    grid:
+      body-width: 960px
     toc: true
     toc-location: left
     toc-depth: 2

@@ -34,7 +34,30 @@
   border: 1px solid var(--nui-line-strong);
   background: var(--nui-bg-2);
 }
-.nui-btn-ghost:hover { color: var(--nui-accent-2); border-color: var(--nui-line-strong); background: rgba(0, 113, 227, 0.06); }
+.nui-btn-ghost:hover { color: var(--nui-accent-2); border-color: var(--nui-line-strong); background: rgba(236, 58, 46, 0.12); }
+
+/* Centre the body column on sidebar-less pages (the landing page is the only
+   `toc: false` page, so it gets Quarto's "fullcontent" grid). That grid uses
+   asymmetric column tracks, which left the lead text, Kurzfassung and callouts
+   visibly off-centre under the full-bleed hero. Give both gutters an equal
+   flexible track so the body column is truly centred. Full-bleed blocks
+   (.column-screen / the hero) span screen-start→screen-end and are unaffected.
+   Scoped to the desktop grid (Quarto collapses it below 992px). */
+@media (min-width: 992px) {
+  body.floating.fullcontent .page-columns,
+  body.docked.fullcontent .page-columns,
+  body.fullcontent:not(.floating):not(.docked) .page-columns {
+    grid-template-columns:
+      [screen-start] 1.5em
+      [screen-start-inset page-start page-start-inset body-start-outset] 5fr
+      [body-start] 1.5em
+      [body-content-start] minmax(0, calc(960px - 3em))
+      [body-content-end] 1.5em
+      [body-end body-end-outset page-end-inset page-end] 5fr
+      [screen-end-inset] 1.5em
+      [screen-end];
+  }
+}
 
 /* Cinematic hero */
 /* Keep the existing heading anchor, but make it a small eyebrow label. */
@@ -84,13 +107,13 @@
   z-index: 1;
   pointer-events: none;
   background:
-    linear-gradient(90deg, rgba(251, 251, 253, 0.98) 0%, rgba(251, 251, 253, 0.94) 38%, rgba(251, 251, 253, 0.58) 62%, rgba(251, 251, 253, 0.12) 100%),
-    linear-gradient(0deg, rgba(245, 245, 247, 0.9) 0%, rgba(245, 245, 247, 0) 44%);
+    linear-gradient(90deg, rgba(13, 14, 18, 0.97) 0%, rgba(13, 14, 18, 0.92) 38%, rgba(13, 14, 18, 0.55) 62%, rgba(13, 14, 18, 0.10) 100%),
+    linear-gradient(0deg, rgba(13, 14, 18, 0.9) 0%, rgba(13, 14, 18, 0) 44%);
 }
 .nui-hero-inner {
   position: relative;
   z-index: 2;
-  max-width: 1180px;
+  max-width: 1320px;
   margin: 0 auto;
   padding: clamp(2rem, 5vw, 4.5rem);
   width: 100%;
@@ -98,7 +121,7 @@
 /* On desktop, keep the copy in a left column and reserve the right side for the
    3D hand so the two never overlap (calmer, more intentional split layout). */
 @media (min-width: 900px) {
-  .nui-hero-inner { padding-right: clamp(320px, 44%, 600px); }
+  .nui-hero-inner { padding-right: clamp(300px, 42%, 560px); }
 }
 .nui-hero-eyebrow {
   margin: 0 0 1rem;
@@ -207,7 +230,10 @@
    the diagram stays visible and every step remains readable. */
 .nui-flow {
   display: grid;
-  grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+  /* Text takes all the freed-up width (it now also extends into the right page
+     margin via .column-page-right); the figure keeps a fixed, comfortable size
+     anchored at the far right. */
+  grid-template-columns: minmax(0, 1fr) clamp(280px, 30%, 360px);
   gap: clamp(1.5rem, 4vw, 3.5rem);
   margin-top: var(--nui-space-3);
   align-items: start;
@@ -237,7 +263,7 @@
   align-items: baseline;
   gap: 0.7rem;
   padding: 1.5rem 1.1rem 0.9rem;
-  background: linear-gradient(0deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.72) 72%, transparent);
+  background: linear-gradient(0deg, rgba(20, 23, 28, 0.97), rgba(20, 23, 28, 0.75) 72%, transparent);
   border-top: 1px solid var(--nui-line);
   pointer-events: none;
 }
@@ -261,11 +287,11 @@
   flex-direction: column;
   justify-content: center;
 }
+/* The first step scrolls normally like the others. It must NOT be sticky:
+   pinning it kept "Stufe 1" on screen while later steps scrolled over it,
+   producing overlapping text. The figure (column 2) is the only sticky part. */
 .nui-flow-step:first-child {
   padding-top: 0.4rem;
-  position: sticky;
-  top: clamp(1rem, 11vh, 6.5rem);
-  align-self: start;
   justify-content: flex-start;
 }
 .nui-flow-step:last-child { min-height: 48vh; }
@@ -300,7 +326,7 @@
 .nui-flow-svg .flow-node { fill: var(--nui-accent); }
 .nui-flow-svg .flow-node.is-key { fill: var(--nui-bg-2); stroke: var(--nui-accent); stroke-width: 2; }
 .nui-flow-svg .flow-det { fill: none; stroke: var(--nui-accent); stroke-width: 2; stroke-dasharray: 7 6; }
-.nui-flow-svg .flow-roi { fill: rgba(0, 113, 227, 0.06); stroke: var(--nui-accent-2); stroke-width: 2; stroke-dasharray: 5 5; }
+.nui-flow-svg .flow-roi { fill: rgba(236, 58, 46, 0.10); stroke: var(--nui-accent-2); stroke-width: 2; stroke-dasharray: 5 5; }
 .nui-flow-svg .flow-label { fill: var(--nui-text-strong); font: 600 12px/1 "Inter", system-ui, sans-serif; }
 .nui-flow-svg .flow-tag { fill: #fff; font: 700 11px/1 "Inter", system-ui, sans-serif; }
 .nui-flow-svg .flow-tag-bg { fill: var(--nui-accent); }
@@ -339,13 +365,13 @@
 /* Comparison table highlight */
 /* Always-on emphasis of the MediaPipe row (the "winner" of the trade-off). */
 #tbl-vergleich tbody tr:first-child {
-  background: rgba(0, 113, 227, 0.07);
+  background: rgba(236, 58, 46, 0.10);
   box-shadow: inset 3px 0 0 var(--nui-accent);
 }
 #tbl-vergleich tbody tr {
   transition: background var(--nui-dur-fast) var(--nui-ease);
 }
-#tbl-vergleich tbody tr:hover { background: rgba(0, 113, 227, 0.08); }
+#tbl-vergleich tbody tr:hover { background: rgba(236, 58, 46, 0.12); }
 
 /* Dino reveal */
 /* The .trex-stage powers on as it scrolls into view. JS adds .is-on; the base
@@ -426,7 +452,7 @@
   width: 2.35rem;
   height: 2.35rem;
   border-radius: var(--nui-radius);
-  background: rgba(0, 113, 227, 0.08);
+  background: rgba(236, 58, 46, 0.14);
   font-size: 1.45rem;
   line-height: 1;
   color: var(--nui-accent);
