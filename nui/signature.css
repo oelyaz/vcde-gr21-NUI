@@ -1,0 +1,691 @@
+/* nui/signature.css
+   Shared presentation for the hero, MediaPipe flow, reveal bits and dock
+   affordances. The site stays readable if the animation JS never runs. */
+
+/* Shared atoms */
+.nui-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+  min-height: 2.65rem;
+  padding: 0.72rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font: 600 0.95rem/1 "Inter", system-ui, sans-serif;
+  letter-spacing: 0;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background-color .16s ease, border-color .16s ease, color .16s ease;
+}
+.nui-btn:hover { text-decoration: none; }
+.nui-btn:focus-visible { outline: 2px solid var(--nui-accent); outline-offset: 3px; }
+.nui-btn-primary {
+  background: var(--nui-accent);
+  color: #fff;
+}
+.nui-btn-primary:hover {
+  background: var(--nui-accent-2);
+  color: #fff;
+}
+.nui-btn-ghost {
+  color: var(--nui-text-strong);
+  border: 1px solid var(--nui-line-strong);
+  background: var(--nui-bg-2);
+}
+.nui-btn-ghost:hover { color: var(--nui-accent-2); border-color: var(--nui-line-strong); background: rgba(236, 58, 46, 0.12); }
+
+/* Centre the body column on sidebar-less pages (the landing page is the only
+   `toc: false` page, so it gets Quarto's "fullcontent" grid). That grid uses
+   asymmetric column tracks, which left the lead text, Kurzfassung and callouts
+   visibly off-centre under the full-bleed hero. Give both gutters an equal
+   flexible track so the body column is truly centred. Full-bleed blocks
+   (.column-screen / the hero) span screen-start→screen-end and are unaffected.
+   Scoped to the desktop grid (Quarto collapses it below 992px). */
+@media (min-width: 992px) {
+  body.floating.fullcontent .page-columns,
+  body.docked.fullcontent .page-columns,
+  body.fullcontent:not(.floating):not(.docked) .page-columns {
+    grid-template-columns:
+      [screen-start] 1.5em
+      [screen-start-inset page-start page-start-inset body-start-outset] 5fr
+      [body-start] 1.5em
+      [body-content-start] minmax(0, calc(960px - 3em))
+      [body-content-end] 1.5em
+      [body-end body-end-outset page-end-inset page-end] 5fr
+      [screen-end-inset] 1.5em
+      [screen-end];
+  }
+}
+
+/* Cinematic hero */
+/* Keep the existing heading anchor, but make it a small eyebrow label. */
+#hero > h2 {
+  margin-top: 1.4rem;
+  padding-top: 0;
+  border-top: none;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--nui-text-muted);
+}
+#hero > h2::before { display: none; }
+
+.nui-hero {
+  position: relative;
+  min-height: min(82vh, 760px);
+  margin: 0.5rem 0 var(--nui-space-4);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: var(--nui-radius-lg);
+  background: linear-gradient(180deg, var(--nui-bg-1) 0%, var(--nui-bg-0) 100%);
+  border: 1px solid var(--nui-line);
+  box-shadow: var(--nui-shadow-panel);
+  isolation: isolate;
+}
+/* When Quarto's full-bleed .column-screen wraps it, square off the side edges. */
+.column-screen > .nui-hero,
+.nui-hero.column-screen { border-radius: 0; border-left: 0; border-right: 0; margin-top: 0; }
+
+.nui-hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 0;
+  opacity: 0;                       /* faded in by signature.js once Babylon paints */
+  transition: opacity 1.2s var(--nui-ease);
+}
+.nui-hero-canvas.is-live { opacity: 1; }
+.nui-hero-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(13, 14, 18, 0.97) 0%, rgba(13, 14, 18, 0.92) 38%, rgba(13, 14, 18, 0.55) 62%, rgba(13, 14, 18, 0.10) 100%),
+    linear-gradient(0deg, rgba(13, 14, 18, 0.9) 0%, rgba(13, 14, 18, 0) 44%);
+}
+.nui-hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 4.5rem);
+  width: 100%;
+}
+/* On desktop, keep the copy in a left column and reserve the right side for the
+   3D hand so the two never overlap (calmer, more intentional split layout). */
+@media (min-width: 900px) {
+  .nui-hero-inner { padding-right: clamp(300px, 42%, 560px); }
+}
+.nui-hero-eyebrow {
+  margin: 0 0 1rem;
+  font: 600 0.8rem/1 "Inter", system-ui, sans-serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--nui-accent);
+}
+.nui-hero-title {
+  margin: 0 0 1.1rem;
+  max-width: 16ch;
+  font: 700 clamp(2.4rem, 6vw, 4.6rem)/1.02 "Inter", system-ui, sans-serif;
+  letter-spacing: 0;
+  color: var(--nui-text-strong);
+  text-wrap: balance;
+}
+.nui-hero-title .nui-grad {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: var(--nui-accent-2);
+}
+.nui-hero-sub {
+  margin: 0 0 1.9rem;
+  max-width: 46ch;
+  font-size: clamp(1.02rem, 1.6vw, 1.28rem);
+  line-height: 1.55;
+  color: var(--nui-text);
+}
+.nui-hero-cta { display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center; }
+.nui-hero-note {
+  margin: 1.3rem 0 0;
+  font-size: 0.82rem;
+  color: var(--nui-text-muted);
+}
+.nui-hero-scrollcue {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  width: 26px;
+  height: 42px;
+  border-radius: 14px;
+  border: 1.5px solid var(--nui-line-strong);
+}
+.nui-hero-scrollcue span {
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  width: 4px;
+  height: 8px;
+  margin-left: -2px;
+  border-radius: 2px;
+  background: var(--nui-accent);
+  animation: nui-scrollcue 1.8s var(--nui-ease-inout) infinite;
+}
+@keyframes nui-scrollcue {
+  0% { opacity: 0; transform: translateY(0); }
+  35% { opacity: 1; }
+  70% { opacity: 0; transform: translateY(14px); }
+  100% { opacity: 0; }
+}
+
+/* Native scroll reveal, no GSAP dependency. JS adds .nui-reveal-primed to
+ * prime the start state; .is-revealed triggers the CSS transition.
+ * Without JS the class is never added, so content is always visible (PE). */
+.nui-reveal-primed {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.nui-reveal-primed.is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* Lead + quick-link chips that sit under the hero (in the normal column) */
+.nui-lead {
+  font-size: 1.18rem;
+  line-height: 1.6;
+  color: var(--nui-text);
+}
+.nui-jumpbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.nui-jumpbar a {
+  display: inline-block;
+  padding: 0.34rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  color: var(--nui-text);
+  text-decoration: none;
+  border: 1px solid var(--nui-line);
+  background: rgba(255, 255, 255, 0.02);
+  transition: border-color var(--nui-dur-fast) var(--nui-ease),
+              color var(--nui-dur-fast) var(--nui-ease);
+}
+.nui-jumpbar a:hover { border-color: var(--nui-accent); color: var(--nui-accent); }
+
+/* MediaPipe pipeline flow */
+/* Two-column scrollytelling: step text next to a sticky SVG scene. Without JS,
+   the diagram stays visible and every step remains readable. */
+.nui-flow {
+  display: grid;
+  /* Text takes all the freed-up width (it now also extends into the right page
+     margin via .column-page-right); the figure keeps a fixed, comfortable size
+     anchored at the far right. */
+  grid-template-columns: minmax(0, 1fr) clamp(280px, 30%, 360px);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  margin-top: var(--nui-space-3);
+  align-items: start;
+}
+.nui-flow-figure {
+  grid-column: 2;
+  position: sticky;
+  top: clamp(1rem, 11vh, 6.5rem);
+  align-self: start;
+}
+.nui-flow-steps { grid-column: 1; min-width: 0; }
+
+.nui-flow-panel {
+  position: relative;
+  border-radius: var(--nui-radius-lg);
+  border: 1px solid var(--nui-line-strong);
+  background: linear-gradient(180deg, var(--nui-bg-2), var(--nui-bg-1));
+  box-shadow: var(--nui-shadow-panel);
+  overflow: hidden;
+}
+.nui-flow-svg { display: block; width: 100%; height: auto; }
+
+.nui-flow-stagebar {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  padding: 1.5rem 1.1rem 0.9rem;
+  background: linear-gradient(0deg, rgba(20, 23, 28, 0.97), rgba(20, 23, 28, 0.75) 72%, transparent);
+  border-top: 1px solid var(--nui-line);
+  pointer-events: none;
+}
+.nui-flow-stage-num {
+  font: 700 1.48rem/1 "Inter", system-ui, sans-serif;
+  color: var(--nui-accent);
+  letter-spacing: 0;
+}
+.nui-flow-stage-label {
+  font: 600 0.88rem/1.2 "Inter", system-ui, sans-serif;
+  color: var(--nui-text-strong);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Step texts. Base state = fully visible (no-JS safe). */
+.nui-flow-step {
+  padding: 1.1rem 0;
+  min-height: 62vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+/* The first step scrolls normally like the others. It must NOT be sticky:
+   pinning it kept "Stufe 1" on screen while later steps scrolled over it,
+   producing overlapping text. The figure (column 2) is the only sticky part. */
+.nui-flow-step:first-child {
+  padding-top: 0.4rem;
+  justify-content: flex-start;
+}
+.nui-flow-step:last-child { min-height: 48vh; }
+.nui-flow-step > :first-child { margin-top: 0; }
+.nui-flow-step h3 {
+  scroll-margin-top: 5rem;
+  font-size: clamp(1.15rem, 1.05rem + 0.5vw, 1.5rem);
+}
+.nui-flow-step mjx-container[display="true"] {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0.15rem;
+}
+/* Only once JS drives the scene do off-stage steps dim (still legible at .5). */
+.nui-flow.is-live .nui-flow-step {
+  opacity: 0.5;
+  transition: opacity var(--nui-dur) var(--nui-ease);
+}
+.nui-flow.is-live .nui-flow-step.is-active { opacity: 1; }
+
+/* SVG scene primitives */
+.nui-flow-svg .flow-frame { fill: var(--nui-bg-2); stroke: var(--nui-line-strong); stroke-width: 1.5; }
+.nui-flow-svg .flow-grid { stroke: var(--nui-line); stroke-width: 1; }
+.nui-flow-svg .flow-corner { stroke: var(--nui-accent); stroke-width: 2.4; fill: none; }
+.nui-flow-svg .flow-hand-stroke {
+  fill: none; stroke: rgba(110, 110, 115, 0.16);
+  stroke-width: 26; stroke-linecap: round; stroke-linejoin: round;
+}
+.nui-flow-svg .flow-hand-palm { fill: rgba(110, 110, 115, 0.10); }
+.nui-flow-svg .flow-edge { stroke: var(--nui-accent); stroke-width: 2.4; stroke-linecap: round; opacity: 0.9; }
+.nui-flow-svg .flow-node { fill: var(--nui-accent); }
+.nui-flow-svg .flow-node.is-key { fill: var(--nui-bg-2); stroke: var(--nui-accent); stroke-width: 2; }
+.nui-flow-svg .flow-det { fill: none; stroke: var(--nui-accent); stroke-width: 2; stroke-dasharray: 7 6; }
+.nui-flow-svg .flow-roi { fill: rgba(236, 58, 46, 0.10); stroke: var(--nui-accent-2); stroke-width: 2; stroke-dasharray: 5 5; }
+.nui-flow-svg .flow-label { fill: var(--nui-text-strong); font: 600 12px/1 "Inter", system-ui, sans-serif; }
+.nui-flow-svg .flow-tag { fill: #fff; font: 700 11px/1 "Inter", system-ui, sans-serif; }
+.nui-flow-svg .flow-tag-bg { fill: var(--nui-accent); }
+.nui-flow-svg .flow-chip-bg { fill: var(--nui-bg-2); stroke: var(--nui-accent); stroke-width: 1.5; }
+.nui-flow-svg .flow-rec { fill: var(--nui-danger); }
+.nui-flow-svg .flow-scan { fill: var(--nui-accent); opacity: 0.44; }
+.nui-flow-svg .flow-arrow { fill: none; stroke: var(--nui-accent); stroke-width: 2.6; stroke-linecap: round; }
+.nui-flow-svg .flow-map-head { fill: var(--nui-accent); }
+.nui-flow-svg .flow-key { fill: var(--nui-bg-3); stroke: var(--nui-accent); stroke-width: 1.5; }
+.nui-flow-svg .flow-jitter { fill: none; stroke: var(--nui-text-muted); stroke-width: 1.6; }
+.nui-flow-svg .flow-smooth { fill: none; stroke: var(--nui-accent); stroke-width: 2.2; stroke-linecap: round; }
+.nui-flow-svg .flow-depth-ring { fill: none; stroke: var(--nui-accent); stroke-width: 1.4; opacity: 0.7; }
+.nui-flow-svg #g-hand.is-faded { opacity: 0.26; }
+
+/* Ambient motion (disabled under prefers-reduced-motion via theme.scss). */
+.nui-flow-svg .flow-rec { animation: nui-flow-blink 1.4s steps(1, end) infinite; }
+@keyframes nui-flow-blink { 0%, 60% { opacity: 1; } 61%, 100% { opacity: 0.15; } }
+.nui-flow-svg .flow-scan {
+  transform-box: fill-box; transform-origin: center;
+  animation: nui-flow-scan 2.8s var(--nui-ease-inout) infinite alternate;
+}
+@keyframes nui-flow-scan { from { transform: translateY(-108px); } to { transform: translateY(108px); } }
+.nui-flow-svg .flow-ripple {
+  transform-box: fill-box; transform-origin: center;
+  animation: nui-flow-ripple 1.9s ease-out infinite;
+}
+@keyframes nui-flow-ripple { 0% { transform: scale(0.3); opacity: 0.9; } 100% { transform: scale(2.6); opacity: 0; } }
+
+@media (max-width: 820px) {
+  .nui-flow { grid-template-columns: 1fr; }
+  .nui-flow-figure { grid-column: 1; grid-row: 1; top: 0.5rem; }
+  .nui-flow-steps { grid-column: 1; }
+  .nui-flow-step { min-height: 46vh; }
+}
+
+/* Comparison table highlight */
+/* Always-on emphasis of the MediaPipe row (the "winner" of the trade-off). */
+#tbl-vergleich tbody tr:first-child {
+  background: rgba(236, 58, 46, 0.10);
+  box-shadow: inset 3px 0 0 var(--nui-accent);
+}
+#tbl-vergleich tbody tr {
+  transition: background var(--nui-dur-fast) var(--nui-ease);
+}
+#tbl-vergleich tbody tr:hover { background: rgba(236, 58, 46, 0.12); }
+
+/* Dino reveal */
+/* The .trex-stage powers on as it scrolls into view. JS adds .is-on; the base
+   (off) state is a slightly dimmed/settled stage that still shows everything. */
+.trex-stage { transition: box-shadow var(--nui-dur) var(--nui-ease); }
+.trex-stage.is-on {
+  box-shadow: var(--nui-shadow-panel);
+}
+
+/* Quiz teaser card */
+.nui-quiz-cta {
+  position: relative;
+  margin: var(--nui-space-3) 0 var(--nui-space-2);
+  padding: 1.6rem 1.8rem;
+  border-radius: var(--nui-radius);
+  background: var(--nui-bg-2);
+  border: 1px solid var(--nui-line);
+  box-shadow: var(--nui-shadow-soft);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.6rem;
+  overflow: hidden;
+}
+.nui-quiz-cta-body { flex: 1 1 320px; min-width: 0; }
+.nui-quiz-cta h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.25rem;
+  color: var(--nui-text-strong);
+}
+.nui-quiz-cta p { margin: 0; color: var(--nui-text-muted); font-size: 0.96rem; }
+.nui-quiz-cta .nui-btn { flex: 0 0 auto; }
+
+/* Reusable page atoms */
+/* Page intro header used at the top of each sub-page. */
+.nui-pagehead {
+  margin: 0 0 var(--nui-space-3);
+  padding: 0 0 var(--nui-space-2);
+  border-bottom: 1px solid var(--nui-line);
+}
+.nui-pagehead .nui-eyebrow {
+  display: block;
+  margin: 0 0 0.6rem;
+  font: 600 0.8rem/1 "Inter", system-ui, sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--nui-accent);
+}
+.nui-pagehead .nui-lead {
+  margin: 0.6rem 0 0;
+  max-width: 60ch;
+  font-size: 1.16rem;
+  line-height: 1.6;
+  color: var(--nui-text);
+}
+
+/* Card grid for use cases, team and summaries. */
+.nui-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: clamp(0.9rem, 2vw, 1.4rem);
+  margin: var(--nui-space-2) 0;
+  padding: 0;
+  list-style: none;
+}
+.nui-card {
+  position: relative;
+  padding: 1.3rem 1.35rem;
+  border-radius: var(--nui-radius);
+  background: var(--nui-bg-2);
+  border: 1px solid var(--nui-line);
+  box-shadow: var(--nui-shadow-soft);
+  transition: border-color .16s ease, background-color .16s ease;
+}
+.nui-card-ico {
+  display: inline-grid;
+  place-items: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: var(--nui-radius);
+  background: rgba(236, 58, 46, 0.14);
+  font-size: 1.45rem;
+  line-height: 1;
+  color: var(--nui-accent);
+}
+.nui-card h3 { margin: 0.7rem 0 0.4rem; font-size: 1.08rem; color: var(--nui-text-strong); }
+.nui-card p { margin: 0; color: var(--nui-text-muted); font-size: 0.92rem; line-height: 1.55; }
+.nui-card a { cursor: pointer; }
+
+/* Card CTA: only this text link navigates; the card body remains a drag surface. */
+.nui-card-go {
+  display: inline-block;
+  margin-top: 0.7rem;
+  font: 600 0.85rem/1 "Inter", system-ui, sans-serif;
+  color: var(--nui-accent);
+  text-decoration: none;
+}
+.nui-card-go:hover {
+  color: var(--nui-accent-2);
+  text-decoration: underline;
+}
+
+/* Inter-page "next step" nav row at the bottom of sub-pages. */
+.nui-pagenav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: space-between;
+  margin: var(--nui-space-4) 0 var(--nui-space-2);
+  padding-top: var(--nui-space-2);
+  border-top: 1px solid var(--nui-line);
+}
+
+/* Wide comparison table → keep it inside the column and let it scroll
+   horizontally on narrow viewports instead of overflowing the page to the
+   right. The wrapper clamps width to the content column; the table keeps a
+   sensible min-width so columns stay readable and scroll when needed. */
+.nui-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  contain: layout paint;
+  margin: var(--nui-space-3) 0;
+  border: 1px solid var(--nui-line);
+  border-radius: var(--nui-radius);
+  background: var(--nui-bg-2);
+  box-shadow: var(--nui-shadow-soft);
+  -webkit-overflow-scrolling: touch;
+}
+.nui-table-wrap > table {
+  margin: 0;
+  width: 100%;
+  font-size: 0.9rem;
+}
+.nui-table-wrap > table :is(th, td) { white-space: normal; }
+.nui-table-wrap > table thead th { white-space: nowrap; }
+
+/* Global camera dock onboarding */
+/* "Camera is off" placeholder shown in the feed until a stream is live. It sits
+   above the empty <video>/<canvas> but below the HUD, and is removed by the
+   data-state selectors the moment the camera is calibrating/ready/running. */
+.nui-feed-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  text-align: center;
+  padding: 0.5rem;
+  background: var(--nui-bg-1);
+  color: var(--nui-text-muted);
+}
+.nui-feed-cam { font-size: 1.9rem; line-height: 1; color: var(--nui-accent); opacity: 0.78; }
+.nui-feed-cap { font-weight: 600; color: var(--nui-text); font-size: 0.86rem; }
+.nui-feed-sub { font-size: 0.74rem; color: var(--nui-text-muted); }
+#nui-dock[data-state="CALIBRATING"] .nui-feed-placeholder,
+#nui-dock[data-state="READY"] .nui-feed-placeholder,
+#nui-dock[data-state="RUNNING"] .nui-feed-placeholder { display: none; }
+
+/* The idle "Kamera starten" button is already the primary dock action. */
+
+/* One-time onboarding coachmark, anchored beside the dock. */
+.nui-coach {
+  position: fixed;
+  z-index: 1060;
+  right: 332px;                 /* sit just left of the 300px-wide dock */
+  bottom: 24px;
+  width: min(330px, calc(100vw - 32px));
+  animation: nui-coach-in 0.5s var(--nui-ease) both;
+}
+.nui-coach[hidden] { display: none; }
+@keyframes nui-coach-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.nui-coach-card {
+  position: relative;
+  padding: 1.1rem 1.2rem 1.2rem;
+  border-radius: var(--nui-radius);
+  background: linear-gradient(180deg, var(--nui-bg-2), var(--nui-bg-1));
+  border: 1px solid var(--nui-accent);
+  box-shadow: var(--nui-shadow-panel);
+  color: var(--nui-text);
+}
+.nui-coach-card::after {            /* arrow pointing right, toward the dock */
+  content: "";
+  position: absolute;
+  right: -7px;
+  bottom: 30px;
+  width: 14px;
+  height: 14px;
+  transform: rotate(45deg);
+  background: var(--nui-bg-1);
+  border-right: 1px solid var(--nui-accent);
+  border-top: 1px solid var(--nui-accent);
+}
+.nui-coach-title {
+  margin: 0 0 0.5rem;
+  font: 700 1.05rem/1.3 "Inter", system-ui, sans-serif;
+  color: var(--nui-text-strong);
+}
+.nui-coach-text { margin: 0 0 1rem; font-size: 0.9rem; line-height: 1.55; color: var(--nui-text); }
+.nui-coach-ok { width: 100%; justify-content: center; }
+.nui-coach-close {
+  position: absolute;
+  top: 7px;
+  right: 9px;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--nui-text-muted);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.nui-coach-close .ph { line-height: 1; }
+.nui-coach-close:hover { color: var(--nui-text-strong); }
+@media (max-width: 680px) {
+  .nui-coach { right: 16px; left: 16px; bottom: 92px; width: auto; }
+  .nui-coach-card::after { right: 26px; bottom: -7px; transform: rotate(135deg); }
+}
+
+/* Landing-page carousel */
+.nui-carousel-viewport {
+  overflow: hidden;
+  /* Fade only the right peek zone. */
+  mask-image: linear-gradient(to right, black 0, black calc(100% - 72px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 0, black calc(100% - 72px), transparent 100%);
+}
+.nui-carousel-track {
+  display: flex;
+  gap: clamp(0.9rem, 2vw, 1.4rem);
+  will-change: transform;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;       /* vertical scroll works; JS handles horizontal */
+}
+.nui-carousel-track.is-dragging            { cursor: grabbing; }
+.nui-carousel-foot {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.nui-carousel-ctrl {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  border: 1px solid var(--nui-line-strong);
+  background: transparent;
+  color: var(--nui-text);
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0;
+  transition: border-color .15s, color .15s;
+}
+.nui-carousel-ctrl:hover { border-color: var(--nui-accent); color: var(--nui-accent); }
+.nui-carousel-ctrl:focus-visible { outline: 2px solid var(--nui-accent); outline-offset: 2px; }
+
+/* The landing page has only a short lead before Der Rundgang, so reduce the
+   default 5rem section gap to something that doesn't look like dead space. */
+#quarto-document-content #rundgang > h2 { margin-top: var(--nui-space-3); }
+
+/* Sub-pages: the first content section immediately follows the page intro block.
+   Collapse the 5rem default margin so there is no large blank gap after the
+   pagehead's bottom border. Subsequent sections keep their full spacing. */
+#quarto-document-content .nui-pagehead + section > h2 {
+  margin-top: var(--nui-space-3);
+}
+
+/* Quiz on the Evaluation page */
+.quiz-intro {
+  margin: var(--nui-space-2) 0 var(--nui-space-3);
+  padding: 1.3rem 1.5rem;
+  border-radius: var(--nui-radius);
+  background: var(--nui-bg-2);
+  border: 1px solid var(--nui-line);
+}
+.quiz-intro p:last-child { margin-bottom: 0; }
+.quiz-goal {
+  margin: 0 0 0.6rem;
+  font: 600 0.78rem/1.2 "Inter", system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nui-accent);
+}
+details.quiz-a {
+  margin: 0.9rem 0 0;
+  padding: 0.5rem 1rem;
+  border-radius: var(--nui-radius);
+  background: var(--nui-bg-1);
+  border: 1px solid var(--nui-line);
+}
+details.quiz-a > summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--nui-accent);
+  list-style: none;
+}
+details.quiz-a > summary::-webkit-details-marker { display: none; }
+details.quiz-a > summary::before { content: "▸ "; }
+details.quiz-a[open] > summary::before { content: "▾ "; }
+details.quiz-a[open] > summary { margin-bottom: 0.6rem; }
+
+.nav-footer .nav-footer-center {
+  white-space: nowrap;
+  flex-basis: auto;
+}

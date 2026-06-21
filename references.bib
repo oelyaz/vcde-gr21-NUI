@@ -1,21 +1,6 @@
-@article{einstein1905,
-  author  = {Einstein, Albert},
-  title   = {Zur Elektrodynamik bewegter Körper},
-  journal = {Annalen der Physik},
-  volume  = {322},
-  number  = {10},
-  pages   = {891--921},
-  year    = {1905},
-  publisher = {Wiley Online Library}
-}
-
-@book{knuth1984,
-  author    = {Knuth, Donald E.},
-  title     = {The TeXbook},
-  publisher = {Addison-Wesley},
-  year      = {1984},
-  address   = {Reading, Massachusetts}
-}
+% ─────────────────────────────────────────────────────────────────────────────
+% Werkzeuge & Drittanbieter-Assets
+% ─────────────────────────────────────────────────────────────────────────────
 
 @online{babylonjs2026,
   author = {{Babylon.js Team}},
@@ -30,4 +15,156 @@
   title     = {Quarto: An Open-Source Scientific and Technical Publishing System},
   booktitle = {Proceedings of the Scientific Computing Conference},
   year      = {2024}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% Fachquellen (M2-C). Autor/Jahr/Venue verifiziert gegen arXiv / CVF Open Access /
+% ACM DL / Autoren-Originalseiten (Juni 2026). Keine erfundenen Zitate.
+% ─────────────────────────────────────────────────────────────────────────────
+
+% — MediaPipe-Framework und Modelle —
+@article{lugaresi2019mediapipe,
+  author  = {Lugaresi, Camillo and Tang, Jiuqiang and Nash, Hadon and McClanahan, Chris
+             and Uboweja, Esha and Hays, Michael and Zhang, Fan and Chang, Chuo-Ling
+             and Yong, Ming Guang and Lee, Juhyun and Chang, Wan-Teh and Hua, Wei
+             and Georg, Manfred and Grundmann, Matthias},
+  title   = {{MediaPipe}: A Framework for Building Perception Pipelines},
+  journal = {arXiv preprint arXiv:1906.08172},
+  year    = {2019}
+}
+
+@inproceedings{zhang2020mediapipehands,
+  author        = {Zhang, Fan and Bazarevsky, Valentin and Vakunov, Andrey and Tkachenka, Andrei
+                   and Sung, George and Chang, Chuo-Ling and Grundmann, Matthias},
+  title         = {{MediaPipe Hands}: On-device Real-time Hand Tracking},
+  booktitle     = {CVPR Workshop on Computer Vision for Augmented and Virtual Reality},
+  year          = {2020},
+  eprint        = {2006.10214},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CV}
+}
+
+@inproceedings{bazarevsky2020blazepose,
+  author        = {Bazarevsky, Valentin and Grishchenko, Ivan and Raveendran, Karthik
+                   and Zhu, Tyler and Zhang, Fan and Grundmann, Matthias},
+  title         = {{BlazePose}: On-device Real-time Body Pose Tracking},
+  booktitle     = {CVPR Workshop on Computer Vision for Augmented and Virtual Reality},
+  year          = {2020},
+  eprint        = {2006.10204},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CV}
+}
+
+@inproceedings{xu2020ghum,
+  author    = {Xu, Hongyi and Bazavan, Eduard Gabriel and Zanfir, Andrei
+               and Freeman, William T. and Sukthankar, Rahul and Sminchisescu, Cristian},
+  title     = {{GHUM} \& {GHUML}: Generative {3D} Human Shape and Articulated Pose Models},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  pages     = {6184--6193},
+  year      = {2020}
+}
+
+% — Detektion, mobile/effiziente CNNs, Wissensdestillation —
+@inproceedings{liu2016ssd,
+  author    = {Liu, Wei and Anguelov, Dragomir and Erhan, Dumitru and Szegedy, Christian
+               and Reed, Scott and Fu, Cheng-Yang and Berg, Alexander C.},
+  title     = {{SSD}: Single Shot MultiBox Detector},
+  booktitle = {Computer Vision -- ECCV 2016},
+  pages     = {21--37},
+  year      = {2016},
+  publisher = {Springer},
+  doi       = {10.1007/978-3-319-46448-0_2}
+}
+
+@article{howard2017mobilenets,
+  author  = {Howard, Andrew G. and Zhu, Menglong and Chen, Bo and Kalenichenko, Dmitry
+             and Wang, Weijun and Weyand, Tobias and Andreetto, Marco and Adam, Hartwig},
+  title   = {{MobileNets}: Efficient Convolutional Neural Networks for Mobile Vision Applications},
+  journal = {arXiv preprint arXiv:1704.04861},
+  year    = {2017}
+}
+
+@article{hinton2015distilling,
+  author  = {Hinton, Geoffrey and Vinyals, Oriol and Dean, Jeff},
+  title   = {Distilling the Knowledge in a Neural Network},
+  journal = {arXiv preprint arXiv:1503.02531},
+  note    = {NIPS Deep Learning Workshop},
+  year    = {2015}
+}
+
+% — Zeitliche Glaettung —
+@inproceedings{casiez2012euro,
+  author    = {Casiez, G{\'e}ry and Roussel, Nicolas and Vogel, Daniel},
+  title     = {{1€} Filter: A Simple Speed-based Low-pass Filter for Noisy Input in Interactive Systems},
+  booktitle = {Proceedings of the SIGCHI Conference on Human Factors in Computing Systems (CHI '12)},
+  pages     = {2527--2530},
+  year      = {2012},
+  publisher = {ACM},
+  doi       = {10.1145/2207676.2208639}
+}
+
+% — NUI / HCI —
+@article{norman2010nui,
+  author    = {Norman, Donald A.},
+  title     = {Natural User Interfaces Are Not Natural},
+  journal   = {interactions},
+  volume    = {17},
+  number    = {3},
+  pages     = {6--10},
+  year      = {2010},
+  publisher = {ACM},
+  doi       = {10.1145/1744161.1744163}
+}
+
+@book{wigdor2011brave,
+  author    = {Wigdor, Daniel and Wixon, Dennis},
+  title     = {Brave {NUI} World: Designing Natural User Interfaces for Touch and Gesture},
+  publisher = {Morgan Kaufmann},
+  year      = {2011}
+}
+
+@inproceedings{buxton1990threestate,
+  author    = {Buxton, William},
+  title     = {A Three-State Model of Graphical Input},
+  booktitle = {Human-Computer Interaction -- INTERACT '90},
+  pages     = {449--456},
+  year      = {1990},
+  publisher = {Elsevier Science Publishers (North-Holland)}
+}
+
+% — Vorlesungsfolien Visual Computing (Prof. Dr. Markus Friedrich, Hochschule Muenchen).
+%   Jahr = Export-/Erstellungsdatum der jeweiligen Foliensatz-PDF (Datei-Metadaten). —
+@misc{friedrich_vc_recognition,
+  author       = {Friedrich, Markus},
+  title        = {Erkennung: Klassifikation, Segmentierung, Objekterkennung},
+  howpublished = {Vorlesungsfolien, Modul Visual Computing, Hochschule M{\"u}nchen},
+  year         = {2025}
+}
+
+@misc{friedrich_vc_affine,
+  author       = {Friedrich, Markus},
+  title        = {Affine Transformationen in {2D}},
+  howpublished = {Vorlesungsfolien, Modul Visual Computing, Hochschule M{\"u}nchen},
+  year         = {2024}
+}
+
+@misc{friedrich_vc_nonlinear,
+  author       = {Friedrich, Markus},
+  title        = {Nichtlineare Filter},
+  howpublished = {Vorlesungsfolien, Modul Visual Computing, Hochschule M{\"u}nchen},
+  year         = {2025}
+}
+
+@misc{friedrich_vc_neural,
+  author       = {Friedrich, Markus},
+  title        = {Neural Rendering},
+  howpublished = {Vorlesungsfolien, Modul Visual Computing, Hochschule M{\"u}nchen},
+  year         = {2025}
+}
+
+@misc{friedrich_vc_xr,
+  author       = {Friedrich, Markus},
+  title        = {Extended Reality},
+  howpublished = {Vorlesungsfolien, Modul Visual Computing, Hochschule M{\"u}nchen},
+  year         = {2025}
 }

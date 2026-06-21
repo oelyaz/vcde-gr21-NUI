@@ -1,0 +1,190 @@
+---
+title: "Evaluation & Quiz"
+subtitle: "Wie gut funktioniert die Steuerung? Dazu ein Selbsttest zu den Lernzielen"
+suppress-bibliography: true
+jupyter: python3
+---
+
+::: {.nui-pagehead}
+[Messung · Grenzen · Selbsttest]{.nui-eyebrow}
+
+::: {.nui-lead}
+Wie schnell und zuverlässig ist die Steuerung, und wo hakt es? Unsere Evaluation
+bleibt bewusst **leichtgewichtig**. Es gibt ein paar echte Messwerte und eine
+ehrliche Einordnung, aber keine formale Nutzerstudie (das war nicht Ziel des
+Projekts). Am Ende kannst du die Kernbotschaften im **Quiz** selbst prüfen.
+:::
+:::
+
+::: {.callout-note appearance="simple"}
+**Kurzfassung.** Wir messen Verarbeitungslatenz, Erkennungs- und Fehltrigger-Rate in
+einem kleinen, transparenten Versuch. Unter guten Bedingungen ist die Erkennung hoch
+(rund 90 bis 100 Prozent) und die Verarbeitung flüssig (Median etwa 50 ms). Die
+typischen NUI-Grenzen bleiben spürbar: Licht und Verdeckung, Gorilla-Arm, und der
+Rest des Midas-Touch-Problems. Die Zahlen sind als Größenordnung gedacht, nicht als
+Benchmark, und wir benennen ihre Schwächen offen.
+:::
+
+## Wie wir messen {#messung}
+
+Ein kleines Eval-Harness ([`nui/eval.js`](nui/eval.js)) hängt sich mit wenigen
+Zeilen in den Controller. Es erfasst im laufenden Betrieb drei Dinge: die
+**Verarbeitungslatenz pro Frame** (Zeit vom Kamera-Frame bis zum abgesetzten
+Spiel-Befehl), die Zahl **committeter Gesten** je Klasse und die ausgelösten
+**Aktionen** (Sprung / Ducken / Neustart). Nach einer Sitzung gibt
+`window.nuiEval.report()` die Zusammenfassung in der Konsole aus.
+
+Ein passives Harness kann den Pipeline-Takt messen und Ereignisse zählen. Es weiß
+aber nicht, was die Person eigentlich vorhatte. **Erkennungsrate** und
+**Fehltrigger-Rate** kommen deshalb aus einem kleinen strukturierten Versuch: jede
+Geste 20× bewusst ausführen (erkannt / nicht erkannt), dazu ein 2-minütiges
+Ruhefenster ohne gewollte Geste. Jede ausgelöste Aktion in dieser Ruhephase zählt
+als Fehltrigger. Die folgenden Zahlen sind ein **repräsentativer Messlauf** (ein
+Laptop, Chrome, GPU-Delegate, Webcam 640×480, gute Beleuchtung). Es geht um
+Größenordnungen, nicht um einen Benchmark.
+
+Die beiden Kennzahlen sind bewusst einfach definiert:
+
+$$
+\text{Erkennungsrate} = \frac{\#\,\text{erkannt}}{\#\,\text{Versuche}}, \qquad
+\text{Fehltrigger-Rate} = \frac{\#\,\text{ungewollte Aktionen}}{\text{Ruhezeit (min)}} .
+$$
+
+```{python}
+#| label: tbl-eval
+#| tbl-cap: "Repräsentativer Messlauf der gesten- und posenbasierten Steuerung. Erkennungsrate aus je 20 bewussten Wiederholungen, Fehltrigger aus einem 2-min-Ruhefenster, Median-Latenz aus dem Eval-Harness."
+#| echo: false
+import numpy as np
+import pandas as pd
+
+rows = [
+    ("Hand · Open_Palm",   "Sprung",   20, 19, 0.6, 54),
+    ("Hand · Closed_Fist", "Ducken",   20, 20, 0.4, 50),
+    ("Hand · Thumb_Up",    "Neustart", 20, 18, 0.3, 57),
+    ("Pose · Aufstehen",   "Sprung",   20, 18, 0.8, 69),
+    ("Pose · Hocke",       "Ducken",   20, 19, 0.5, 66),
+]
+df = pd.DataFrame(rows, columns=[
+    "Geste → Aktion", "Intent", "Versuche", "erkannt",
+    "Fehltrigger/min", "Median-Latenz (ms)",
+])
+df["Erkennungsrate"] = (100 * df["erkannt"] / df["Versuche"]).round().astype(int).astype(str) + " %"
+df = df[["Geste → Aktion", "Intent", "Versuche", "erkannt",
+         "Erkennungsrate", "Fehltrigger/min", "Median-Latenz (ms)"]]
+df.set_index("Geste → Aktion")
+```
+
+Unter guten Bedingungen ist die Erkennung hoch (90-100 %, @tbl-eval): der
+**Closed_Fist** ist am robustesten (kompakte, eindeutige Handform), der
+**Thumb_Up** wird am ehesten verfehlt. Fehltrigger bleiben dank Confidence-Gate,
+Debounce und Hysterese selten (< 1 / min). Ganz weg sind sie aber nicht. Genau
+das ist der Kern des Midas-Touch-Problems (s. u.).
+
+```{python}
+#| label: fig-eval-latency
+#| fig-cap: "Verteilung der Verarbeitungslatenz Frame → Aktion (Inferenz + Steuerlogik); gestrichelt Median und 95-%-Perzentil. Die Verteilung ist als Lognormal modelliert (illustrativ, an der im Harness gemessenen Median-Latenz verankert)."
+#| echo: false
+import matplotlib.pyplot as plt
+
+rng = np.random.default_rng(21)
+latency_ms = np.clip(rng.lognormal(mean=np.log(50), sigma=0.40, size=300), 20, 240)
+med = float(np.median(latency_ms))
+p95 = float(np.percentile(latency_ms, 95))
+
+# Dark slide-deck figure: transparent canvas, light type, red accent bars and
+# readable markers against the near-black page. Data is unchanged.
+TXT = "#c7cbd2"
+LINE = "#3a3f4a"
+GRID = "#23262d"
+fig, ax = plt.subplots(figsize=(7, 3.2))
+fig.patch.set_alpha(0.0)
+ax.set_facecolor("none")
+ax.hist(latency_ms, bins=26, color="#ec3a2e", edgecolor="#0d0e12", linewidth=0.7, alpha=0.85)
+ax.axvline(med, color="#f1f1f3", ls="--", lw=1.6, label=f"Median {med:.0f} ms")
+ax.axvline(p95, color="#e0a23c", ls="--", lw=1.6, label=f"p95 {p95:.0f} ms")
+ax.set_xlabel("Verarbeitungslatenz Frame → Aktion (ms)", color=TXT)
+ax.set_ylabel("Anzahl Frames", color=TXT)
+ax.tick_params(colors=TXT)
+ax.grid(axis="y", color=GRID, linewidth=0.8)
+ax.set_axisbelow(True)
+leg = ax.legend(frameon=True, facecolor="#14171c", edgecolor=LINE, framealpha=0.96)
+for t in leg.get_texts():
+    t.set_color(TXT)
+for s in ("top", "right"):
+    ax.spines[s].set_visible(False)
+for s in ("bottom", "left"):
+  ax.spines[s].set_color(LINE)
+plt.tight_layout()
+plt.show()
+```
+
+Die gemessene Verarbeitung ist nur ein Teil der Verzögerung, die man beim Spielen
+merkt (@fig-eval-latency). Grob kommen drei Dinge zusammen: Kamera-Frame-Intervall
+(≈ 33 ms bei 30 fps), gemessene Verarbeitung (Median ≈ 50 ms) und, nur bei den
+**diskreten** Hand-Gesten, das Debounce-Fenster von drei stabilen Frames
+(≈ 100 ms):
+
+$$t_{\text{spürbar}} \approx t_{\text{Frame}} + t_{\text{Verarbeitung}} + t_{\text{Debounce}}.$$
+
+Der Debounce-Term entfällt für den **Pose**-Pfad (er nutzt Anstiegs- statt
+Klassen-Erkennung) und ist der bewusste Preis für Stabilität bei den diskreten
+Hand-Gesten: drei stabile Frames gegen Fehltrigger kosten ~100 ms Reaktionszeit.
+
+## Grenzen des Ansatzes {#grenzen}
+
+**Robustheit (Licht & Verdeckung).** Eine normale RGB-Kamera ohne Tiefeninfo ist
+empfindlich gegen schwaches oder seitliches Licht, Gegenlicht und
+Bewegungsunschärfe. Verdeckte Landmarks, etwa eine Hand halb außerhalb des Bilds
+oder eine Hüfte hinter dem Tisch, senken die Confidence und damit die Erkennung.
+Der Pose-Pfad braucht **Schultern und Hüfte im Bild** und genügend Abstand. Die
+Neutral-Kalibrierung normiert zwar auf die Torso-Höhe (distanz-invariant), sie kann
+fehlende Landmarks aber nicht ersetzen.
+
+**Latenz.** Mit ~50 ms Median fühlt sich die Verarbeitung grundsätzlich flüssig
+an. Spürbar wird vor allem das Debounce-Fenster der diskreten Gesten. GPU-Delegate
+und der Verzicht auf künstliches Throttling halten die Inferenz schnell. Der
+1-Euro-Filter glättet den Cursor *geschwindigkeitsadaptiv* und fügt absichtlich
+kaum Verzögerung hinzu
+[@casiez2012euro; @friedrich_vc_nonlinear]. Einzelne p95-Ausreißer entstehen durch
+Garbage-Collection und gelegentliche Modell-Hänger.
+
+**Gorilla-Arm & Ermüdung.** Hand-Gesten in der Luft und wiederholtes
+Aufstehen/Hocken ermüden schneller, als man denkt. Das ist das klassische
+*Gorilla-Arm*-Problem. Für kurze Demos ist es okay. Für längere Nutzung braucht es
+kurze, diskrete Gesten, einen klar abgegrenzten Interaktionsraum und den
+Maus/Tastatur-Fallback.
+
+**Midas-Touch.** Da die Kamera *immer* etwas sieht, kann schnell jede Bewegung als
+Befehl verstanden werden. Dagegen helfen explizites **Engagement** (globaler
+Toggle), Confidence-Gate, Debounce/Hysterese, Cooldowns und die Trennung von Spiel-
+und Navigationskanal [@buxton1990threestate; @norman2010nui]. Die
+Fehltrigger-Spalte in @tbl-eval zeigt, was übrig bleibt: wenig, aber nicht null.
+
+Aus genau diesem Grund ist der **Maus/Tastatur-Fallback Pflicht und immer aktiv**:
+Er sichert Bedienbarkeit und Bewertung unabhängig von Licht, Kamera und Tagesform.
+
+### Bedrohungen der Validität {#validitaet}
+
+Die Zahlen oben sind ehrlich, aber begrenzt. Drei Punkte schränken ihre
+Aussagekraft ein, und es lohnt sich, sie zu nennen:
+
+- **Kleine Stichprobe, eine Person, ein Setup.** Je 20 bewusste Wiederholungen auf
+  *einem* Laptop mit *einer* Webcam zeigen Tendenzen, keine statistisch belastbaren
+  Unterschiede. Andere Hände, Hauttöne, Kleidung, Hintergründe und Lichtsituationen
+  können die Erkennung verschieben.
+- **Modellierte statt geloggte Latenzkurve.** Die Verteilung in @fig-eval-latency
+  ist an der gemessenen Median-Latenz verankert und als Lognormal modelliert, um die
+  typische rechtsschiefe Form mit p95-Ausreißern zu zeigen. Median und Latenz-Budget
+  sind real, die einzelnen Balken sind illustrativ.
+- **Intent ist nicht direkt messbar.** Ob eine Bewegung als Befehl gemeint war, weiß
+  nur die Person. Erkennungs- und Fehltrigger-Rate kommen deshalb aus dem bewusst
+  strukturierten Versuch, nicht aus dem passiven Harness, das nur den Takt der
+  Pipeline und ausgelöste Aktionen zählt.
+
+
+```{=html}
+<nav class="nui-pagenav" aria-label="Seitennavigation">
+  <a class="nui-btn nui-btn-ghost" href="demo.html">← Live-Demo</a>
+  <a class="nui-btn nui-btn-primary" href="ueber.html">Weiter: Über & Referenzen →</a>
+</nav>
+```

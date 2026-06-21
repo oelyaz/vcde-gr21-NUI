@@ -1,235 +1,372 @@
 ---
-title: "T-Rex Game"
-author: "Elias Seidl"
+title: "Gestensteuerung mit Hand- & Pose-Tracking"
+subtitle: "Natural User Interfaces mit MediaPipe: ein interaktives Visual-Computing-Projekt"
+author:
+  - "Alexander Restle"
+  - "Elias Seidl"
+  - "Egzon Kastrati"
+suppress-bibliography: true
 format:
   html:
-    theme: cosmo
-jupyter: python3
-bibliography: references.bib
+    toc: false
+    anchor-sections: false
 ---
 
-Control the dinosaur with hand gestures via your webcam:
+```{=html}
+<style>header#title-block-header{display:none;}</style>
+```
 
-- **Open palm** ✋ — jump
-- **Closed fist** ✊ — duck (hold)
-- **Thumbs up** 👍 — restart after a crash
+:::: {.column-screen}
+```{=html}
+<div class="nui-hero" id="hero-stage">
+  <canvas id="nui-hero-canvas" class="nui-hero-canvas" aria-hidden="true"></canvas>
+  <div class="nui-hero-veil" aria-hidden="true"></div>
+  <div class="nui-hero-inner">
+    <p class="nui-hero-eyebrow">Visual Computing · Natural User Interfaces</p>
+    <p class="nui-hero-title">Die leere Hand wird zur <span class="nui-grad">Schnittstelle</span>.</p>
+    <p class="nui-hero-sub">Markerloses <strong>Hand- &amp; Pose-Tracking</strong> mit
+      <em>MediaPipe</em>: Eine gewöhnliche Webcam genügt, um Gesten und Körperhaltung
+      in Echtzeit in Befehle umzusetzen. Damit lässt sich sogar der Dinosaurier nur mit
+      Bewegung steuern.</p>
+    <div class="nui-hero-cta">
+      <a class="nui-btn nui-btn-primary" href="demo.html"><i class="ph ph-game-controller" aria-hidden="true"></i><span>Live-Demo starten</span></a>
+      <a class="nui-btn nui-btn-ghost" href="methode.html"><i class="ph ph-gear-six" aria-hidden="true"></i><span>Wie es funktioniert</span></a>
+    </div>
+    <p class="nui-hero-note">Die Kamera startet erst auf Klick · Maus &amp; Tastatur funktionieren immer.</p>
+  </div>
+  <div class="nui-hero-scrollcue" aria-hidden="true"><span></span></div>
+</div>
+```
+::::
+
+::: {.nui-lead}
+Dieses Projekt zeigt, wie **Hand- und Pose-Tracking** mit *MediaPipe* ein **Natural
+User Interface (NUI)** möglich macht: vom Funktionsprinzip *unter der Haube* bis
+zur spielbaren Live-Demo. Du steuerst den Dinosaurier mit Körperbewegung und
+Handgesten. Die Seite lässt sich außerdem **per Handgeste bedienen** (Taste
+<kbd>N</kbd> oder Button im Dock unten rechts). Maus und Tastatur bleiben jederzeit
+aktiv.
+:::
+
+## Kurzfassung {#kurzfassung}
+
+::: {.callout-note appearance="simple"}
+Natural User Interfaces wollen den Körper selbst zur Eingabe machen, statt Maus,
+Tastatur oder Controller. Wir zeigen, dass dafür eine gewöhnliche Webcam reicht:
+*MediaPipe* schätzt Hand- und Körper-Landmarks on-device direkt im Browser
+[@lugaresi2019mediapipe; @zhang2020mediapipehands; @bazarevsky2020blazepose]. Aus
+diesen Landmarks bauen wir zwei Steuerungen. Erstens einen pose- und
+gestengesteuerten Chrome-T-Rex (Springen, Ducken, Neustart). Zweitens eine komplett
+handbedienbare Website mit Cursor, Pinch-Klick und Scrollen als *einem*
+kontinuierlichen Kanal. Den Kern bildet ein eigener **Mapping-Layer**, der Geste
+oder Pose über einen abstrakten Intent auf Befehle abbildet. Gegen das
+Midas-Touch-Problem setzen wir Engagement-Toggle, Confidence-Gate, Debounce,
+Hysterese und den 1-Euro-Filter [@buxton1990threestate; @casiez2012euro]. Eine
+leichte Evaluation misst Latenz, Erkennungs- und Fehltrigger-Rate und benennt die
+Grenzen offen. Maus und Tastatur bleiben jederzeit aktiv.
+:::
+
+## Hintergrund & Problem {#problem}
+
+In der Landkarte des Visual Computing sitzt dieses Projekt zwischen **Bildanalyse**
+(*Image Analysis → Recognition*) und **Human-Computer Interaction**. Die Erkennung
+von Gesten und Landmarks ist überwacht gelerntes Sehen, ein Modell $h_\theta$, das
+zu einem Bild eine Prädiktion liefert [@friedrich_vc_recognition]. Die eigentliche
+Frage ist aber keine reine CV-Frage: Wann *meint* eine Bewegung einen Befehl, und
+wann ist sie beiläufig? Genau hier wird ein Interface, das technisch funktioniert,
+trotzdem unbenutzbar, wenn jede Handbewegung ungewollt auslöst.
+
+„Natürlich" ist deshalb ein Designziel und kein Naturgesetz: Auch Gesten sind
+erlernt, und ein NUI funktioniert erst mit sichtbaren Affordances, Discoverability
+und Feedback [@norman2010nui; @wigdor2011brave]. Webcam-Tracking ist dabei ein
+bewusster Kompromiss. Wir verzichten auf Spezialhardware und metrische Tiefe und
+bekommen dafür etwas, das kein anderes Verfahren so bietet: markerlose Echtzeit
+ohne Installation, direkt im Browser [@lugaresi2019mediapipe]. Was dabei an
+Genauigkeit und Robustheit verloren geht, diskutieren wir in der
+[Evaluation](evaluation.qmd#grenzen).
+
+## Unser Beitrag {#beitrag}
+
+Über den vendored T-Rex-Runner hinaus (BSD-Asset, unverändert) ist alles
+Folgende Eigenleistung:
+
+- **Pose-gesteuerter T-Rex.** Neutral-Kalibrierung der Schulter-/Hüft-Baseline,
+  Springen über einen vertikalen Impuls, Ducken als gehaltene Hocke. Schwellen in
+  Torso-Höhen, also distanz-invariant [@bazarevsky2020blazepose].
+- **Ganzseiten-Handnavigation.** Cursor an der Zeigefingerspitze, der Pinch als
+  einziger kontinuierlicher Kanal (Klick und Scroll), Posture-Gate gegen
+  Fehlauslösung, läuft beim Seitenwechsel automatisch weiter.
+- **Eigener Mapping-Layer** Quelle → Intent → Aktion, der den Runner über
+  `Runner.instance_.onKeyDown/onKeyUp` ansteuert, nicht über synthetische Events.
+- **Interaktive Lernbausteine.** Live-Skelett-Overlay, Landmark-Explorer und
+  Gesten-Playground machen Pipeline-Schritte direkt anfassbar.
+- **Leichte Evaluation** mit eigenem Harness (`nui/eval.js`) plus ehrlicher
+  Diskussion von Latenz, Fehltriggern und Ermüdung.
+- **Progressive Enhancement.** Maus und Tastatur sind Pflicht-Fallback und immer
+  aktiv; die Demo bleibt ohne 3D, Animationen oder Kamera bedienbar.
+
+::: {.nui-table-wrap}
+| Auf einen Blick | |
+|---|---|
+| Tracking | MediaPipe Tasks-Vision: GestureRecognizer + Pose Landmarker, on-device |
+| Landmarks | 21 pro Hand, 33 für die Körperpose |
+| Auslieferung | statische Quarto-Website, Libs zur Laufzeit per CDN, kein Build [@quarto2024] |
+| Browser | Chrome, Edge, Firefox |
+| Datenschutz | Frames verlassen das Gerät nicht |
+
+: Technischer Rahmen des Projekts. {#tbl-stack}
+:::
+
+## Der Rundgang {#rundgang}
 
 ```{=html}
-<div class="trex-host">
-  <div id="main-frame-error" class="interstitial-wrapper">
-    <div id="main-content">
-      <div class="icon icon-offline" alt=""></div>
-    </div>
-    <div id="offline-resources">
-      <img id="offline-resources-1x" src="trex/assets/default_100_percent/100-offline-sprite.png">
-      <img id="offline-resources-2x" src="trex/assets/default_200_percent/200-offline-sprite.png">
+<div class="nui-carousel-root nui-reveal" id="nui-rundgang">
+  <div class="nui-carousel-viewport" id="nui-rundgang-vp">
+    <div class="nui-carousel-track" id="nui-rundgang-track">
+      <div class="nui-card">
+        <i class="ph ph-graduation-cap nui-card-ico" aria-hidden="true"></i>
+        <h3>Grundlagen</h3>
+        <p>Was ein NUI ausmacht: diskrete vs. kontinuierliche Gesten, das
+          Midas-Touch-Problem, Use-Cases und eine kurze Geschichte.</p>
+        <a class="nui-card-go" href="grundlagen.html">Mehr erfahren →</a>
+      </div>
+      <div class="nui-card">
+        <i class="ph ph-gear-six nui-card-ico" aria-hidden="true"></i>
+        <h3>Methode im Detail</h3>
+        <p>Die MediaPipe-Pipeline von der Kamera bis zur Aktion, in neun Stufen
+          animiert und beim Scrollen Schritt für Schritt erklärt.</p>
+        <a class="nui-card-go" href="methode.html">Zur Pipeline →</a>
+      </div>
+      <div class="nui-card">
+        <i class="ph ph-game-controller nui-card-ico" aria-hidden="true"></i>
+        <h3>Live-Demo</h3>
+        <p>Steuere den Chrome-T-Rex per Handgeste oder Körperpose. Mit
+          Live-Skelett-Overlay und Ganzseiten-NUI.</p>
+        <a class="nui-card-go" href="demo.html">Jetzt spielen →</a>
+      </div>
+      <div class="nui-card">
+        <i class="ph ph-chart-bar nui-card-ico" aria-hidden="true"></i>
+        <h3>Evaluation & Quiz</h3>
+        <p>Wie zuverlässig und schnell ist die Steuerung? Plus ein Selbsttest
+          zu den Lernzielen.</p>
+        <a class="nui-card-go" href="evaluation.html">Testen →</a>
+      </div>
+      <div class="nui-card">
+        <i class="ph ph-books nui-card-ico" aria-hidden="true"></i>
+        <h3>Über & Referenzen</h3>
+        <p>Team, Aufgabenverteilung, Lizenzen der Drittanbieter-Assets und
+          die vollständige Literaturliste.</p>
+        <a class="nui-card-go" href="ueber.html">Mehr erfahren →</a>
+      </div>
     </div>
   </div>
-</div>
-
-<div class="nui-panel">
-  <button id="nui-start" type="button">Start camera</button>
-  <div class="nui-feed">
-    <video id="nui-video" playsinline muted></video>
-    <div class="nui-overlay">
-      <span id="nui-gesture">—</span>
-      <span id="nui-status">Camera off</span>
-    </div>
+  <div class="nui-carousel-foot">
+    <button class="nui-carousel-ctrl" id="nui-rundgang-prev" aria-label="Vorherige Karte">
+      <i class="ph ph-caret-left" aria-hidden="true"></i>
+    </button>
+    <button class="nui-carousel-ctrl" id="nui-rundgang-next" aria-label="Nächste Karte">
+      <i class="ph ph-caret-right" aria-hidden="true"></i>
+    </button>
   </div>
 </div>
+<script>
+(function () {
+  'use strict';
+  var vp    = document.getElementById('nui-rundgang-vp');
+  var track = document.getElementById('nui-rundgang-track');
+  if (!vp || !track) return;
 
-<style>
-  .trex-host {
-    position: relative;
-    width: 600px;
-    height: 150px;
-    margin: 1.5rem auto 0.5rem;
-    background: #f7f7f7;
-  }
-  .trex-host #offline-resources,
-  .trex-host #main-content,
-  .trex-host .icon { display: none; }
-  .trex-host .interstitial-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
-  .trex-host .runner-container {
-    position: absolute;
-    inset: 0;
-    width: 100% !important;
-    height: 100% !important;
-  }
-  .trex-host .runner-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    image-rendering: pixelated;
+  /* 1. Clone all cards on both ends for seamless infinite loop.
+        Track layout: [clone_0…n-1] [orig_0…n-1] [clone_0…n-1]  (total 3n)
+        "Real" zone = indices n … 2n-1. Clones look identical to originals. */
+  var originals = Array.from(track.children);
+  var n = originals.length;
+  originals.slice().reverse().forEach(function (c) {
+    track.insertBefore(c.cloneNode(true), track.firstChild);
+  });
+  originals.forEach(function (c) {
+    track.appendChild(c.cloneNode(true));
+  });
+
+  var cur         = n;    /* start at first original */
+  var cardW       = 0;
+  var gapPx       = 0;
+  var translateX  = 0;
+  var isAnimating = false;
+
+  function visCount() {
+    return vp.clientWidth >= 900 ? 3 : vp.clientWidth >= 540 ? 2 : 1;
   }
 
-  .nui-panel {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    margin: 0.5rem auto 2rem;
-  }
-  #nui-start {
-    padding: 0.5rem 1.25rem;
-    font-size: 0.95rem;
-    border: 1px solid #888;
-    background: #f4f4f4;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  #nui-start:hover { background: #e8e8e8; }
-  .nui-feed {
-    position: relative;
-    width: 280px;
-    height: 210px;
-    background: #111;
-    border-radius: 6px;
-    overflow: hidden;
-  }
-  #nui-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: scaleX(-1);
-  }
-  .nui-overlay {
-    position: absolute;
-    inset: auto 0 0 0;
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 8px;
-    background: rgba(0,0,0,0.55);
-    color: #fff;
-    font: 600 12px/1.2 monospace;
-  }
-</style>
-
-<script src="trex/trex-runner.js"></script>
-
-<script type="module">
-  const MP_VERSION = "0.10.35";
-  let GestureRecognizer, FilesetResolver;
-  try {
-    ({ GestureRecognizer, FilesetResolver } = await import(
-      `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MP_VERSION}/vision_bundle.mjs`
-    ));
-  } catch (err) {
-    document.getElementById('nui-status').textContent = 'Load failed: ' + err.message;
-    console.error('MediaPipe import failed', err);
-    throw err;
+  /* Cards start flush-left; right card peeks naturally (cardW sized to vis+0.25). */
+  function idealX(idx) {
+    return -(idx * (cardW + gapPx));
   }
 
-  const video    = document.getElementById('nui-video');
-  const startBtn = document.getElementById('nui-start');
-  const gestureEl = document.getElementById('nui-gesture');
-  const statusEl  = document.getElementById('nui-status');
-
-  const KEY = { JUMP: 32, DUCK: 40, RESTART: 13 };
-  const JUMP_COOLDOWN_MS = 280;
-
-  let recognizer = null;
-  let lastVideoTime = -1;
-  let lastGesture = 'None';
-  let duckHeld = false;
-  let lastJumpAt = 0;
-
-  // Drive the game directly via its onKeyDown/onKeyUp methods. Synthetic
-  // KeyboardEvents are unreliable because the t-rex-runner reads the
-  // deprecated e.keyCode, and Firefox shadows defineProperty overrides on
-  // KeyboardEvent instances with the prototype getter.
-  function fireKey(type, keyCode) {
-    const runner = window.Runner && window.Runner.instance_;
-    if (!runner) return;
-    const evt = { keyCode, type, target: document, preventDefault() {} };
-    if (type === 'keydown') runner.onKeyDown(evt);
-    else if (type === 'keyup') runner.onKeyUp(evt);
-  }
-  function tapKey(keyCode) {
-    fireKey('keydown', keyCode);
-    setTimeout(() => fireKey('keyup', keyCode), 60);
-  }
-  function setDuck(active) {
-    if (active && !duckHeld)       { fireKey('keydown', KEY.DUCK); duckHeld = true; }
-    else if (!active && duckHeld)  { fireKey('keyup',   KEY.DUCK); duckHeld = false; }
-  }
-  function tryJump() {
-    const now = performance.now();
-    if (now - lastJumpAt < JUMP_COOLDOWN_MS) return;
-    lastJumpAt = now;
-    tapKey(KEY.JUMP);
+  function setTranslate(x, animate) {
+    translateX = x;
+    track.style.transition = animate
+      ? 'transform 0.46s cubic-bezier(0.25,0,0.1,1)'
+      : 'none';
+    track.style.transform = 'translateX(' + x + 'px)';
   }
 
-  function handleGesture(g) {
-    gestureEl.textContent = g;
-    // Edge-triggered actions on gesture transitions
-    if (g !== lastGesture) {
-      if (g === 'Open_Palm') tryJump();
-      if (g === 'Thumb_Up')  tapKey(KEY.RESTART);
+  /* 2. Layout: called on init and resize. */
+  function layout() {
+    gapPx = parseFloat(getComputedStyle(track).columnGap) || 14;
+    var vis = visCount();
+    /* vis full cards + ~25% of next card peeking on the right. */
+    cardW = Math.max(120, (vp.clientWidth - gapPx * (vis - 1)) / (vis + 0.25));
+    Array.from(track.children).forEach(function (c) {
+      c.style.flex = '0 0 ' + cardW + 'px';
+    });
+    setTranslate(idealX(cur), false);
+  }
+
+  /* 3. Advance by delta (±1). */
+  function go(delta) {
+    if (isAnimating) return;
+    cur += delta;
+    isAnimating = true;
+    setTranslate(idealX(cur), true);
+  }
+
+  /* 4. After each animation, if cur landed in a clone zone, instantly
+        jump to the visually identical position in the real zone. */
+  track.addEventListener('transitionend', function (e) {
+    if (e.propertyName !== 'transform' || e.target !== track) return;
+    isAnimating = false;
+    var jumped = false;
+    if      (cur < n)      { cur += n; jumped = true; }
+    else if (cur >= 2 * n) { cur -= n; jumped = true; }
+    if (jumped) {
+      track.style.transition = 'none';
+      translateX = idealX(cur);
+      track.style.transform = 'translateX(' + translateX + 'px)';
+      void track.offsetWidth; /* flush so the next transition starts clean */
     }
-    setDuck(g === 'Closed_Fist');
-    lastGesture = g;
+  });
+
+  /* 5. Prev / Next buttons. */
+  var prevBtn = document.getElementById('nui-rundgang-prev');
+  var nextBtn = document.getElementById('nui-rundgang-next');
+  if (prevBtn) prevBtn.addEventListener('click', function () { go(-1); });
+  if (nextBtn) nextBtn.addEventListener('click', function () { go(1); });
+
+  /* 6. Drag / swipe: pointer events work for both mouse and touch.
+        Axis detection: vertical movement hands back to page scroll. */
+  var drag = { active: false, moved: false, axis: null, suppressClickUntil: 0,
+               startX: 0, startY: 0, baseX: 0 };
+
+  function readActualX() {
+    var t = getComputedStyle(track).transform;
+    if (!t || t === 'none') return translateX;
+    var x = new DOMMatrix(t).m41;
+    return isFinite(x) ? x : translateX;
   }
 
-  function loop() {
-    if (video.readyState >= 2 && video.currentTime !== lastVideoTime) {
-      lastVideoTime = video.currentTime;
-      const res = recognizer.recognizeForVideo(video, performance.now());
-      const g = (res.gestures && res.gestures.length) ? res.gestures[0][0].categoryName : 'None';
-      handleGesture(g);
+  track.addEventListener('pointerdown', function (e) {
+    if (e.button !== 0) return;
+    /* Sync cur to the actual on-screen position (animation may be mid-flight). */
+    var actualX = readActualX();
+    cur = Math.round(-actualX / (cardW + gapPx));
+    cur = Math.max(n - 1, Math.min(2 * n, cur));
+    translateX   = actualX;
+    isAnimating  = false;
+    drag.active  = true;
+    drag.moved   = false;
+    drag.axis    = null;
+    drag.suppressClickUntil = 0;
+    drag.startX  = e.clientX;
+    drag.startY  = e.clientY;
+    drag.baseX   = actualX;
+    track.style.transition = 'none';
+    window.addEventListener('pointermove', onMove, { passive: false });
+    window.addEventListener('pointerup',     onUp);
+    window.addEventListener('pointercancel', onCancel);
+  });
+
+  function onMove(e) {
+    if (!drag.active) return;
+    var dx = e.clientX - drag.startX;
+    var dy = e.clientY - drag.startY;
+    if (!drag.axis) {
+      if (Math.sqrt(dx * dx + dy * dy) < 8) return;
+      drag.axis = Math.abs(dx) >= Math.abs(dy) ? 'h' : 'v';
+      if (drag.axis === 'v') { cancelDrag(); return; }
     }
-    requestAnimationFrame(loop);
-  }
-
-  async function start() {
-    startBtn.disabled = true;
-    statusEl.textContent = 'Requesting camera…';
-    try {
-      // Camera first while the click's user-activation is still fresh — Firefox
-      // can reject getUserMedia with NotAllowedError after a long await chain.
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { width: 320, height: 240, facingMode: 'user' },
-        audio: false
-      });
-      video.srcObject = stream;
-      await video.play();
-
-      statusEl.textContent = 'Loading model…';
-      const vision = await FilesetResolver.forVisionTasks(
-        `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MP_VERSION}/wasm`
-      );
-      recognizer = await GestureRecognizer.createFromOptions(vision, {
-        baseOptions: {
-          modelAssetPath: "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/latest/gesture_recognizer.task",
-          delegate: "CPU"
-        },
-        runningMode: "VIDEO",
-        numHands: 1
-      });
-      statusEl.textContent = 'Tracking';
-      startBtn.style.display = 'none';
-      requestAnimationFrame(loop);
-    } catch (err) {
-      console.error(err);
-      let msg = err.message || String(err);
-      if (err.name === 'NotAllowedError') {
-        msg = window.isSecureContext
-          ? 'Camera permission denied — allow it in the site settings.'
-          : 'Insecure context — open via http://localhost (e.g. `quarto preview`), not file:// or a LAN IP.';
-      } else if (err.name === 'NotFoundError') {
-        msg = 'No camera device found.';
-      }
-      statusEl.textContent = msg;
-      startBtn.disabled = false;
+    if (!drag.moved) {
+      drag.suppressClickUntil = Date.now() + 350;
+      track.classList.add('is-dragging');
     }
+    drag.moved = true;
+    e.preventDefault(); /* block page-scroll while dragging horizontally */
+    translateX = drag.baseX + dx;
+    track.style.transform = 'translateX(' + translateX + 'px)';
   }
 
-  startBtn.addEventListener('click', start);
+  function onUp(e) {
+    if (!drag.active) return;
+    endDrag();
+    if (!drag.moved || drag.axis !== 'h') {
+      setTranslate(idealX(cur), false);
+      return;
+    }
+    var dx = e.clientX - drag.startX;
+    var threshold = Math.max(50, cardW * 0.22);
+    if      (dx < -threshold) cur++;
+    else if (dx >  threshold) cur--;
+    isAnimating = true;
+    setTranslate(idealX(cur), true);
+  }
+
+  function onCancel() {
+    if (!drag.active) return;
+    endDrag();
+    isAnimating = true;
+    setTranslate(idealX(cur), true);
+  }
+
+  function endDrag() {
+    drag.active = false;
+    track.classList.remove('is-dragging');
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup',     onUp);
+    window.removeEventListener('pointercancel', onCancel);
+  }
+
+  function cancelDrag() {
+    drag.suppressClickUntil = 0;
+    endDrag();
+    setTranslate(idealX(cur), false);
+  }
+
+  /* Suppress link navigation if the gesture was a real horizontal drag. */
+  track.addEventListener('click', function (e) {
+    if (Date.now() > drag.suppressClickUntil) return;
+    drag.suppressClickUntil = 0;
+    e.preventDefault();
+  }, true);
+
+  /* 7. Resize. */
+  var raf;
+  window.addEventListener('resize', function () {
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(layout);
+  }, { passive: true });
+
+  layout();
+}());
 </script>
+```
+
+```{=html}
+<div class="nui-quiz-cta nui-reveal">
+  <div class="nui-quiz-cta-body">
+    <h3>Bereit? Steuere den Dino mit deinem Körper.</h3>
+    <p>Kamera an, Modus wählen (Handgesten oder Ganzkörper-Pose) und losspielen.
+      On-device, nichts verlässt dein Gerät. Ohne Kamera per Tastatur spielbar.</p>
+  </div>
+  <a class="nui-btn nui-btn-primary" href="demo.html"><i class="ph ph-game-controller" aria-hidden="true"></i><span>Zur Live-Demo</span></a>
+</div>
 ```
