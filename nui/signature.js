@@ -418,7 +418,7 @@ function initFlow(gsap, ScrollTrigger) {
   const ALL = ['g-hand', 'g-rec', 'g-detbox', 'g-roi', 'g-landmarks',
     'g-depth', 'g-gesture', 'g-smooth', 'g-map', 'g-action'];
   const LABELS = ['Aufnahme', 'Detektion', 'ROI-Ausrichtung', 'Landmark-Regression',
-    '3D-Lifting', 'Klassifikation', 'Glättung', 'Mapping', 'Aktion'];
+    '3D-Lifting', 'Klassifikation', 'Glättung', 'Mapping', 'Echtzeit'];
 
   const numEl = flow.querySelector('.nui-flow-stage-num');
   const labelEl = flow.querySelector('.nui-flow-stage-label');

@@ -154,6 +154,9 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#messung" id="toc-messung" class="nav-link active" data-scroll-target="#messung">Wie wir messen</a></li>
   <li><a href="#grenzen" id="toc-grenzen" class="nav-link" data-scroll-target="#grenzen">Grenzen des Ansatzes</a></li>
+  <li><a href="#fazit" id="toc-fazit" class="nav-link" data-scroll-target="#fazit">Fazit</a></li>
+  <li><a href="#ausblick" id="toc-ausblick" class="nav-link" data-scroll-target="#ausblick">Ausblick &amp; neue Entwicklungen</a></li>
+  <li><a href="#quiz" id="toc-quiz" class="nav-link" data-scroll-target="#quiz">Mach mit: Live-Quiz</a></li>
   </ul>
 </nav>
 </nav>
@@ -187,7 +190,7 @@ window.Quarto = {
 <div class="nui-pagehead">
 <p><span class="nui-eyebrow">Messung · Grenzen · Selbsttest</span></p>
 <div class="nui-lead">
-<p>Wie schnell und zuverlässig ist die Steuerung, und wo hakt es? Unsere Evaluation bleibt bewusst <strong>leichtgewichtig</strong>. Es gibt ein paar echte Messwerte und eine ehrliche Einordnung, aber keine formale Nutzerstudie (das war nicht Ziel des Projekts). Am Ende kannst du die Kernbotschaften im <strong>Quiz</strong> selbst prüfen.</p>
+<p>Wie schnell und zuverlässig ist die Steuerung, und wo hakt es? Unsere Evaluation bleibt <strong>leichtgewichtig</strong>. Es gibt ein paar echte Messwerte und eine ehrliche Einordnung, aber keine formale Nutzerstudie (das war nicht Ziel des Projekts). Am Ende prüfen wir die Kernbotschaften gemeinsam in einem kurzen <strong>Live-Quiz</strong>.</p>
 </div>
 </div>
 <div class="callout callout-style-simple callout-note">
@@ -302,10 +305,10 @@ Tabelle&nbsp;1: Repräsentativer Messlauf der gesten- und posenbasierten Steueru
 <div id="fig-eval-latency" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-eval-latency-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="evaluation_files/figure-html/fig-eval-latency-output-1.png" width="662" height="298" class="figure-img">
+<img src="evaluation_files/figure-html/fig-eval-latency-output-1.png" width="661" height="259" class="figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-eval-latency-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Abbildung&nbsp;1: Verteilung der Verarbeitungslatenz Frame → Aktion (Inferenz + Steuerlogik); gestrichelt Median und 95-%-Perzentil. Die Verteilung ist als Lognormal modelliert (illustrativ, an der im Harness gemessenen Median-Latenz verankert).
+Abbildung&nbsp;1: Latenz-Budget Frame → Aktion, additiv aus drei realen Beiträgen: Kamera-Frame-Intervall (≈ 33 ms bei 30 fps), gemessene Median-Verarbeitung (≈ 50 ms aus dem Eval-Harness) und – nur bei den diskreten Hand-Gesten – das Debounce-Fenster von drei stabilen Frames (≈ 100 ms). Der Pose-Pfad nutzt Anstiegserkennung ohne Debounce.
 </figcaption>
 </figure>
 </div>
@@ -313,30 +316,86 @@ Abbildung&nbsp;1: Verteilung der Verarbeitungslatenz Frame → Aktion (Inferenz 
 </div>
 <p>Die gemessene Verarbeitung ist nur ein Teil der Verzögerung, die man beim Spielen merkt (<a href="#fig-eval-latency" class="quarto-xref">Abbildung&nbsp;1</a>). Grob kommen drei Dinge zusammen: Kamera-Frame-Intervall (≈ 33 ms bei 30 fps), gemessene Verarbeitung (Median ≈ 50 ms) und, nur bei den <strong>diskreten</strong> Hand-Gesten, das Debounce-Fenster von drei stabilen Frames (≈ 100 ms):</p>
 <p><span class="math display">\[t_{\text{spürbar}} \approx t_{\text{Frame}} + t_{\text{Verarbeitung}} + t_{\text{Debounce}}.\]</span></p>
-<p>Der Debounce-Term entfällt für den <strong>Pose</strong>-Pfad (er nutzt Anstiegs- statt Klassen-Erkennung) und ist der bewusste Preis für Stabilität bei den diskreten Hand-Gesten: drei stabile Frames gegen Fehltrigger kosten ~100 ms Reaktionszeit.</p>
+<p>Der Debounce-Term entfällt für den <strong>Pose</strong>-Pfad (er nutzt Anstiegs- statt Klassen-Erkennung) und ist der Preis für Stabilität bei den diskreten Hand-Gesten: drei stabile Frames gegen Fehltrigger kosten ~100 ms Reaktionszeit.</p>
 </section>
 <section id="grenzen" class="level2">
 <h2 class="anchored" data-anchor-id="grenzen">Grenzen des Ansatzes</h2>
 <p><strong>Robustheit (Licht &amp; Verdeckung).</strong> Eine normale RGB-Kamera ohne Tiefeninfo ist empfindlich gegen schwaches oder seitliches Licht, Gegenlicht und Bewegungsunschärfe. Verdeckte Landmarks, etwa eine Hand halb außerhalb des Bilds oder eine Hüfte hinter dem Tisch, senken die Confidence und damit die Erkennung. Der Pose-Pfad braucht <strong>Schultern und Hüfte im Bild</strong> und genügend Abstand. Die Neutral-Kalibrierung normiert zwar auf die Torso-Höhe (distanz-invariant), sie kann fehlende Landmarks aber nicht ersetzen.</p>
-<p><strong>Latenz.</strong> Mit ~50 ms Median fühlt sich die Verarbeitung grundsätzlich flüssig an. Spürbar wird vor allem das Debounce-Fenster der diskreten Gesten. GPU-Delegate und der Verzicht auf künstliches Throttling halten die Inferenz schnell. Der 1-Euro-Filter glättet den Cursor <em>geschwindigkeitsadaptiv</em> und fügt absichtlich kaum Verzögerung hinzu <span class="citation" data-cites="casiez2012euro friedrich_vc_nonlinear">(Casiez u.&nbsp;a. 2012; Friedrich 2025)</span>. Einzelne p95-Ausreißer entstehen durch Garbage-Collection und gelegentliche Modell-Hänger.</p>
-<p><strong>Gorilla-Arm &amp; Ermüdung.</strong> Hand-Gesten in der Luft und wiederholtes Aufstehen/Hocken ermüden schneller, als man denkt. Das ist das klassische <em>Gorilla-Arm</em>-Problem. Für kurze Demos ist es okay. Für längere Nutzung braucht es kurze, diskrete Gesten, einen klar abgegrenzten Interaktionsraum und den Maus/Tastatur-Fallback.</p>
-<p><strong>Midas-Touch.</strong> Da die Kamera <em>immer</em> etwas sieht, kann schnell jede Bewegung als Befehl verstanden werden. Dagegen helfen explizites <strong>Engagement</strong> (globaler Toggle), Confidence-Gate, Debounce/Hysterese, Cooldowns und die Trennung von Spiel- und Navigationskanal <span class="citation" data-cites="buxton1990threestate norman2010nui">(Buxton 1990; Norman 2010)</span>. Die Fehltrigger-Spalte in <a href="#tbl-eval" class="quarto-xref">Tabelle&nbsp;1</a> zeigt, was übrig bleibt: wenig, aber nicht null.</p>
-<p>Aus genau diesem Grund ist der <strong>Maus/Tastatur-Fallback Pflicht und immer aktiv</strong>: Er sichert Bedienbarkeit und Bewertung unabhängig von Licht, Kamera und Tagesform.</p>
+<p><strong>Latenz.</strong> Mit ~50 ms Median fühlt sich die Verarbeitung grundsätzlich flüssig an. Spürbar wird vor allem das Debounce-Fenster der diskreten Gesten. GPU-Delegate und der Verzicht auf künstliches Throttling halten die Inferenz schnell. Der 1-Euro-Filter glättet den Cursor <em>geschwindigkeitsadaptiv</em> und fügt absichtlich kaum Verzögerung hinzu <span class="citation" data-cites="casiez2012euro">(Casiez u.&nbsp;a. 2012)</span>. Einzelne p95-Ausreißer entstehen durch Garbage-Collection und gelegentliche Modell-Hänger.</p>
+<p><strong>Gorilla-Arm &amp; Ermüdung.</strong> Hand-Gesten in der Luft und wiederholtes Aufstehen/Hocken ermüden schneller, als man denkt. Das ist das klassische <em>Gorilla-Arm</em>-Problem. Für kurze Demos ist das vertretbar. Für längere Nutzung braucht es kurze, diskrete Gesten, einen klar abgegrenzten Interaktionsraum und den Maus/Tastatur-Fallback.</p>
+<p><strong>Midas-Touch.</strong> Da die Kamera <em>immer</em> etwas sieht, kann schnell jede Bewegung als Befehl verstanden werden. Dagegen helfen explizites <strong>Engagement</strong> (globaler Toggle), Confidence-Gate, Debounce/Hysterese, Cooldowns und die Trennung von Spiel- und Navigationskanal <span class="citation" data-cites="buxton1990threestate norman2010nui">(Buxton 1990; Norman 2010)</span>. Die Fehltrigger-Spalte in <a href="#tbl-eval" class="quarto-xref">Tabelle&nbsp;1</a> zeigt, dass trotzdem vereinzelt Fehltrigger übrig bleiben.</p>
+<p>Deshalb ist der <strong>Maus/Tastatur-Fallback Pflicht und immer aktiv</strong>: Er sichert Bedienbarkeit und Bewertung unabhängig von Licht, Kamera und Tagesform.</p>
 <section id="validitaet" class="level3">
 <h3 class="anchored" data-anchor-id="validitaet">Bedrohungen der Validität</h3>
 <p>Die Zahlen oben sind ehrlich, aber begrenzt. Drei Punkte schränken ihre Aussagekraft ein, und es lohnt sich, sie zu nennen:</p>
 <ul>
 <li><strong>Kleine Stichprobe, eine Person, ein Setup.</strong> Je 20 bewusste Wiederholungen auf <em>einem</em> Laptop mit <em>einer</em> Webcam zeigen Tendenzen, keine statistisch belastbaren Unterschiede. Andere Hände, Hauttöne, Kleidung, Hintergründe und Lichtsituationen können die Erkennung verschieben.</li>
-<li><strong>Modellierte statt geloggte Latenzkurve.</strong> Die Verteilung in <a href="#fig-eval-latency" class="quarto-xref">Abbildung&nbsp;1</a> ist an der gemessenen Median-Latenz verankert und als Lognormal modelliert, um die typische rechtsschiefe Form mit p95-Ausreißern zu zeigen. Median und Latenz-Budget sind real, die einzelnen Balken sind illustrativ.</li>
+<li><strong>Median-Budget statt voller Verteilung.</strong> <a href="#fig-eval-latency" class="quarto-xref">Abbildung&nbsp;1</a> zeigt die drei realen, additiven Latenzbeiträge am Median, nicht die vollständige Verteilung. Einzelne p95-Ausreißer (Garbage-Collection, Modell-Hänger) liegen darüber und sind hier nicht abgebildet.</li>
 <li><strong>Intent ist nicht direkt messbar.</strong> Ob eine Bewegung als Befehl gemeint war, weiß nur die Person. Erkennungs- und Fehltrigger-Rate kommen deshalb aus dem bewusst strukturierten Versuch, nicht aus dem passiven Harness, das nur den Takt der Pipeline und ausgelöste Aktionen zählt.</li>
 </ul>
+</section>
+</section>
+<section id="fazit" class="level2">
+<h2 class="anchored" data-anchor-id="fazit">Fazit</h2>
+<p>Vier Punkte fassen das Projekt zusammen:</p>
+<div class="nui-reveal">
+<ol type="1">
+<li><strong>NUI ist berührungslose, körperbasierte Eingabe</strong> und vor allem dort relevant, wo Kontakt unmöglich, unhygienisch oder unpraktisch ist (siehe <a href="./grundlagen.html#use-cases">Use-Cases</a>).</li>
+<li><strong>Das Funktionsprinzip ist eine klassische CV-Pipeline:</strong> Bild → CNN-Landmarks → Klassifikation/Heuristik → Mapping → Aktion (siehe <a href="./methode.html#pipeline">Methode</a>). Kein einzelnes großes Netz, sondern spezialisierte Stufen mit Tracking-Optimierung.</li>
+<li><strong>Eine gewöhnliche Webcam plus MediaPipe genügt</strong>, ohne Spezial-Hardware und vollständig on-device im Browser. Das ist der Kompromiss aus dem <a href="./methode.html#vergleich">Methodenvergleich</a>: nicht die höchste Genauigkeit, aber markerlose Echtzeit ohne Installation.</li>
+<li><strong>Die Grenzen bleiben real:</strong> Licht und Verdeckung, Latenz, Ergonomie („Gorilla-Arm”) und das Midas-Touch-Problem. Wir begegnen ihnen technisch (Confidence-Gate, Debounce, Hysterese, 1-Euro-Filter) und mit dem Pflicht-Fallback auf Maus und Tastatur, lösen sie aber nicht vollständig. Der <a href="#ausblick">Ausblick</a> unten zeigt, wohin die Entwicklung geht.</li>
+</ol>
+</div>
+</section>
+<section id="ausblick" class="level2">
+<h2 class="anchored" data-anchor-id="ausblick">Ausblick &amp; neue Entwicklungen</h2>
+<p>Die genannten Grenzen sind kein Endzustand, sondern aktive Forschungsfelder. Mehrere Entwicklungen deuten darauf hin, dass berührungslose Eingabe künftig breiter genutzt wird.</p>
+<div class="nui-reveal">
+<ul>
+<li><strong>Transformer-Pose-Modelle.</strong> Aufmerksamkeitsbasierte Architekturen lösen reine CNN-Detektoren zunehmend ab. Sie versprechen mehr Robustheit gegen Verdeckung und eine stabilere 3D-Schätzung als die heutige Pipeline.</li>
+<li><strong>Tiefe aus Mono-RGB.</strong> Gelernte monokulare Tiefenschätzung bringt echte 3D-Gesten ohne Extra-Sensor in Reichweite und entschärft die zentrale Schwäche, die der Webcam-Ansatz heute gegenüber Tiefenkameras hat (siehe <a href="./methode.html#vergleich">Vergleich</a>).</li>
+<li><strong>WebGPU.</strong> Als Nachfolger von WebGL erlaubt es schnellere On-device-Inferenz direkt im Browser und drückt die in der <a href="#grenzen">Latenz-Diskussion</a> gemessenen Verarbeitungszeiten weiter nach unten.</li>
+<li><strong>Multimodale Eingabe.</strong> Hand, Blick und Sprache werden kombiniert statt einzeln ausgewertet. Aktuelle Spatial-Computing-Geräte (Apple Vision Pro) zeigen das Muster: Der Blick zielt, ein Pinch bestätigt.</li>
+<li><strong>Sensorfusion jenseits der Kamera.</strong> EMG-Armbänder lesen Muskelsignale, Radar-Chips wie Googles <em>Soli</em> erfassen feine Bewegungen. Beide ergänzen das Kamerabild und umgehen dessen Licht- und Verdeckungsprobleme.</li>
+</ul>
+</div>
+<p>Die Richtung ist dieselbe wie in der <a href="./grundlagen.html#geschichte">kurzen Geschichte</a>: von Spezial-Hardware hin zu berührungsloser Eingabe auf Alltagsgeräten. Die hier gezeigte Webcam-Demo ist dafür ein früher, aber schon heute lauffähiger Schritt.</p>
+</section>
+<section id="quiz" class="level2">
+<h2 class="anchored" data-anchor-id="quiz">Mach mit: Live-Quiz</h2>
+<p>Die Kernbotschaften dieser Seite prüfen wir am Ende des Vortrags gemeinsam in einem kurzen <strong>Live-Quiz</strong> über Mentimeter. Mitmachen kannst du mit Smartphone oder Laptop, solange die Session im Vortrag läuft.</p>
+<div class="nui-menti nui-reveal">
+  <div class="nui-menti-body">
+    <p class="nui-menti-eyebrow">Live im Vortrag · Mentimeter</p>
+    <h3 class="nui-menti-title anchored">Geh auf <span class="nui-menti-host">menti.com</span> und gib den Code ein</h3>
+    <p class="nui-menti-code" aria-label="Mentimeter-Code">3442 3119</p>
+    <a class="nui-btn nui-btn-primary" href="https://www.menti.com/" target="_blank" rel="noopener">
+      <i class="ph ph-device-mobile" aria-hidden="true"></i><span>Quiz beitreten</span>
+    </a>
+    <p class="nui-menti-note">Der Code kann je Session abweichen. Antworten nimmt das
+      Quiz nur während einer laufenden Live-Session an.</p>
+  </div>
+  <figure class="nui-menti-qr figure">
+    <img src="nui/assets/qr-menti.png" width="160" height="160" alt="QR-Code: führt zu menti.com zum Eingeben des Quiz-Codes" class="figure-img">
+    <figcaption>Oder QR scannen</figcaption>
+  </figure>
+</div>
+
+<!--
+  Optionale read-only Live-Vorschau: In Mentimeter unter "Share" den Embed-Code
+  kopieren und die src unten einsetzen. Zeigt ausserhalb einer laufenden Session
+  nur einen Wartescreen, daher standardmaessig deaktiviert.
+<div class="nui-menti-embed">
+  <iframe src="HIER_MENTI_EMBED_SRC_EINSETZEN" height="450" frameborder="0"
+          allowfullscreen loading="lazy" title="Mentimeter-Quiz-Vorschau"></iframe>
+</div>
+-->
 <nav class="nui-pagenav" aria-label="Seitennavigation">
   <a class="nui-btn nui-btn-ghost" href="demo.html">← Live-Demo</a>
   <a class="nui-btn nui-btn-primary" href="ueber.html">Weiter: Über &amp; Referenzen →</a>
 </nav>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

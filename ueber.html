@@ -140,6 +140,7 @@ div.csl-indent {
    
   <ul class="collapse">
   <li><a href="#team" id="toc-team" class="nav-link active" data-scroll-target="#team">Wer hat was gemacht</a></li>
+  <li><a href="#ki-nutzung" id="toc-ki-nutzung" class="nav-link" data-scroll-target="#ki-nutzung">KI-Nutzung</a></li>
   <li><a href="#lizenzen" id="toc-lizenzen" class="nav-link" data-scroll-target="#lizenzen">Lizenzen &amp; Drittanbieter-Assets</a></li>
   <li><a href="#reproduzierbarkeit" id="toc-reproduzierbarkeit" class="nav-link" data-scroll-target="#reproduzierbarkeit">Projektdaten &amp; Reproduzierbarkeit</a></li>
   <li><a href="#referenzen" id="toc-referenzen" class="nav-link" data-scroll-target="#referenzen">Referenzen</a></li>
@@ -176,25 +177,63 @@ div.csl-indent {
 <div class="nui-pagehead">
 <p><span class="nui-eyebrow">Team · Lizenzen · Literatur</span></p>
 <div class="nui-lead">
-<p>Wer hat was gebaut? Welche fremden Bausteine stecken im Projekt? Und worauf stützt sich die Theorie? Hier stehen <strong>Aufgabenverteilung</strong>, <strong>Lizenzen</strong> der Drittanbieter-Assets und die <strong>vollständige Literaturliste</strong>.</p>
+<p>Wer hat was gebaut, welche fremden Bausteine stecken im Projekt, und worauf stützt sich die Theorie? Hier stehen <strong>Aufgabenverteilung</strong>, <strong>Lizenzen</strong> der Drittanbieter-Assets und die <strong>vollständige Literaturliste</strong>.</p>
 </div>
 </div>
 <section id="team" class="level2">
 <h2 class="anchored" data-anchor-id="team">Wer hat was gemacht</h2>
+<div class="nui-modules">
+  <section class="nui-module">
+    <header class="nui-module-head">
+      <h3 class="anchored">Alex</h3>
+    </header>
+    <dl class="nui-module-readout">
+      <div><dt>Präsentation</dt><dd>Teil 3 · Demo, Ausblick &amp; Quiz</dd></div>
+      <div><dt>Website</dt><dd>Live-Demo Gestensteuerung</dd></div>
+      <div><dt>Code</dt><dd>Gesten-Mapping &amp; Browser-Integration</dd></div>
+    </dl>
+  </section>
+
+  <section class="nui-module">
+    <header class="nui-module-head">
+      <h3 class="anchored">Elias</h3>
+    </header>
+    <dl class="nui-module-readout">
+      <div><dt>Präsentation</dt><dd>Teil 2 · Funktionsprinzip</dd></div>
+      <div><dt>Website</dt><dd>Theorie &amp; Methode</dd></div>
+      <div><dt>Code</dt><dd>MediaPipe-Integration &amp; Klassifikation</dd></div>
+    </dl>
+  </section>
+
+  <section class="nui-module">
+    <header class="nui-module-head">
+      <h3 class="anchored">Egzon</h3>
+    </header>
+    <dl class="nui-module-readout">
+      <div><dt>Präsentation</dt><dd>Teil 1 · Problem &amp; Motivation</dd></div>
+      <div><dt>Website</dt><dd>Einführung &amp; verwandte Arbeiten</dd></div>
+      <div><dt>Code</dt><dd>Dino-Pose-Demo</dd></div>
+    </dl>
+  </section>
+</div>
+</section>
+<section id="ki-nutzung" class="level2">
+<h2 class="anchored" data-anchor-id="ki-nutzung">KI-Nutzung</h2>
+<p>Im Rahmen des Projekts wurden KI-gestützte Werkzeuge unterstützend eingesetzt. Die finalen Inhalte, Entscheidungen und Ergebnisse wurden vom Projektteam geprüft und verantwortet.</p>
 </section>
 <section id="lizenzen" class="level2">
 <h2 class="anchored" data-anchor-id="lizenzen">Lizenzen &amp; Drittanbieter-Assets</h2>
 <ul>
-<li><strong>Chrome-Dino / T-Rex-Runner</strong> (<code>trex/trex-runner.js</code>): © 2014 The Chromium Authors, BSD-Style-Lizenz (siehe Header der Datei). Unverändert eingebunden, also vendored Asset und nicht refaktoriert.</li>
+<li><strong>Chrome-Dino / T-Rex-Runner</strong> (<code>trex/trex-runner.js</code>): © 2014 The Chromium Authors, BSD-Style-Lizenz (siehe Header der Datei). Vendored Asset; die Spiellogik bleibt unverändert, ergänzt sind nur kleine Einbettungs-Guards für diese lokale Demo.</li>
 <li><strong>MediaPipe Tasks-Vision</strong> (<code>@mediapipe/tasks-vision</code>, GestureRecognizer &amp; Pose Landmarker): Google, Apache-2.0; zur Laufzeit per CDN geladen.</li>
 <li><strong>GSAP / ScrollTrigger</strong> und <strong>Lenis</strong>: clientseitige Animations- und Smooth-Scroll-Bibliotheken, zur Laufzeit per CDN geladen (Scroll-Story der Methode-Seite). <strong>Babylon.js</strong> treibt die 3D-Hand der Startseite.</li>
-<li><strong>Quarto</strong> als Publishing-System <span class="citation" data-cites="quarto2024">(<a href="#ref-quarto2024" role="doc-biblioref">Allaire und Teague 2024</a>)</span>.</li>
+<li><strong>Quarto</strong> als Publishing-System.</li>
 </ul>
 </section>
 <section id="reproduzierbarkeit" class="level2">
 <h2 class="anchored" data-anchor-id="reproduzierbarkeit">Projektdaten &amp; Reproduzierbarkeit</h2>
 <ul>
-<li><strong>Publishing:</strong> Statische Website mit Quarto, lokal via <code>quarto preview</code> mit Live-Reload, Rendern mit <code>quarto render</code> <span class="citation" data-cites="quarto2024">(<a href="#ref-quarto2024" role="doc-biblioref">Allaire und Teague 2024</a>)</span>.</li>
+<li><strong>Publishing:</strong> Statische Website mit Quarto, lokal via <code>quarto preview</code> mit Live-Reload, Rendern mit <code>quarto render</code>.</li>
 <li><strong>Build:</strong> Kein Bundler, kein <code>node_modules</code>, kein zusätzlicher Build-Schritt. Animations- und Tracking-Libs werden zur Laufzeit per CDN/ESM geladen.</li>
 <li><strong>Tracking:</strong> MediaPipe Tasks-Vision mit GestureRecognizer und Pose Landmarker, on-device im Browser. Frames verlassen das Gerät nicht.</li>
 <li><strong>Front-end:</strong> Handgeschriebene ES-Module unter <code>nui/</code>: config, controller, filters, overlay, explainer, eval, signature, onboarding. Kein Framework.</li>
@@ -203,11 +242,8 @@ div.csl-indent {
 </section>
 <section id="referenzen" class="level2">
 <h2 class="anchored" data-anchor-id="referenzen">Referenzen</h2>
-<p>Die folgende Liste sammelt die zitierte Fachliteratur: Vorlesungsfolien (Visual Computing), MediaPipe-/BlazePose-Paper, NUI-Grundlagen und den 1-Euro-Filter.</p>
+<p>Die folgende Liste sammelt die zitierte Fachliteratur: das MediaPipe-Framework mit seinen Modellen (Hands, BlazePose, GHUM) und den zugehörigen Model Cards, die Detektions- und Effizienz-Grundlagen (SSD, MobileNets, Knowledge Distillation), die NUI-/HCI-Literatur (Norman, Buxton, Wigdor) und den 1-Euro-Filter.</p>
 <div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-quarto2024" class="csl-entry" role="listitem">
-Allaire, J. J., und Charles Teague. 2024. <span>„Quarto: An Open-Source Scientific and Technical Publishing System“</span>. <em>Proceedings of the Scientific Computing Conference</em>.
-</div>
 <div id="ref-babylonjs2026" class="csl-entry" role="listitem">
 Babylon.js Team. 2026. <span>„Babylon.js Documentation“</span>. <a href="https://doc.babylonjs.com/">https://doc.babylonjs.com/</a>.
 </div>
@@ -246,6 +282,12 @@ Liu, Wei, Dragomir Anguelov, Dumitru Erhan, u.&nbsp;a. 2016. <span>„<span>SSD<
 </div>
 <div id="ref-lugaresi2019mediapipe" class="csl-entry" role="listitem">
 Lugaresi, Camillo, Jiuqiang Tang, Hadon Nash, u.&nbsp;a. 2019. <span>„<span>MediaPipe</span>: A Framework for Building Perception Pipelines“</span>. <em>arXiv preprint arXiv:1906.08172</em>.
+</div>
+<div id="ref-mediapipe2020blazeposemodelcard" class="csl-entry" role="listitem">
+MediaPipe. 2020a. <span>„Model Card: <span>BlazePose</span> <span>GHUM</span> <span>3D</span>“</span>. <a href="https://drive.google.com/file/d/10WlcTvrQnR_R2TdTmKw0nkyRLqrwNkWU/preview">https://drive.google.com/file/d/10WlcTvrQnR_R2TdTmKw0nkyRLqrwNkWU/preview</a>.
+</div>
+<div id="ref-mediapipe2020handsmodelcard" class="csl-entry" role="listitem">
+MediaPipe. 2020b. <span>„Model Card: <span>MediaPipe</span> Hands (<span>Lite/Full</span>)“</span>. <a href="https://drive.google.com/file/d/1-rmIgTfuCbBPW_IFHkh3f0-U_lnGrWpg/preview">https://drive.google.com/file/d/1-rmIgTfuCbBPW_IFHkh3f0-U_lnGrWpg/preview</a>.
 </div>
 <div id="ref-norman2010nui" class="csl-entry" role="listitem">
 Norman, Donald A. 2010. <span>„Natural User Interfaces Are Not Natural“</span>. <em>interactions</em> 17 (3): 6–10. <a href="https://doi.org/10.1145/1744161.1744163">https://doi.org/10.1145/1744161.1744163</a>.

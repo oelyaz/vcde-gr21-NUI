@@ -165,19 +165,19 @@ ul.task-list li input[type="checkbox"] {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p><strong>Kurzfassung:</strong> Ein Interface wirkt „natürlich”, wenn es vorhandene menschliche Fähigkeiten verständlich nutzbar macht, es ist aber ein Designziel und kein Naturgesetz <span class="citation" data-cites="norman2010nui">(Norman 2010)</span>. Für die Umsetzung ist wichtig, diskrete Gesten als einzelne Ereignisse von kontinuierlichen Kanälen wie Position, Abstand oder Haltung zu trennen. Engagement und Disengagement bestimmen, wann eine Bewegung wirklich als Befehl gilt, sonst entsteht das Midas-Touch-Problem <span class="citation" data-cites="buxton1990threestate">(Buxton 1990)</span>. Typische Use-Cases reichen von XR und Accessibility bis Medizin und Gaming, historisch verschiebt sich das Feld von getragenen Sensoren und Handschuhen zu markerlosem kamera-basiertem Tracking.</p>
+<p><strong>Kurzfassung:</strong> Ein Interface wirkt „natürlich”, wenn es vorhandene menschliche Fähigkeiten verständlich nutzbar macht. Das gelingt aber nicht von selbst, sondern ist ein Designziel <span class="citation" data-cites="norman2010nui">(Norman 2010)</span>. Für die Umsetzung ist wichtig, diskrete Gesten als einzelne Ereignisse von kontinuierlichen Kanälen wie Position, Abstand oder Haltung zu trennen. Engagement und Disengagement bestimmen, wann eine Bewegung wirklich als Befehl gilt, sonst entsteht das Midas-Touch-Problem <span class="citation" data-cites="buxton1990threestate">(Buxton 1990)</span>. Typische Use-Cases reichen von XR und Accessibility bis Medizin und Gaming. Historisch verschiebt sich das Feld von getragenen Sensoren und Handschuhen hin zu markerlosem, kamerabasiertem Tracking.</p>
 </div>
 </div>
 </div>
 <section id="motivation" class="level2">
 <h2 class="anchored" data-anchor-id="motivation">Von der leeren Hand zum Befehl</h2>
-<p>Klassische Eingabe braucht meistens ein <em>Instrument</em>: Maus, Tastatur oder Touchscreen. Ein <strong>Natural User Interface (NUI)</strong> probiert das Gegenteil. Fähigkeiten, die Menschen sowieso mitbringen, etwa Zeigen, Greifen, Mimik oder Körperhaltung, sollen <em>direkt</em> zur Eingabe werden. Hand- und Pose-Tracking liefern dafür die technische Grundlage. Eine gewöhnliche RGB-Kamera genügt, um die Hand bzw. den ganzen Körper als Eingabegerät zu erkennen. In der Landkarte des Visual Computing liegt dieses Projekt damit zwischen <strong>Human-Computer Interaction</strong> und der <strong>Bildanalyse</strong> (<em>Image Analysis → Recognition</em>) <span class="citation" data-cites="friedrich_vc_recognition">(Friedrich 2025a)</span>.</p>
-<p>„Natural” ist dabei ein <strong>Designziel, kein Naturgesetz</strong>: Auch Gesten sind erlernt und kulturell konventioniert, und ein NUI wird erst dann „natürlich”, wenn es klassische Usability-Prinzipien erfüllt: sichtbare <em>Affordances</em>, <em>Discoverability</em> (welche Gesten sind überhaupt möglich?) und unmittelbares <em>Feedback</em> <span class="citation" data-cites="norman2010nui wigdor2011brave">(Norman 2010; Wigdor und Wixon 2011)</span>. Zwei Begriffe strukturieren das ganze Projekt:</p>
+<p>Klassische Eingabe braucht meistens ein <em>Instrument</em>: Maus, Tastatur oder Touchscreen. Ein <strong>Natural User Interface (NUI)</strong> probiert das Gegenteil. Fähigkeiten, die Menschen sowieso mitbringen, etwa Zeigen, Greifen, Mimik oder Körperhaltung, sollen <em>direkt</em> zur Eingabe werden. Hand- und Pose-Tracking liefern dafür die technische Grundlage. Eine gewöhnliche RGB-Kamera genügt, um die Hand bzw. den ganzen Körper als Eingabegerät zu erkennen. In der Landkarte des Visual Computing liegt dieses Projekt damit zwischen <strong>Human-Computer Interaction</strong> und der <strong>Bildanalyse</strong> (<em>Image Analysis → Recognition</em>).</p>
+<p>Dabei ist „natürlich” ein Designziel, kein Automatismus. Auch Gesten sind erlernt und kulturell geprägt. Ein NUI wird erst dann gut bedienbar, wenn es übliche Usability-Prinzipien erfüllt: Die Nutzer müssen erkennen können, welche Gesten möglich sind (<em>Discoverability</em>), und unmittelbares <em>Feedback</em> bekommen <span class="citation" data-cites="norman2010nui wigdor2011brave">(Norman 2010; Wigdor und Wixon 2011)</span>. Zwei Begriffe strukturieren das ganze Projekt:</p>
 <ul>
 <li><strong>Diskrete vs.&nbsp;kontinuierliche Gesten.</strong> Eine diskrete Geste ist ein <em>Klassen­ereignis</em> (offene Handfläche → Sprung), ein kontinuierlicher Kanal ein <em>Wert</em> (z. B. die Pinch-Distanz zwischen Daumen und Zeigefinger als Schieberegler).</li>
-<li><strong>Engagement / Disengagement.</strong> Wann <em>meint</em> eine Bewegung einen Befehl, und wann ist sie beiläufig? Ohne saubere Zustände entsteht das <strong>Midas-Touch-Problem</strong>: Jede Bewegung löst ungewollt aus. Buxtons <em>Three-State-Model</em> (Out-of-Range → Tracking → Aktiv) liefert das passende Vokabular, um Erkennen und Auslösen bewusst zu trennen <span class="citation" data-cites="buxton1990threestate">(Buxton 1990)</span>.</li>
+<li><strong>Engagement / Disengagement.</strong> Wann <em>meint</em> eine Bewegung einen Befehl, und wann ist sie beiläufig? Ohne saubere Zustände entsteht das <strong>Midas-Touch-Problem</strong>: Jede Bewegung löst ungewollt aus. Buxtons <em>Three-State-Model</em> (Out-of-Range → Tracking → Aktiv) liefert das passende Vokabular, um Erkennen und Auslösen sauber zu trennen <span class="citation" data-cites="buxton1990threestate">(Buxton 1990)</span>.</li>
 </ul>
-<p>Das merkt man direkt in der Technik, zum Beispiel bei Debounce, Hysterese und Kalibrierung in der <a href="./methode.html">Methode</a>. Die Grenzen besprechen wir später auch offen: <em>Gorilla-Arm</em>, Ermüdung und Fehltrigger in der <a href="./evaluation.html">Evaluation</a>.</p>
+<p>Das zeigt sich direkt in der Technik, zum Beispiel bei Debounce, Hysterese und Kalibrierung in der <a href="./methode.html">Methode</a>. Die Grenzen besprechen wir später auch offen: <em>Gorilla-Arm</em>, Ermüdung und Fehltrigger in der <a href="./evaluation.html">Evaluation</a>.</p>
 </section>
 <section id="use-cases" class="level2">
 <h2 class="anchored" data-anchor-id="use-cases">Use-Cases</h2>
@@ -190,7 +190,7 @@ ul.task-list li input[type="checkbox"] {
         <h3 class="anchored">AR/VR &amp; Spatial Computing</h3>
         <p>Aktuelle Headsets (Meta Quest, Apple Vision Pro) ersetzen Controller
           zunehmend durch <strong>markerloses Hand-Tracking</strong> als primäre
-          Eingabe, passend zur XR-Pipeline der Vorlesung.</p>
+          Eingabe.</p>
       </div>
       <div class="nui-card">
         <i class="ph ph-wheelchair nui-card-ico" aria-hidden="true"></i>
@@ -403,14 +403,14 @@ ul.task-list li input[type="checkbox"] {
 <p>Die Idee, den Körper selbst zur Schnittstelle zu machen, ist alt. Grob sieht man zwei Linien: <em>getragene</em> Sensorik und <em>kamerabasierte</em>, markerlose Verfahren.</p>
 <div class="nui-reveal">
 <ul>
-<li><strong>1975: Videoplace</strong> (Myron Krueger): einer der ersten interaktiven Räume, in dem die <em>Silhouette</em> der Person ohne getragene Hardware mit virtuellen Inhalten interagiert. Für markerlose Gestensteuerung ist das ein frühes Vorbild <span class="citation" data-cites="friedrich_vc_xr">(Friedrich 2025b)</span>.</li>
+<li><strong>1975: Videoplace</strong> (Myron Krueger): einer der ersten interaktiven Räume, in dem die <em>Silhouette</em> der Person ohne getragene Hardware mit virtuellen Inhalten interagiert. Für markerlose Gestensteuerung ist das ein frühes Vorbild.</li>
 <li><strong>1987: VPL DataGlove:</strong> Der Datenhandschuh macht Fingerbeugung direkt messbar. Das ist präzise, aber <em>instrumentiert</em> (Hardware an der Hand) <span class="citation" data-cites="buxton1990threestate">(Buxton 1990)</span>.</li>
 <li><strong>2010: Microsoft Kinect:</strong> erstmals <strong>markerloses Ganzkörper-Skelett</strong> für den Massenmarkt, möglich durch eine aktive <strong>Tiefenkamera</strong>.</li>
 <li><strong>2013: Leap Motion:</strong> dedizierter IR-Stereo-Sensor für hochpräzises Finger-Tracking im Nahbereich.</li>
 <li><strong>2019: MediaPipe</strong> (Google): Die hier genutzte Pipeline bringt Hand- und Pose-Tracking <em>on-device</em> auf gewöhnliche RGB-Kameras und damit auch in den <strong>Browser</strong> <span class="citation" data-cites="lugaresi2019mediapipe zhang2020mediapipehands">(Lugaresi u.&nbsp;a. 2019; Zhang u.&nbsp;a. 2020)</span>.</li>
 </ul>
 </div>
-<p>Der rote Faden: weg von Spezial-Hardware, hin zu markerloser, kamerabasierter Erkennung auf Alltagsgeräten. Genau diesen Schritt schaut sich die <a href="./methode.html">Methode</a> genauer an; die <a href="./methode.html#vergleich">Einordnung gegenüber verwandten Verfahren</a> zeigt, welche Nachteile dabei bleiben.</p>
+<p>Über die Jahrzehnte geht der Trend von Spezial-Hardware zu markerloser Erkennung auf Alltagsgeräten. Diesen Schritt schaut sich die <a href="./methode.html">Methode</a> genauer an; die <a href="./methode.html#vergleich">Einordnung gegenüber verwandten Verfahren</a> zeigt, welche Nachteile dabei bleiben.</p>
 <nav class="nui-pagenav" aria-label="Seitennavigation">
   <a class="nui-btn nui-btn-ghost" href="index.html">← Start</a>
   <a class="nui-btn nui-btn-primary" href="methode.html">Weiter: Methode →</a>

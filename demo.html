@@ -240,7 +240,7 @@ window.Quarto = {
 </ul>
 <p><strong>NUI-Navigation (ganze Seite).</strong> Mit dem Button <strong>„Hand-Nav“</strong> (oder Taste <kbd>N</kbd>) schaltest du die <strong>Handsteuerung der ganzen Seite</strong> ein. Dann steuern die Handgesten nicht das Spiel, sondern einen <strong>Hand-Cursor</strong> (1-Euro-geglättet). Der <strong>Pinch</strong> ist der <strong>eine kontinuierliche Kanal</strong>: <strong>kurzer Pinch = Klick</strong>, <strong>Pinch + Ziehen = Scrollen</strong>; <strong>Victory</strong> blendet das <strong>NUI-Menü</strong> ein/aus. Zum <strong>Seitenwechsel</strong> zeigst du mit dem Cursor auf einen <strong>Navbar-Link</strong> und <strong>pinchst</strong> ihn an. Die Handsteuerung läuft auf der neuen Seite automatisch weiter. Cursor und Pinch reagieren nur bei <strong>gestrecktem Zeigefinger</strong> (Posture-Gate). Eine Faust friert den Cursor ein, statt ungewollt zu klicken. Der Pinch nutzt <strong>Hysterese</strong> (zwei Schwellen) gegen Flattern, also gegen „Midas-Touch“. <strong>Maus und Tastatur funktionieren weiterhin jederzeit</strong>, auch zum Spielen selbst (Pflicht-Fallback).</p>
 <p>Ohne Kamera jederzeit per Tastatur/Maus spielbar (Fallback aus dem vendored Runner).</p>
-<p>Die folgende Tabelle fasst den <strong>Mapping-Layer</strong> zusammen, also unsere Übersetzung <em>Quelle → Intent → Aktion</em>. Dieselbe Quelle kann je nach Modus anders belegt sein, genau das ist der Sinn der Entkopplung.</p>
+<p>Die folgende Tabelle fasst den <strong>Mapping-Layer</strong> zusammen, also unsere Übersetzung <em>Quelle → Intent → Aktion</em>. Dieselbe Quelle kann je nach Modus anders belegt sein; das ist der Sinn der Entkopplung.</p>
 <div class="nui-table-wrap">
 <div id="tbl-mapping" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -349,7 +349,7 @@ Tabelle&nbsp;1: Mapping-Layer der Steuerung: Quelle, Intent und ausgelöste Akti
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p><strong>Lizenz &amp; Attribution (Demo).</strong> Die T-Rex-Demo nutzt den quelloffenen <em>Chrome-Dino</em>-Runner (<code>trex/trex-runner.js</code>), © 2014 The Chromium Authors, BSD-Lizenz; unverändert eingebunden (vendored). Die Gesten-/Pose-Steuerung darüber ist Eigenleistung. Tracking läuft über <em>MediaPipe Tasks-Vision</em> (Google, Apache-2.0), zur Laufzeit per CDN geladen <span class="citation" data-cites="lugaresi2019mediapipe">(Lugaresi u.&nbsp;a. 2019)</span>. Vollständige Hinweise unter <a href="./ueber.html#referenzen">Über &amp; Referenzen</a>.</p>
+<p><strong>Lizenz &amp; Attribution (Demo).</strong> Die T-Rex-Demo nutzt den quelloffenen <em>Chrome-Dino</em>-Runner (<code>trex/trex-runner.js</code>), © 2014 The Chromium Authors, BSD-Lizenz; vendored mit kleinen Einbettungs-Guards für die lokale Demo. Die Gesten-/Pose-Steuerung darüber ist Eigenleistung. Tracking läuft über <em>MediaPipe Tasks-Vision</em> (Google, Apache-2.0), zur Laufzeit per CDN geladen <span class="citation" data-cites="lugaresi2019mediapipe">(Lugaresi u.&nbsp;a. 2019)</span>. Vollständige Hinweise unter <a href="./ueber.html#referenzen">Über &amp; Referenzen</a>.</p>
 </div>
 </div>
 </div>
