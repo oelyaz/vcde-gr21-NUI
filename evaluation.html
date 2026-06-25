@@ -156,7 +156,7 @@ window.Quarto = {
   <li><a href="#grenzen" id="toc-grenzen" class="nav-link" data-scroll-target="#grenzen">Grenzen des Ansatzes</a></li>
   <li><a href="#fazit" id="toc-fazit" class="nav-link" data-scroll-target="#fazit">Fazit</a></li>
   <li><a href="#ausblick" id="toc-ausblick" class="nav-link" data-scroll-target="#ausblick">Ausblick &amp; neue Entwicklungen</a></li>
-  <li><a href="#quiz" id="toc-quiz" class="nav-link" data-scroll-target="#quiz">Mach mit: Live-Quiz</a></li>
+  <li><a href="#selbsttest" id="toc-selbsttest" class="nav-link" data-scroll-target="#selbsttest">Selbsttest</a></li>
   </ul>
 </nav>
 </nav>
@@ -190,7 +190,7 @@ window.Quarto = {
 <div class="nui-pagehead">
 <p><span class="nui-eyebrow">Messung · Grenzen · Selbsttest</span></p>
 <div class="nui-lead">
-<p>Wie schnell und zuverlässig ist die Steuerung, und wo hakt es? Unsere Evaluation bleibt <strong>leichtgewichtig</strong>. Es gibt ein paar echte Messwerte und eine ehrliche Einordnung, aber keine formale Nutzerstudie (das war nicht Ziel des Projekts). Am Ende prüfen wir die Kernbotschaften gemeinsam in einem kurzen <strong>Live-Quiz</strong>.</p>
+<p>Wie schnell und zuverlässig ist die Steuerung, und wo hakt es? Unsere Evaluation bleibt <strong>leichtgewichtig</strong>. Es gibt ein paar echte Messwerte und eine ehrliche Einordnung, aber keine formale Nutzerstudie (das war nicht Ziel des Projekts). Am Ende kannst du die Kernbotschaften in einem kurzen <strong>Selbsttest</strong> prüfen.</p>
 </div>
 </div>
 <div class="callout callout-style-simple callout-note">
@@ -199,14 +199,38 @@ window.Quarto = {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p><strong>Kurzfassung.</strong> Wir messen Verarbeitungslatenz, Erkennungs- und Fehltrigger-Rate in einem kleinen, transparenten Versuch. Unter guten Bedingungen ist die Erkennung hoch (rund 90 bis 100 Prozent) und die Verarbeitung flüssig (Median etwa 50 ms). Die typischen NUI-Grenzen bleiben spürbar: Licht und Verdeckung, Gorilla-Arm, und der Rest des Midas-Touch-Problems. Die Zahlen sind als Größenordnung gedacht, nicht als Benchmark, und wir benennen ihre Schwächen offen.</p>
+<p><strong>Kurzfassung.</strong> Wir messen Verarbeitungslatenz, Erkennungs- und Fehltrigger-Rate in einem kleinen, transparenten Versuch (Rohdaten in <code>nui/eval-data.json</code>, Live-Werte im Panel oben). Unter guten Bedingungen ist die Erkennung hoch und die Verarbeitung flüssig; die konkreten Zahlen stehen in <a href="#tbl-eval" class="quarto-xref">Tabelle&nbsp;1</a> und im Latenz-Budget. Die typischen NUI-Grenzen bleiben spürbar: Licht und Verdeckung, Gorilla-Arm, und der Rest des Midas-Touch-Problems. Die Zahlen sind als Größenordnung gedacht, nicht als Benchmark, und wir benennen ihre Schwächen offen.</p>
 </div>
 </div>
 </div>
 <section id="messung" class="level2">
 <h2 class="anchored" data-anchor-id="messung">Wie wir messen</h2>
 <p>Ein kleines Eval-Harness (<a href="nui/eval.js"><code>nui/eval.js</code></a>) hängt sich mit wenigen Zeilen in den Controller. Es erfasst im laufenden Betrieb drei Dinge: die <strong>Verarbeitungslatenz pro Frame</strong> (Zeit vom Kamera-Frame bis zum abgesetzten Spiel-Befehl), die Zahl <strong>committeter Gesten</strong> je Klasse und die ausgelösten <strong>Aktionen</strong> (Sprung / Ducken / Neustart). Nach einer Sitzung gibt <code>window.nuiEval.report()</code> die Zusammenfassung in der Konsole aus.</p>
-<p>Ein passives Harness kann den Pipeline-Takt messen und Ereignisse zählen. Es weiß aber nicht, was die Person eigentlich vorhatte. <strong>Erkennungsrate</strong> und <strong>Fehltrigger-Rate</strong> kommen deshalb aus einem kleinen strukturierten Versuch: jede Geste 20× bewusst ausführen (erkannt / nicht erkannt), dazu ein 2-minütiges Ruhefenster ohne gewollte Geste. Jede ausgelöste Aktion in dieser Ruhephase zählt als Fehltrigger. Die folgenden Zahlen sind ein <strong>repräsentativer Messlauf</strong> (ein Laptop, Chrome, GPU-Delegate, Webcam 640×480, gute Beleuchtung). Es geht um Größenordnungen, nicht um einen Benchmark.</p>
+<p>Du musst dafür aber nicht in die Konsole schauen. Das Panel unten liest dieselben Zahlen live aus deiner <strong>eigenen</strong> Sitzung: Starte die Kamera im <strong>NUI-Dock unten rechts</strong>, mach ein paar Gesten (oder spiel kurz), und die Werte füllen sich. Das sind echte Messwerte von deinem Gerät, keine Modellannahme.</p>
+<div class="nui-module nui-eval" id="nui-eval" data-empty="true">
+  <header class="nui-module-head">
+    <h3 class="anchored"><span class="nui-eval-live" aria-hidden="true"></span> Deine Live-Messung</h3>
+    <span class="nui-eval-actions">
+      <button id="nui-eval-export" type="button">Daten exportieren</button>
+      <button id="nui-eval-reset" type="button">Zurücksetzen</button>
+    </span>
+  </header>
+  <dl class="nui-module-readout nui-eval-grid">
+    <div><dt>Dauer</dt><dd id="nui-eval-dur">0 s</dd></div>
+    <div><dt>Frames mit Subjekt</dt><dd id="nui-eval-frames">0</dd></div>
+    <div><dt>Inferenz p50 / p95</dt><dd id="nui-eval-inf">–</dd></div>
+    <div><dt>Frame → Aktion p50 / p95</dt><dd id="nui-eval-lat">–</dd></div>
+    <div class="nui-eval-wide"><dt>Aktionen</dt><dd id="nui-eval-actions">–</dd></div>
+    <div class="nui-eval-wide"><dt>Gesten committet</dt><dd id="nui-eval-commits">–</dd></div>
+  </dl>
+  <p class="nui-module-note nui-eval-empty">Noch keine Daten. Starte die Kamera im
+    NUI-Dock und führe ein paar Gesten aus, dann erscheinen hier deine Messwerte.</p>
+  <p class="nui-module-note nui-eval-hint">Inferenz = reine Modellzeit pro Frame ·
+    Frame → Aktion = vom Kamera-Frame bis zum abgesetzten Spiel-Befehl. Beide als
+    Median (p50) und 95-%-Perzentil (p95).</p>
+</div>
+<script type="module" src="nui/evalpanel.js"></script>
+<p>Ein passives Harness kann den Pipeline-Takt messen und Ereignisse zählen. Es weiß aber nicht, was die Person eigentlich vorhatte. <strong>Erkennungsrate</strong> und <strong>Fehltrigger-Rate</strong> kommen deshalb aus einem kleinen strukturierten Versuch: jede Geste 20× bewusst ausführen (erkannt / nicht erkannt), dazu ein 2-minütiges Ruhefenster ohne gewollte Geste. Jede ausgelöste Aktion in dieser Ruhephase zählt als Fehltrigger. Die Zahlen unten stammen aus einem <strong>gemessenen Versuch</strong> auf einem einzelnen Setup (Details im <code>meta</code>-Feld von <code>nui/eval-data.json</code>). Es geht um Größenordnungen, nicht um einen Benchmark.</p>
 <p>Die beiden Kennzahlen sind bewusst einfach definiert:</p>
 <p><span class="math display">\[
 \text{Erkennungsrate} = \frac{\#\,\text{erkannt}}{\#\,\text{Versuche}}, \qquad
@@ -216,10 +240,10 @@ window.Quarto = {
 <div id="tbl-eval" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="1">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-eval-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabelle&nbsp;1: Repräsentativer Messlauf der gesten- und posenbasierten Steuerung. Erkennungsrate aus je 20 bewussten Wiederholungen, Fehltrigger aus einem 2-min-Ruhefenster, Median-Latenz aus dem Eval-Harness.
+Tabelle&nbsp;1: Gemessener strukturierter Versuch der gesten- und posenbasierten Steuerung: Erkennungsrate aus je 20 bewussten Wiederholungen, Fehltrigger aus einem 2-min-Ruhefenster. Rohdaten in <code>nui/eval-data.json</code>.
 </figcaption>
 <div aria-describedby="tbl-eval-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display" data-execution_count="1">
+<div class="cell-output cell-output-display">
 <div>
 
 
@@ -232,11 +256,9 @@ Tabelle&nbsp;1: Repräsentativer Messlauf der gesten- und posenbasierten Steueru
 <th data-quarto-table-cell-role="th">erkannt</th>
 <th data-quarto-table-cell-role="th">Erkennungsrate</th>
 <th data-quarto-table-cell-role="th">Fehltrigger/min</th>
-<th data-quarto-table-cell-role="th">Median-Latenz (ms)</th>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">Geste → Aktion</th>
-<th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th"></th>
 <th data-quarto-table-cell-role="th"></th>
@@ -249,46 +271,25 @@ Tabelle&nbsp;1: Repräsentativer Messlauf der gesten- und posenbasierten Steueru
 <th data-quarto-table-cell-role="th">Hand · Open_Palm</th>
 <td>Sprung</td>
 <td>20</td>
-<td>19</td>
-<td>95 %</td>
-<td>0.6</td>
-<td>54</td>
+<td>20</td>
+<td>100 %</td>
+<td>0.0</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">Hand · Closed_Fist</th>
 <td>Ducken</td>
 <td>20</td>
-<td>20</td>
-<td>100 %</td>
-<td>0.4</td>
-<td>50</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">Hand · Thumb_Up</th>
-<td>Neustart</td>
-<td>20</td>
-<td>18</td>
-<td>90 %</td>
-<td>0.3</td>
-<td>57</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">Pose · Aufstehen</th>
-<td>Sprung</td>
-<td>20</td>
-<td>18</td>
-<td>90 %</td>
-<td>0.8</td>
-<td>69</td>
+<td>19</td>
+<td>95 %</td>
+<td>0.5</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">Pose · Hocke</th>
 <td>Ducken</td>
 <td>20</td>
-<td>19</td>
-<td>95 %</td>
-<td>0.5</td>
-<td>66</td>
+<td>20</td>
+<td>100 %</td>
+<td>0.0</td>
 </tr>
 </tbody>
 </table>
@@ -299,7 +300,7 @@ Tabelle&nbsp;1: Repräsentativer Messlauf der gesten- und posenbasierten Steueru
 </figure>
 </div>
 </div>
-<p>Unter guten Bedingungen ist die Erkennung hoch (90-100 %, <a href="#tbl-eval" class="quarto-xref">Tabelle&nbsp;1</a>): der <strong>Closed_Fist</strong> ist am robustesten (kompakte, eindeutige Handform), der <strong>Thumb_Up</strong> wird am ehesten verfehlt. Fehltrigger bleiben dank Confidence-Gate, Debounce und Hysterese selten (&lt; 1 / min). Ganz weg sind sie aber nicht. Genau das ist der Kern des Midas-Touch-Problems (s. u.).</p>
+<p>Welche Geste wie zuverlässig erkannt wird, zeigt <a href="#tbl-eval" class="quarto-xref">Tabelle&nbsp;1</a>. Tendenziell sind kompakte, eindeutige Handformen (etwa die Faust) robuster als feinere Gesten. Fehltrigger bleiben dank Confidence-Gate, Debounce und Hysterese selten, ganz weg sind sie aber nicht. Genau das ist der Kern des Midas-Touch-Problems (s. u.).</p>
 <div id="cell-fig-eval-latency" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display">
 <div id="fig-eval-latency" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -308,20 +309,20 @@ Tabelle&nbsp;1: Repräsentativer Messlauf der gesten- und posenbasierten Steueru
 <img src="evaluation_files/figure-html/fig-eval-latency-output-1.png" width="661" height="259" class="figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-eval-latency-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Abbildung&nbsp;1: Latenz-Budget Frame → Aktion, additiv aus drei realen Beiträgen: Kamera-Frame-Intervall (≈ 33 ms bei 30 fps), gemessene Median-Verarbeitung (≈ 50 ms aus dem Eval-Harness) und – nur bei den diskreten Hand-Gesten – das Debounce-Fenster von drei stabilen Frames (≈ 100 ms). Der Pose-Pfad nutzt Anstiegserkennung ohne Debounce.
+Abbildung&nbsp;1: Latenz-Budget Frame → Aktion: der Inferenz-Median stammt aus den geloggten Frames (<code>nui/eval-data.json</code>); Kamera-Frame-Intervall (≈ 33 ms bei 30 fps) und das Debounce-Fenster von drei stabilen Frames (≈ 100 ms, nur diskrete Hand-Gesten) sind strukturelle Konstanten. Der Pose-Pfad nutzt Anstiegserkennung ohne Debounce.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Die gemessene Verarbeitung ist nur ein Teil der Verzögerung, die man beim Spielen merkt (<a href="#fig-eval-latency" class="quarto-xref">Abbildung&nbsp;1</a>). Grob kommen drei Dinge zusammen: Kamera-Frame-Intervall (≈ 33 ms bei 30 fps), gemessene Verarbeitung (Median ≈ 50 ms) und, nur bei den <strong>diskreten</strong> Hand-Gesten, das Debounce-Fenster von drei stabilen Frames (≈ 100 ms):</p>
+<p>Die gemessene Inferenz ist nur ein kleiner Teil der Verzögerung, die man beim Spielen merkt (<a href="#fig-eval-latency" class="quarto-xref">Abbildung&nbsp;1</a>). Grob kommen drei Dinge zusammen: Kamera-Frame-Intervall (≈ 33 ms bei 30 fps), die <strong>geloggte Inferenz</strong> (Median aus den Frames in <code>nui/eval-data.json</code>) und, nur bei den <strong>diskreten</strong> Hand-Gesten, das Debounce-Fenster von drei stabilen Frames (≈ 100 ms):</p>
 <p><span class="math display">\[t_{\text{spürbar}} \approx t_{\text{Frame}} + t_{\text{Verarbeitung}} + t_{\text{Debounce}}.\]</span></p>
 <p>Der Debounce-Term entfällt für den <strong>Pose</strong>-Pfad (er nutzt Anstiegs- statt Klassen-Erkennung) und ist der Preis für Stabilität bei den diskreten Hand-Gesten: drei stabile Frames gegen Fehltrigger kosten ~100 ms Reaktionszeit.</p>
 </section>
 <section id="grenzen" class="level2">
 <h2 class="anchored" data-anchor-id="grenzen">Grenzen des Ansatzes</h2>
 <p><strong>Robustheit (Licht &amp; Verdeckung).</strong> Eine normale RGB-Kamera ohne Tiefeninfo ist empfindlich gegen schwaches oder seitliches Licht, Gegenlicht und Bewegungsunschärfe. Verdeckte Landmarks, etwa eine Hand halb außerhalb des Bilds oder eine Hüfte hinter dem Tisch, senken die Confidence und damit die Erkennung. Der Pose-Pfad braucht <strong>Schultern und Hüfte im Bild</strong> und genügend Abstand. Die Neutral-Kalibrierung normiert zwar auf die Torso-Höhe (distanz-invariant), sie kann fehlende Landmarks aber nicht ersetzen.</p>
-<p><strong>Latenz.</strong> Mit ~50 ms Median fühlt sich die Verarbeitung grundsätzlich flüssig an. Spürbar wird vor allem das Debounce-Fenster der diskreten Gesten. GPU-Delegate und der Verzicht auf künstliches Throttling halten die Inferenz schnell. Der 1-Euro-Filter glättet den Cursor <em>geschwindigkeitsadaptiv</em> und fügt absichtlich kaum Verzögerung hinzu <span class="citation" data-cites="casiez2012euro">(Casiez u.&nbsp;a. 2012)</span>. Einzelne p95-Ausreißer entstehen durch Garbage-Collection und gelegentliche Modell-Hänger.</p>
+<p><strong>Latenz.</strong> Die reine Inferenz ist mit wenigen Millisekunden Median (s. Latenz-Budget) unkritisch; spürbar wird vor allem das Debounce-Fenster der diskreten Gesten. GPU-Delegate und der Verzicht auf künstliches Throttling halten die Inferenz schnell. Der 1-Euro-Filter glättet den Cursor <em>geschwindigkeitsadaptiv</em> und fügt absichtlich kaum Verzögerung hinzu <span class="citation" data-cites="casiez2012euro">(Casiez u.&nbsp;a. 2012)</span>. Einzelne p95-Ausreißer entstehen durch Garbage-Collection und gelegentliche Modell-Hänger.</p>
 <p><strong>Gorilla-Arm &amp; Ermüdung.</strong> Hand-Gesten in der Luft und wiederholtes Aufstehen/Hocken ermüden schneller, als man denkt. Das ist das klassische <em>Gorilla-Arm</em>-Problem. Für kurze Demos ist das vertretbar. Für längere Nutzung braucht es kurze, diskrete Gesten, einen klar abgegrenzten Interaktionsraum und den Maus/Tastatur-Fallback.</p>
 <p><strong>Midas-Touch.</strong> Da die Kamera <em>immer</em> etwas sieht, kann schnell jede Bewegung als Befehl verstanden werden. Dagegen helfen explizites <strong>Engagement</strong> (globaler Toggle), Confidence-Gate, Debounce/Hysterese, Cooldowns und die Trennung von Spiel- und Navigationskanal <span class="citation" data-cites="buxton1990threestate norman2010nui">(Buxton 1990; Norman 2010)</span>. Die Fehltrigger-Spalte in <a href="#tbl-eval" class="quarto-xref">Tabelle&nbsp;1</a> zeigt, dass trotzdem vereinzelt Fehltrigger übrig bleiben.</p>
 <p>Deshalb ist der <strong>Maus/Tastatur-Fallback Pflicht und immer aktiv</strong>: Er sichert Bedienbarkeit und Bewertung unabhängig von Licht, Kamera und Tagesform.</p>
@@ -361,35 +362,13 @@ Abbildung&nbsp;1: Latenz-Budget Frame → Aktion, additiv aus drei realen Beitr�
 </div>
 <p>Die Richtung ist dieselbe wie in der <a href="./grundlagen.html#geschichte">kurzen Geschichte</a>: von Spezial-Hardware hin zu berührungsloser Eingabe auf Alltagsgeräten. Die hier gezeigte Webcam-Demo ist dafür ein früher, aber schon heute lauffähiger Schritt.</p>
 </section>
-<section id="quiz" class="level2">
-<h2 class="anchored" data-anchor-id="quiz">Mach mit: Live-Quiz</h2>
-<p>Die Kernbotschaften dieser Seite prüfen wir am Ende des Vortrags gemeinsam in einem kurzen <strong>Live-Quiz</strong> über Mentimeter. Mitmachen kannst du mit Smartphone oder Laptop, solange die Session im Vortrag läuft.</p>
-<div class="nui-menti nui-reveal">
-  <div class="nui-menti-body">
-    <p class="nui-menti-eyebrow">Live im Vortrag · Mentimeter</p>
-    <h3 class="nui-menti-title anchored">Geh auf <span class="nui-menti-host">menti.com</span> und gib den Code ein</h3>
-    <p class="nui-menti-code" aria-label="Mentimeter-Code">3442 3119</p>
-    <a class="nui-btn nui-btn-primary" href="https://www.menti.com/" target="_blank" rel="noopener">
-      <i class="ph ph-device-mobile" aria-hidden="true"></i><span>Quiz beitreten</span>
-    </a>
-    <p class="nui-menti-note">Der Code kann je Session abweichen. Antworten nimmt das
-      Quiz nur während einer laufenden Live-Session an.</p>
-  </div>
-  <figure class="nui-menti-qr figure">
-    <img src="nui/assets/qr-menti.png" width="160" height="160" alt="QR-Code: führt zu menti.com zum Eingeben des Quiz-Codes" class="figure-img">
-    <figcaption>Oder QR scannen</figcaption>
-  </figure>
-</div>
-
-<!--
-  Optionale read-only Live-Vorschau: In Mentimeter unter "Share" den Embed-Code
-  kopieren und die src unten einsetzen. Zeigt ausserhalb einer laufenden Session
-  nur einen Wartescreen, daher standardmaessig deaktiviert.
-<div class="nui-menti-embed">
-  <iframe src="HIER_MENTI_EMBED_SRC_EINSETZEN" height="450" frameborder="0"
-          allowfullscreen loading="lazy" title="Mentimeter-Quiz-Vorschau"></iframe>
-</div>
--->
+<section id="selbsttest" class="level2">
+<h2 class="anchored" data-anchor-id="selbsttest">Selbsttest</h2>
+<p>Prüf dein Verständnis direkt hier – fünf kurze Fragen zu den Kernbotschaften, mit sofortiger Auflösung. Der Test läuft jederzeit im Browser, unabhängig vom Vortrag.</p>
+<section class="nui-quiz" id="nui-quiz" aria-label="Selbsttest mit fünf Fragen">
+  <noscript><p class="nui-module-note">Der Selbsttest braucht aktiviertes JavaScript.</p></noscript>
+</section>
+<script type="module" src="nui/quiz.js"></script>
 <nav class="nui-pagenav" aria-label="Seitennavigation">
   <a class="nui-btn nui-btn-ghost" href="demo.html">← Live-Demo</a>
   <a class="nui-btn nui-btn-primary" href="ueber.html">Weiter: Über &amp; Referenzen →</a>

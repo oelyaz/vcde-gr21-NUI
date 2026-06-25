@@ -205,7 +205,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="nui-lead">
-<p>Dieses Projekt zeigt, wie <strong>Hand- und Pose-Tracking</strong> mit <em>MediaPipe</em> ein <strong>Natural User Interface (NUI)</strong> möglich macht: vom Funktionsprinzip <em>unter der Haube</em> bis zur spielbaren Live-Demo. Du steuerst den Dinosaurier mit Körperbewegung und Handgesten. Die Seite lässt sich außerdem <strong>per Handgeste bedienen</strong> (Taste <kbd>N</kbd> oder Button im Dock unten rechts). Maus und Tastatur bleiben jederzeit aktiv.</p>
+<p>Dieses Projekt zeigt, wie <strong>Hand- und Pose-Tracking</strong> mit <em>MediaPipe</em> ein <strong>Natural User Interface (NUI)</strong> möglich macht: vom Funktionsprinzip <em>unter der Haube</em> bis zur spielbaren Live-Demo. Du steuerst den Dinosaurier mit Körperbewegung und Handgesten, und die ganze Seite lässt sich <strong>per Handgeste bedienen</strong> (Taste <kbd>N</kbd> oder Button im Dock unten rechts).</p>
 </div>
 <section id="kurzfassung" class="level2">
 <h2 data-anchor-id="kurzfassung">Kurzfassung</h2>
@@ -215,14 +215,14 @@ window.Quarto = {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>Natural User Interfaces wollen den Körper selbst zur Eingabe machen, statt Maus, Tastatur oder Controller. Wir zeigen, dass dafür eine gewöhnliche Webcam reicht: <em>MediaPipe</em> schätzt Hand- und Körper-Landmarks on-device direkt im Browser <span class="citation" data-cites="lugaresi2019mediapipe zhang2020mediapipehands bazarevsky2020blazepose">(Lugaresi u.&nbsp;a. 2019; Zhang u.&nbsp;a. 2020; Bazarevsky u.&nbsp;a. 2020)</span>. Aus diesen Landmarks bauen wir zwei Steuerungen. Erstens einen pose- und gestengesteuerten Chrome-T-Rex (Springen, Ducken, Neustart). Zweitens eine komplett handbedienbare Website mit Cursor, Pinch-Klick und Scrollen als <em>einem</em> kontinuierlichen Kanal. Der Kern ist ein eigener <strong>Mapping-Layer</strong>, der Geste oder Pose über einen abstrakten Intent auf Befehle abbildet. Gegen das Midas-Touch-Problem nutzen wir Engagement-Toggle, Confidence-Gate, Debounce, Hysterese und den 1-Euro-Filter <span class="citation" data-cites="buxton1990threestate casiez2012euro">(Buxton 1990; Casiez u.&nbsp;a. 2012)</span>. Eine leichte Evaluation misst Latenz, Erkennungs- und Fehltrigger-Rate und benennt die Grenzen offen. Maus und Tastatur bleiben jederzeit aktiv.</p>
+<p>Natural User Interfaces wollen den Körper selbst zur Eingabe machen, statt Maus, Tastatur oder Controller. Wir zeigen, dass dafür eine gewöhnliche Webcam reicht: <em>MediaPipe</em> schätzt Hand- und Körper-Landmarks on-device direkt im Browser <span class="citation" data-cites="lugaresi2019mediapipe zhang2020mediapipehands bazarevsky2020blazepose">(Lugaresi u.&nbsp;a. 2019; Zhang u.&nbsp;a. 2020; Bazarevsky u.&nbsp;a. 2020)</span>. Aus diesen Landmarks bauen wir zwei Steuerungen. Erstens einen pose- und gestengesteuerten Chrome-T-Rex (Springen, Ducken, Neustart). Zweitens eine komplett handbedienbare Website mit Cursor, Pinch-Klick und Scrollen als <em>einem</em> kontinuierlichen Kanal. Der Kern ist ein eigener <strong>Mapping-Layer</strong>, der Geste oder Pose über einen abstrakten Intent auf Befehle abbildet. Gegen das Midas-Touch-Problem nutzen wir Engagement-Toggle, Confidence-Gate, Debounce, Hysterese und den 1-Euro-Filter <span class="citation" data-cites="buxton1990threestate casiez2012euro">(Buxton 1990; Casiez u.&nbsp;a. 2012)</span>. Eine leichte Evaluation misst Latenz, Erkennungs- und Fehltrigger-Rate in einem kleinen Versuch und benennt die Grenzen offen. Maus und Tastatur bleiben jederzeit aktiv.</p>
 </div>
 </div>
 </div>
 </section>
 <section id="problem" class="level2">
 <h2 data-anchor-id="problem">Hintergrund &amp; Problem</h2>
-<p>In der Landkarte des Visual Computing sitzt dieses Projekt zwischen <strong>Bildanalyse</strong> (<em>Image Analysis → Recognition</em>) und <strong>Human-Computer Interaction</strong>. Die Erkennung von Gesten und Landmarks ist überwacht gelerntes Sehen, ein Modell <span class="math inline">\(h_\theta\)</span>, das zu einem Bild eine Prädiktion liefert. Die eigentliche Frage ist aber keine reine CV-Frage: Wann <em>meint</em> eine Bewegung einen Befehl, und wann ist sie beiläufig? Hier wird ein technisch funktionierendes Interface trotzdem unbenutzbar, wenn jede Handbewegung ungewollt auslöst.</p>
+<p>Die Erkennung von Gesten und Landmarks ist überwacht gelerntes Sehen: ein Modell <span class="math inline">\(h_\theta\)</span>, das zu einem Bild eine Prädiktion liefert. Die eigentliche Frage ist aber keine reine CV-Frage: Wann <em>meint</em> eine Bewegung einen Befehl, und wann ist sie beiläufig? Ein technisch funktionierendes Interface wird unbenutzbar, wenn jede Handbewegung ungewollt auslöst.</p>
 <p>„Natürlich” heißt nicht automatisch gut bedienbar. Auch Gesten sind erlernt. Ein NUI funktioniert erst, wenn die Nutzer sehen, welche Gesten möglich sind (Discoverability), und unmittelbar Feedback bekommen <span class="citation" data-cites="norman2010nui wigdor2011brave">(Norman 2010; Wigdor und Wixon 2011)</span>. Webcam-Tracking ist dabei ein Kompromiss: Wir verzichten auf Spezialhardware und metrische Tiefe. Dafür bekommen wir markerlose Echtzeit ohne Installation, direkt im Browser <span class="citation" data-cites="lugaresi2019mediapipe">(Lugaresi u.&nbsp;a. 2019)</span>. Was dabei an Genauigkeit und Robustheit verloren geht, diskutieren wir in der <a href="./evaluation.html#grenzen">Evaluation</a>.</p>
 </section>
 <section id="beitrag" class="level2">
@@ -269,7 +269,7 @@ Tabelle&nbsp;1: Technischer Rahmen des Projekts.
 </tr>
 <tr class="even">
 <td>Browser</td>
-<td>Chrome, Edge, Firefox</td>
+<td>Chrome, Edge, Firefox, Safari</td>
 </tr>
 <tr class="odd">
 <td>Datenschutz</td>
