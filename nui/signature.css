@@ -407,62 +407,6 @@
 .nui-quiz-cta p { margin: 0; color: var(--nui-text-muted); font-size: 0.96rem; }
 .nui-quiz-cta .nui-btn { flex: 0 0 auto; }
 
-/* Mentimeter live-quiz block (evaluation page). Mirrors .nui-quiz-cta layout. */
-.nui-menti {
-  position: relative;
-  margin: var(--nui-space-3) 0 var(--nui-space-2);
-  padding: 1.6rem 1.8rem;
-  border-radius: var(--nui-radius);
-  background: var(--nui-bg-2);
-  border: 1px solid var(--nui-line);
-  box-shadow: var(--nui-shadow-soft);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1rem 1.8rem;
-}
-.nui-menti-body { flex: 1 1 320px; min-width: 0; }
-.nui-menti-eyebrow {
-  margin: 0 0 0.3rem;
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--nui-text-muted);
-}
-.nui-menti-title { margin: 0 0 0.5rem; font-size: 1.25rem; color: var(--nui-text-strong); }
-.nui-menti-host { white-space: nowrap; }
-.nui-menti-code {
-  margin: 0 0 0.7rem;
-  font-size: 1.9rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: var(--nui-text-strong);
-  font-variant-numeric: tabular-nums;
-}
-.nui-menti-note { margin: 0.7rem 0 0; color: var(--nui-text-muted); font-size: 0.86rem; }
-.nui-menti-qr {
-  flex: 0 0 auto;
-  margin: 0;
-  text-align: center;
-  color: var(--nui-text-muted);
-  font-size: 0.82rem;
-}
-.nui-menti-qr img {
-  display: block;
-  width: 160px;
-  height: 160px;
-  padding: 8px;
-  margin: 0 auto 0.4rem;
-  border-radius: 10px;
-  background: #fff;
-}
-.nui-menti-embed { margin: var(--nui-space-2) 0; }
-.nui-menti-embed iframe {
-  width: 100%;
-  border: 0;
-  border-radius: var(--nui-radius);
-}
-
 /* Reusable page atoms */
 /* Page intro header used at the top of each sub-page. */
 .nui-pagehead {

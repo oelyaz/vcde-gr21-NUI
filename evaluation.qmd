@@ -270,40 +270,16 @@ Die Richtung ist dieselbe wie in der
 berührungsloser Eingabe auf Alltagsgeräten. Die hier gezeigte Webcam-Demo ist dafür
 ein früher, aber schon heute lauffähiger Schritt.
 
-## Mach mit: Live-Quiz {#quiz}
+## Selbsttest {#selbsttest}
 
-Die Kernbotschaften dieser Seite prüfen wir am Ende des Vortrags gemeinsam in einem
-kurzen **Live-Quiz** über Mentimeter. Mitmachen kannst du mit Smartphone oder Laptop,
-solange die Session im Vortrag läuft.
+Prüf dein Verständnis direkt hier – fünf kurze Fragen zu den Kernbotschaften, mit
+sofortiger Auflösung. Der Test läuft jederzeit im Browser, unabhängig vom Vortrag.
 
 ```{=html}
-<div class="nui-menti nui-reveal">
-  <div class="nui-menti-body">
-    <p class="nui-menti-eyebrow">Live im Vortrag · Mentimeter</p>
-    <h3 class="nui-menti-title">Geh auf <span class="nui-menti-host">menti.com</span> und gib den Code ein</h3>
-    <p class="nui-menti-code" aria-label="Mentimeter-Code">3442 3119</p>
-    <a class="nui-btn nui-btn-primary" href="https://www.menti.com/" target="_blank" rel="noopener">
-      <i class="ph ph-device-mobile" aria-hidden="true"></i><span>Quiz beitreten</span>
-    </a>
-    <p class="nui-menti-note">Der Code kann je Session abweichen. Antworten nimmt das
-      Quiz nur während einer laufenden Live-Session an.</p>
-  </div>
-  <figure class="nui-menti-qr">
-    <img src="nui/assets/qr-menti.png" width="160" height="160"
-         alt="QR-Code: führt zu menti.com zum Eingeben des Quiz-Codes">
-    <figcaption>Oder QR scannen</figcaption>
-  </figure>
-</div>
-
-<!--
-  Optionale read-only Live-Vorschau: In Mentimeter unter "Share" den Embed-Code
-  kopieren und die src unten einsetzen. Zeigt ausserhalb einer laufenden Session
-  nur einen Wartescreen, daher standardmaessig deaktiviert.
-<div class="nui-menti-embed">
-  <iframe src="HIER_MENTI_EMBED_SRC_EINSETZEN" height="450" frameborder="0"
-          allowfullscreen loading="lazy" title="Mentimeter-Quiz-Vorschau"></iframe>
-</div>
--->
+<section class="nui-quiz" id="nui-quiz" aria-label="Selbsttest mit fünf Fragen">
+  <noscript><p class="nui-module-note">Der Selbsttest braucht aktiviertes JavaScript.</p></noscript>
+</section>
+<script type="module" src="nui/quiz.js"></script>
 ```
 
 ```{=html}

@@ -618,6 +618,44 @@
 @media (prefers-reduced-motion: reduce) {
   .nui-eval[data-empty="false"] .nui-eval-live { animation: none; }
 }
+
+/* Self-test quiz on the Evaluation page (nui/quiz.js). */
+.nui-quiz { display: flex; flex-direction: column; gap: 14px; margin: 1.5rem 0; }
+.nui-quiz-q {
+  margin: 0; border: 1px solid var(--nui-line); border-radius: var(--nui-radius);
+  background: var(--nui-bg-2); padding: 14px 16px 16px;
+}
+.nui-quiz-q legend {
+  padding: 0 6px; margin-left: -6px; font-weight: 600; color: var(--nui-text-strong);
+  font-size: 0.95rem; line-height: 1.35;
+}
+.nui-quiz-opt {
+  display: flex; align-items: flex-start; gap: 10px; margin-top: 8px;
+  padding: 9px 12px; border: 1px solid var(--nui-line); border-radius: var(--nui-radius);
+  background: var(--nui-bg-1); color: var(--nui-text); cursor: pointer;
+  transition: background .12s ease, border-color .12s ease;
+}
+.nui-quiz-opt:hover { background: var(--nui-bg-3); }
+.nui-quiz-opt input { margin-top: 0.2rem; accent-color: var(--nui-accent); }
+.nui-quiz-opt input:disabled { cursor: default; }
+.nui-quiz-q:has(input:disabled) .nui-quiz-opt { cursor: default; }
+.nui-quiz-q:has(input:disabled) .nui-quiz-opt:hover { background: var(--nui-bg-1); }
+.nui-quiz-opt.is-correct {
+  border-color: #34c759; background: rgba(52, 199, 89, 0.12); color: var(--nui-text-strong);
+}
+.nui-quiz-opt.is-wrong {
+  border-color: var(--nui-danger); background: rgba(255, 95, 87, 0.12);
+}
+.nui-quiz-fb {
+  margin: 10px 0 0; font-size: 0.82rem; line-height: 1.45; color: var(--nui-text-muted);
+}
+.nui-quiz-fb[data-ok="true"]  { color: #4cd964; }
+.nui-quiz-fb[data-ok="false"] { color: var(--nui-accent-3); }
+.nui-quiz-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap; margin-top: 4px;
+}
+.nui-quiz-score { margin: 0; font-size: 0.85rem; color: var(--nui-text-strong); }
 .nui-pg-chips {
   display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; padding: 0;
   list-style: none;
