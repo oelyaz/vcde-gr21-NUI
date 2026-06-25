@@ -109,10 +109,8 @@ Zum **Seitenwechsel** zeigst du mit dem Cursor auf einen **Navbar-Link** und
 weiter. Cursor und Pinch reagieren nur bei **gestrecktem Zeigefinger**
 (Posture-Gate). Eine Faust friert den Cursor ein, statt ungewollt zu klicken. Der
 Pinch nutzt **Hysterese** (zwei Schwellen) gegen Flattern, also gegen
-„Midas-Touch“. **Maus und Tastatur funktionieren weiterhin jederzeit**, auch zum Spielen selbst
-(Pflicht-Fallback).
-
-Ohne Kamera jederzeit per Tastatur/Maus spielbar (Fallback aus dem vendored Runner).
+„Midas-Touch“. **Maus und Tastatur funktionieren weiterhin jederzeit**, auch zum
+Spielen selbst (Pflicht-Fallback aus dem vendored Runner).
 
 Die folgende Tabelle fasst den **Mapping-Layer** zusammen, also unsere Übersetzung
 *Quelle → Intent → Aktion*. Dieselbe Quelle kann je nach Modus anders belegt sein; das ist der Sinn der Entkopplung.

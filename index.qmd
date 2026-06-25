@@ -43,9 +43,8 @@ format:
 Dieses Projekt zeigt, wie **Hand- und Pose-Tracking** mit *MediaPipe* ein **Natural
 User Interface (NUI)** möglich macht: vom Funktionsprinzip *unter der Haube* bis
 zur spielbaren Live-Demo. Du steuerst den Dinosaurier mit Körperbewegung und
-Handgesten. Die Seite lässt sich außerdem **per Handgeste bedienen** (Taste
-<kbd>N</kbd> oder Button im Dock unten rechts). Maus und Tastatur bleiben jederzeit
-aktiv.
+Handgesten, und die ganze Seite lässt sich **per Handgeste bedienen** (Taste
+<kbd>N</kbd> oder Button im Dock unten rechts).
 :::
 
 ## Kurzfassung {#kurzfassung}
@@ -68,13 +67,11 @@ Grenzen offen. Maus und Tastatur bleiben jederzeit aktiv.
 
 ## Hintergrund & Problem {#problem}
 
-In der Landkarte des Visual Computing sitzt dieses Projekt zwischen **Bildanalyse**
-(*Image Analysis → Recognition*) und **Human-Computer Interaction**. Die Erkennung
-von Gesten und Landmarks ist überwacht gelerntes Sehen, ein Modell $h_\theta$, das
-zu einem Bild eine Prädiktion liefert. Die eigentliche
-Frage ist aber keine reine CV-Frage: Wann *meint* eine Bewegung einen Befehl, und
-wann ist sie beiläufig? Hier wird ein technisch funktionierendes Interface
-trotzdem unbenutzbar, wenn jede Handbewegung ungewollt auslöst.
+Die Erkennung von Gesten und Landmarks ist überwacht gelerntes Sehen: ein Modell
+$h_\theta$, das zu einem Bild eine Prädiktion liefert. Die eigentliche Frage ist
+aber keine reine CV-Frage: Wann *meint* eine Bewegung einen Befehl, und wann ist
+sie beiläufig? Ein technisch funktionierendes Interface wird unbenutzbar, wenn
+jede Handbewegung ungewollt auslöst.
 
 „Natürlich" heißt nicht automatisch gut bedienbar. Auch Gesten sind erlernt. Ein NUI
 funktioniert erst, wenn die Nutzer sehen, welche Gesten möglich sind (Discoverability),
