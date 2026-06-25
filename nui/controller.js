@@ -683,6 +683,16 @@ async function start() {
     setState(State.NO_CAMERA, "Model library still loading, please try again in a moment.");
     return false;
   }
+  // navigator.mediaDevices is undefined on insecure origins and in some old or
+  // embedded browsers. Without this guard the getUserMedia call below throws a
+  // cryptic "Cannot read properties of undefined" TypeError; here we name the
+  // actual cause and leave the button enabled so the user can retry.
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    setState(State.ERROR, window.isSecureContext
+      ? "This browser does not support camera access (getUserMedia)."
+      : "Insecure context, open via http://localhost (e.g. `quarto preview`), not file:// or a LAN IP.");
+    return false;
+  }
   startBtn.disabled = true;
   setState(State.CALIBRATING, "Requesting camera…");
   try {
