@@ -1,0 +1,10 @@
+{
+  "name": "vcde-gr21-nui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "NUI website front-end (nui/) – tests for the pure helper modules.",
+  "scripts": {
+    "test": "node --test nui/*.test.js"
+  }
+}
