@@ -89,6 +89,31 @@ export function evalSnapshot() {
   };
 }
 
+// A full, JSON-serialisable dump of the current measurement window, including the
+// RAW latency samples (not just summaries). This is what backs the real numbers on
+// the Evaluation page: a session is exported here, saved to nui/eval-data.json, and
+// the page renders its table + histogram from it. meta.browser/date are auto-filled;
+// device/delegate/camera and the structured-trial counts are filled in by hand.
+export function evalExport() {
+  const snap = evalSnapshot();
+  return {
+    meta: {
+      device: "",
+      browser: (typeof navigator !== "undefined" && navigator.userAgent) || "",
+      delegate: "",
+      camera: "",
+      date: new Date().toISOString().slice(0, 10),
+    },
+    durationSec: snap.durationSec,
+    framesWithSubject: snap.framesWithSubject,
+    latency: { metric: "inference_ms", samples: [...inferenceMs] },
+    frameActionMs: [...latencyMs],
+    actions: { ...actions },
+    commitsPerGesture: { ...commits },
+    trial: [],
+  };
+}
+
 // Print a copy-pasteable summary and return it. Run this in the console after a
 // short session, or just watch the live panel on the Evaluation page.
 export function evalReport() {
@@ -118,5 +143,7 @@ export function evalReset() {
 
 // Expose the workflow so a session can be measured from the console or a live UI.
 if (typeof window !== "undefined") {
-  window.nuiEval = { report: evalReport, snapshot: evalSnapshot, reset: evalReset };
+  window.nuiEval = {
+    report: evalReport, snapshot: evalSnapshot, export: evalExport, reset: evalReset,
+  };
 }

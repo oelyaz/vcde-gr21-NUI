@@ -27,6 +27,7 @@ if (panel) {
     commits: el("nui-eval-commits"),
   };
   const resetBtn = el("nui-eval-reset");
+  const exportBtn = el("nui-eval-export");
 
   // "p50 / p95 ms" from a summarise() result, or "–" when there are no samples.
   const ms = s => (s && s.n) ? `${s.p50} / ${s.p95} ms` : "–";
@@ -56,6 +57,25 @@ if (panel) {
     resetBtn.addEventListener("click", () => {
       if (window.nuiEval) window.nuiEval.reset();
       render();
+    });
+  }
+
+  // Download the current session (incl. raw latency samples) as JSON. This file
+  // becomes nui/eval-data.json, which the Evaluation page renders its real numbers
+  // from. The structured-trial counts are filled into that file by hand afterwards.
+  if (exportBtn) {
+    exportBtn.addEventListener("click", () => {
+      if (!window.nuiEval) return;
+      const blob = new Blob([JSON.stringify(window.nuiEval.export(), null, 2)],
+        { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "eval-session.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
     });
   }
 

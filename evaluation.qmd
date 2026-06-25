@@ -12,14 +12,15 @@ jupyter: python3
 Wie schnell und zuverlässig ist die Steuerung, und wo hakt es? Unsere Evaluation
 bleibt **leichtgewichtig**. Es gibt ein paar echte Messwerte und eine
 ehrliche Einordnung, aber keine formale Nutzerstudie (das war nicht Ziel des
-Projekts). Am Ende prüfen wir die Kernbotschaften gemeinsam in einem kurzen **Live-Quiz**.
+Projekts). Am Ende kannst du die Kernbotschaften in einem kurzen **Selbsttest** prüfen.
 :::
 :::
 
 ::: {.callout-note appearance="simple"}
 **Kurzfassung.** Wir messen Verarbeitungslatenz, Erkennungs- und Fehltrigger-Rate in
-einem kleinen, transparenten Versuch. Unter guten Bedingungen ist die Erkennung hoch
-(rund 90 bis 100 Prozent) und die Verarbeitung flüssig (Median etwa 50 ms). Die
+einem kleinen, transparenten Versuch (Rohdaten in `nui/eval-data.json`, Live-Werte im
+Panel oben). Unter guten Bedingungen ist die Erkennung hoch und die Verarbeitung
+flüssig; die konkreten Zahlen stehen in @tbl-eval und im Latenz-Budget. Die
 typischen NUI-Grenzen bleiben spürbar: Licht und Verdeckung, Gorilla-Arm, und der
 Rest des Midas-Touch-Problems. Die Zahlen sind als Größenordnung gedacht, nicht als
 Benchmark, und wir benennen ihre Schwächen offen.
@@ -43,7 +44,10 @@ sind echte Messwerte von deinem Gerät, keine Modellannahme.
 <div class="nui-module nui-eval" id="nui-eval" data-empty="true">
   <header class="nui-module-head">
     <h3><span class="nui-eval-live" aria-hidden="true"></span> Deine Live-Messung</h3>
-    <button id="nui-eval-reset" type="button">Zurücksetzen</button>
+    <span class="nui-eval-actions">
+      <button id="nui-eval-export" type="button">Daten exportieren</button>
+      <button id="nui-eval-reset" type="button">Zurücksetzen</button>
+    </span>
   </header>
   <dl class="nui-module-readout nui-eval-grid">
     <div><dt>Dauer</dt><dd id="nui-eval-dur">0 s</dd></div>
@@ -67,8 +71,8 @@ aber nicht, was die Person eigentlich vorhatte. **Erkennungsrate** und
 **Fehltrigger-Rate** kommen deshalb aus einem kleinen strukturierten Versuch: jede
 Geste 20× bewusst ausführen (erkannt / nicht erkannt), dazu ein 2-minütiges
 Ruhefenster ohne gewollte Geste. Jede ausgelöste Aktion in dieser Ruhephase zählt
-als Fehltrigger. Die folgenden Zahlen sind ein **repräsentativer Messlauf** (ein
-Laptop, Chrome, GPU-Delegate, Webcam 640×480, gute Beleuchtung). Es geht um
+als Fehltrigger. Die Zahlen unten stammen aus einem **gemessenen Versuch** auf einem
+einzelnen Setup (Details im `meta`-Feld von `nui/eval-data.json`). Es geht um
 Größenordnungen, nicht um einen Benchmark.
 
 Die beiden Kennzahlen sind bewusst einfach definiert:
@@ -80,43 +84,52 @@ $$
 
 ```{python}
 #| label: tbl-eval
-#| tbl-cap: "Repräsentativer Messlauf der gesten- und posenbasierten Steuerung. Erkennungsrate aus je 20 bewussten Wiederholungen, Fehltrigger aus einem 2-min-Ruhefenster, Median-Latenz aus dem Eval-Harness."
+#| tbl-cap: "Gemessener strukturierter Versuch der gesten- und posenbasierten Steuerung: Erkennungsrate aus je 20 bewussten Wiederholungen, Fehltrigger aus einem 2-min-Ruhefenster. Rohdaten in `nui/eval-data.json`."
 #| echo: false
-import numpy as np
+import json
 import pandas as pd
+from IPython.display import display, Markdown
 
-rows = [
-    ("Hand · Open_Palm",   "Sprung",   20, 19, 0.6, 54),
-    ("Hand · Closed_Fist", "Ducken",   20, 20, 0.4, 50),
-    ("Hand · Thumb_Up",    "Neustart", 20, 18, 0.3, 57),
-    ("Pose · Aufstehen",   "Sprung",   20, 18, 0.8, 69),
-    ("Pose · Hocke",       "Ducken",   20, 19, 0.5, 66),
-]
-df = pd.DataFrame(rows, columns=[
-    "Geste → Aktion", "Intent", "Versuche", "erkannt",
-    "Fehltrigger/min", "Median-Latenz (ms)",
-])
-df["Erkennungsrate"] = (100 * df["erkannt"] / df["Versuche"]).round().astype(int).astype(str) + " %"
-df = df[["Geste → Aktion", "Intent", "Versuche", "erkannt",
-         "Erkennungsrate", "Fehltrigger/min", "Median-Latenz (ms)"]]
-df.set_index("Geste → Aktion")
+trial = json.load(open("nui/eval-data.json")).get("trial", [])
+if not trial:
+    display(Markdown(
+        "*Noch keine Versuchsdaten. Die Werte entstehen aus einem strukturierten "
+        "Versuch und werden in `nui/eval-data.json` (`trial`) eingetragen — siehe das "
+        "Mess-Protokoll im Repository.*"
+    ))
+else:
+    df = pd.DataFrame(trial)
+    df["Erkennungsrate"] = (100 * df["recognized"] / df["attempts"]).round().astype(int).astype(str) + " %"
+    df = df.rename(columns={
+        "source": "Geste → Aktion", "intent": "Intent",
+        "attempts": "Versuche", "recognized": "erkannt", "falsePerMin": "Fehltrigger/min",
+    })
+    df = df[["Geste → Aktion", "Intent", "Versuche", "erkannt",
+             "Erkennungsrate", "Fehltrigger/min"]]
+    display(df.set_index("Geste → Aktion"))
 ```
 
-Unter guten Bedingungen ist die Erkennung hoch (90-100 %, @tbl-eval): der
-**Closed_Fist** ist am robustesten (kompakte, eindeutige Handform), der
-**Thumb_Up** wird am ehesten verfehlt. Fehltrigger bleiben dank Confidence-Gate,
-Debounce und Hysterese selten (< 1 / min). Ganz weg sind sie aber nicht. Genau
-das ist der Kern des Midas-Touch-Problems (s. u.).
+Welche Geste wie zuverlässig erkannt wird, zeigt @tbl-eval. Tendenziell sind
+kompakte, eindeutige Handformen (etwa die Faust) robuster als feinere Gesten.
+Fehltrigger bleiben dank Confidence-Gate, Debounce und Hysterese selten, ganz weg
+sind sie aber nicht. Genau das ist der Kern des Midas-Touch-Problems (s. u.).
 
 ```{python}
 #| label: fig-eval-latency
-#| fig-cap: "Latenz-Budget Frame → Aktion, additiv aus drei realen Beiträgen: Kamera-Frame-Intervall (≈ 33 ms bei 30 fps), gemessene Median-Verarbeitung (≈ 50 ms aus dem Eval-Harness) und – nur bei den diskreten Hand-Gesten – das Debounce-Fenster von drei stabilen Frames (≈ 100 ms). Der Pose-Pfad nutzt Anstiegserkennung ohne Debounce."
+#| fig-cap: "Latenz-Budget Frame → Aktion: der Inferenz-Median stammt aus den geloggten Frames (`nui/eval-data.json`); Kamera-Frame-Intervall (≈ 33 ms bei 30 fps) und das Debounce-Fenster von drei stabilen Frames (≈ 100 ms, nur diskrete Hand-Gesten) sind strukturelle Konstanten. Der Pose-Pfad nutzt Anstiegserkennung ohne Debounce."
 #| echo: false
+import json
+import numpy as np
 import matplotlib.pyplot as plt
 
-# Reale, additive Budget-Komponenten in ms: Frame-Intervall @30 fps, gemessene
-# Median-Verarbeitung, Debounce = 3 stabile Frames (nur diskrete Hand-Gesten).
-t_frame, t_proc, t_debounce = 33, 50, 100
+# Frame-Intervall (33 ms @30 fps) und Debounce (3 stabile Frames) sind strukturelle
+# Konstanten; der Inferenz-Median wird aus den geloggten Inferenz-Samples
+# berechnet (eval-data.json). Ohne Samples fällt er auf eine angenommene Größe zurück.
+samples  = np.array(json.load(open("nui/eval-data.json")).get("latency", {}).get("samples", []), dtype=float)
+measured = samples.size > 0
+t_proc   = int(round(float(np.median(samples)))) if measured else 50
+proc_lbl = f"Inferenz (Median) ≈ {t_proc} ms" + ("" if measured else " (angenommen)")
+t_frame, t_debounce = 33, 100
 paths     = ["Pose\n(kontinuierlich)", "Hand\n(diskret)"]
 frame     = [t_frame, t_frame]
 proc      = [t_proc,  t_proc]
@@ -133,7 +146,7 @@ ax.set_facecolor("none")
 ax.barh(paths, frame, color=C_FRAME, edgecolor="#0d0e12", linewidth=0.7,
         label=f"Kamera-Frame ≈ {t_frame} ms")
 ax.barh(paths, proc, left=frame, color=C_PROC, edgecolor="#0d0e12", linewidth=0.7,
-        label=f"Verarbeitung (Median) ≈ {t_proc} ms")
+        label=proc_lbl)
 ax.barh(paths, deb, left=left_deb, color=C_DEB, edgecolor="#0d0e12", linewidth=0.7,
         label=f"Debounce (3 Frames) ≈ {t_debounce} ms")
 for i, total in enumerate(totals):
@@ -156,11 +169,11 @@ plt.tight_layout()
 plt.show()
 ```
 
-Die gemessene Verarbeitung ist nur ein Teil der Verzögerung, die man beim Spielen
-merkt (@fig-eval-latency). Grob kommen drei Dinge zusammen: Kamera-Frame-Intervall
-(≈ 33 ms bei 30 fps), gemessene Verarbeitung (Median ≈ 50 ms) und, nur bei den
-**diskreten** Hand-Gesten, das Debounce-Fenster von drei stabilen Frames
-(≈ 100 ms):
+Die gemessene Inferenz ist nur ein kleiner Teil der Verzögerung, die man beim
+Spielen merkt (@fig-eval-latency). Grob kommen drei Dinge zusammen:
+Kamera-Frame-Intervall (≈ 33 ms bei 30 fps), die **geloggte Inferenz** (Median aus
+den Frames in `nui/eval-data.json`) und, nur bei den **diskreten** Hand-Gesten, das
+Debounce-Fenster von drei stabilen Frames (≈ 100 ms):
 
 $$t_{\text{spürbar}} \approx t_{\text{Frame}} + t_{\text{Verarbeitung}} + t_{\text{Debounce}}.$$
 
@@ -178,9 +191,9 @@ Der Pose-Pfad braucht **Schultern und Hüfte im Bild** und genügend Abstand. Di
 Neutral-Kalibrierung normiert zwar auf die Torso-Höhe (distanz-invariant), sie kann
 fehlende Landmarks aber nicht ersetzen.
 
-**Latenz.** Mit ~50 ms Median fühlt sich die Verarbeitung grundsätzlich flüssig
-an. Spürbar wird vor allem das Debounce-Fenster der diskreten Gesten. GPU-Delegate
-und der Verzicht auf künstliches Throttling halten die Inferenz schnell. Der
+**Latenz.** Die reine Inferenz ist mit wenigen Millisekunden Median (s. Latenz-Budget)
+unkritisch; spürbar wird vor allem das Debounce-Fenster der diskreten Gesten.
+GPU-Delegate und der Verzicht auf künstliches Throttling halten die Inferenz schnell. Der
 1-Euro-Filter glättet den Cursor *geschwindigkeitsadaptiv* und fügt absichtlich
 kaum Verzögerung hinzu
 [@casiez2012euro]. Einzelne p95-Ausreißer entstehen durch

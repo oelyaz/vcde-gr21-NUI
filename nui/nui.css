@@ -592,13 +592,14 @@
 .nui-eval { margin: 1.5rem 0; }
 .nui-eval-grid { gap: 14px 28px; }
 .nui-eval-grid .nui-eval-wide { flex-basis: 100%; }
-#nui-eval-reset {
+.nui-eval-actions { display: flex; gap: 8px; }
+#nui-eval-reset, #nui-eval-export {
   padding: 0.3rem 0.7rem; font-size: 0.78rem; font-weight: 600;
   border-radius: 7px; cursor: pointer;
   border: 1px solid var(--nui-line-strong);
   background: var(--nui-bg-2); color: var(--nui-text-strong);
 }
-#nui-eval-reset:hover { background: rgba(236, 58, 46, 0.12); border-color: var(--nui-accent); color: var(--nui-accent); }
+#nui-eval-reset:hover, #nui-eval-export:hover { background: rgba(236, 58, 46, 0.12); border-color: var(--nui-accent); color: var(--nui-accent); }
 .nui-eval-live {
   display: inline-block; width: 8px; height: 8px; border-radius: 999px;
   background: var(--nui-text-muted); vertical-align: middle; margin-right: 4px;
