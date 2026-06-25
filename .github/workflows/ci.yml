@@ -1,0 +1,51 @@
+name: CI
+# Pre-merge checks. Kept separate from publish.yml (which renders + deploys to
+# gh-pages on a push to main): this only verifies, it never deploys.
+on:
+  push:
+    branches-ignore: [gh-pages]
+  pull_request:
+
+jobs:
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # The tests use Node's built-in runner (node:test), so there are no
+      # dependencies to install.
+      - name: Run unit tests
+        run: npm test
+
+  render:
+    name: Quarto render check
+    # Only on pull requests: catch a broken .qmd before it reaches main and the
+    # publish workflow. A push to main is already covered by publish.yml.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install jupyter matplotlib numpy pandas
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Render site (no publish)
+        run: quarto render
