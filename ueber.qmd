@@ -84,7 +84,7 @@ und verantwortet.
 - **Front-end:** Handgeschriebene ES-Module unter `nui/`: config, controller,
   filters, overlay, explainer, eval, evalpanel, help, signature, onboarding,
   quiz. Kein Framework.
-- **Browser:** Lauffähig in Chrome, Edge und Firefox. Die Kamera startet nur auf
+- **Browser:** Lauffähig in Chrome, Edge, Firefox und Safari. Die Kamera startet nur auf
   Klick, in einem Secure Context über `getUserMedia`.
 
 ## Referenzen {#referenzen}
