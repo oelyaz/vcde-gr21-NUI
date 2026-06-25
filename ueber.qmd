@@ -82,7 +82,8 @@ und verantwortet.
 - **Tracking:** MediaPipe Tasks-Vision mit GestureRecognizer und Pose Landmarker,
   on-device im Browser. Frames verlassen das Gerät nicht.
 - **Front-end:** Handgeschriebene ES-Module unter `nui/`: config, controller,
-  filters, overlay, explainer, eval, signature, onboarding. Kein Framework.
+  filters, overlay, explainer, eval, evalpanel, help, signature, onboarding,
+  quiz. Kein Framework.
 - **Browser:** Lauffähig in Chrome, Edge und Firefox. Die Kamera startet nur auf
   Klick, in einem Secure Context über `getUserMedia`.
 
