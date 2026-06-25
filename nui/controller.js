@@ -32,7 +32,7 @@ import {
     PREFERRED_DELEGATE,
     State, STATE_INFO,
 } from "./config.js";
-import { evalAction, evalCommit, evalFrameStart, evalSawSubject } from "./eval.js";
+import { evalAction, evalCommit, evalFrameStart, evalInference, evalSawSubject } from "./eval.js";
 import { createExplainer } from "./explainer.js";
 import { clamp, handFeatures, OneEuro } from "./filters.js";
 import { createOverlay } from "./overlay.js";
@@ -580,10 +580,16 @@ function loop() {
 
   const now = performance.now();
   evalFrameStart(now);
+  // Time the model inference itself (synchronous) so the eval harness gets a
+  // dense per-frame latency sample, independent of whether an action fired.
   if (activeMode === "hand" && recognizer) {
-    handleHand(recognizer.recognizeForVideo(video, now), now);
+    const res = recognizer.recognizeForVideo(video, now);
+    evalInference(performance.now() - now);
+    handleHand(res, now);
   } else if (activeMode === "pose" && poseLandmarker) {
-    handlePose(poseLandmarker.detectForVideo(video, now), now);
+    const res = poseLandmarker.detectForVideo(video, now);
+    evalInference(performance.now() - now);
+    handlePose(res, now);
   }
 }
 

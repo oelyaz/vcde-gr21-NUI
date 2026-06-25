@@ -34,6 +34,34 @@ Spiel-Befehl), die Zahl **committeter Gesten** je Klasse und die ausgelösten
 **Aktionen** (Sprung / Ducken / Neustart). Nach einer Sitzung gibt
 `window.nuiEval.report()` die Zusammenfassung in der Konsole aus.
 
+Du musst dafür aber nicht in die Konsole schauen. Das Panel unten liest dieselben
+Zahlen live aus deiner **eigenen** Sitzung: Starte die Kamera im **NUI-Dock unten
+rechts**, mach ein paar Gesten (oder spiel kurz), und die Werte füllen sich. Das
+sind echte Messwerte von deinem Gerät, keine Modellannahme.
+
+```{=html}
+<div class="nui-module nui-eval" id="nui-eval" data-empty="true">
+  <header class="nui-module-head">
+    <h3><span class="nui-eval-live" aria-hidden="true"></span> Deine Live-Messung</h3>
+    <button id="nui-eval-reset" type="button">Zurücksetzen</button>
+  </header>
+  <dl class="nui-module-readout nui-eval-grid">
+    <div><dt>Dauer</dt><dd id="nui-eval-dur">0 s</dd></div>
+    <div><dt>Frames mit Subjekt</dt><dd id="nui-eval-frames">0</dd></div>
+    <div><dt>Inferenz p50 / p95</dt><dd id="nui-eval-inf">–</dd></div>
+    <div><dt>Frame → Aktion p50 / p95</dt><dd id="nui-eval-lat">–</dd></div>
+    <div class="nui-eval-wide"><dt>Aktionen</dt><dd id="nui-eval-actions">–</dd></div>
+    <div class="nui-eval-wide"><dt>Gesten committet</dt><dd id="nui-eval-commits">–</dd></div>
+  </dl>
+  <p class="nui-module-note nui-eval-empty">Noch keine Daten. Starte die Kamera im
+    NUI-Dock und führe ein paar Gesten aus, dann erscheinen hier deine Messwerte.</p>
+  <p class="nui-module-note nui-eval-hint">Inferenz = reine Modellzeit pro Frame ·
+    Frame → Aktion = vom Kamera-Frame bis zum abgesetzten Spiel-Befehl. Beide als
+    Median (p50) und 95-%-Perzentil (p95).</p>
+</div>
+<script type="module" src="nui/evalpanel.js"></script>
+```
+
 Ein passives Harness kann den Pipeline-Takt messen und Ereignisse zählen. Es weiß
 aber nicht, was die Person eigentlich vorhatte. **Erkennungsrate** und
 **Fehltrigger-Rate** kommen deshalb aus einem kleinen strukturierten Versuch: jede

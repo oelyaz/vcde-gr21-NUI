@@ -1,24 +1,28 @@
 // nui/eval.js
 // Tiny, self-contained evaluation harness for the NUI controller. It records a
 // few honest runtime metrics, enough to back up the evaluation with real numbers:
-//   • per-frame processing latency  (camera frame grab to game action dispatch)
+//   • per-frame model inference time (how long recognition itself takes)
+//   • frame → game-action latency    (camera frame grab to action dispatch)
 //   • how often each gesture is committed (recognition activity per class)
 //   • how many game actions fire, split by type (jump / duck / restart)
 //   • how many frames actually contained a hand / body (subject present)
 //
-// Deliberately minimal: no UI, no storage, no dependencies. The controller calls
-// a handful of one-line hooks; everything else is read back from the browser
-// console after a session:
+// Deliberately minimal: no storage, no dependencies. The controller calls a
+// handful of one-line hooks. The numbers can be read back two ways:
 //
-//     window.nuiEval.report()   // prints a summary + returns it as an object
-//     window.nuiEval.reset()    // start a fresh measurement window
+//     window.nuiEval.report()    // prints a summary + returns it as an object
+//     window.nuiEval.snapshot()  // same object, no console output (for live UI)
+//     window.nuiEval.reset()     // start a fresh measurement window
+//
+// The live panel on the Evaluation page polls snapshot(); see nui/evalpanel.js.
 //
 // Scope note, no false precision: a passive harness can time the pipeline and
 // count events, but it cannot know what the user meant. True recognition and
 // false-trigger rates need a small structured trial (do a gesture a few times,
 // then hold still for a fixed window) using these same counters.
 
-const latencyMs = [];                  // per-frame processing latency samples
+const latencyMs   = [];                // frame → game-action latency samples
+const inferenceMs = [];                // per-frame model inference time samples
 const commits   = Object.create(null); // committed gesture name → count
 const actions   = Object.create(null); // game action (jump/duck/restart) → count
 let framesWithSubject = 0;             // frames where a hand/body was present
@@ -30,6 +34,13 @@ let startedAt = 0;                     // first frame timestamp (session start)
 export function evalFrameStart(ts) {
   if (!startedAt) startedAt = ts;
   frameTs = ts;
+}
+
+// Per-frame model inference time (recognizeForVideo / detectForVideo), measured
+// in the recognition loop. This is the dense sample the latency histogram wants:
+// it lands every frame, not only on the frames that happen to fire an action.
+export function evalInference(ms) {
+  if (ms >= 0 && ms < 1000) inferenceMs.push(ms); // drop absurd outliers
 }
 
 // Whether this frame contained a subject (a hand for the gesture path, a body
@@ -64,21 +75,29 @@ function summarise(arr) {
   };
 }
 
-// Print a copy-pasteable summary and return it. Run this in the console after a
-// short session to feed real numbers into the evaluation chart.
-export function evalReport() {
+// Build the current report object. Pure read of the counters, no side effects,
+// so it is safe to poll many times a second from the live UI.
+export function evalSnapshot() {
   const durationSec = startedAt ? Math.round((performance.now() - startedAt) / 100) / 10 : 0;
-  const report = {
+  return {
     durationSec,
     framesWithSubject,
+    inferenceMs: summarise(inferenceMs),
     latencyMs: summarise(latencyMs),
     actions: { ...actions },
     commitsPerGesture: { ...commits },
   };
+}
+
+// Print a copy-pasteable summary and return it. Run this in the console after a
+// short session, or just watch the live panel on the Evaluation page.
+export function evalReport() {
+  const report = evalSnapshot();
   if (typeof console !== "undefined") {
     console.group("%cNUI eval report", "color:#0071e3;font-weight:bold");
-    console.log(`Dauer ${durationSec}s · Frames mit Subjekt ${framesWithSubject}`);
-    if (report.latencyMs.n) console.table({ "Latenz Frame-Aktion (ms)": report.latencyMs });
+    console.log(`Dauer ${report.durationSec}s · Frames mit Subjekt ${report.framesWithSubject}`);
+    if (report.inferenceMs.n) console.table({ "Inferenz (ms)": report.inferenceMs });
+    if (report.latencyMs.n)   console.table({ "Latenz Frame-Aktion (ms)": report.latencyMs });
     console.table(report.commitsPerGesture);
     console.table(report.actions);
     console.groupEnd();
@@ -89,6 +108,7 @@ export function evalReport() {
 // Clear all counters to start a fresh measurement window.
 export function evalReset() {
   latencyMs.length = 0;
+  inferenceMs.length = 0;
   framesWithSubject = 0;
   frameTs = 0;
   startedAt = 0;
@@ -96,7 +116,7 @@ export function evalReset() {
   for (const k in actions) delete actions[k];
 }
 
-// Expose a console workflow so a session can be measured with zero extra UI.
+// Expose the workflow so a session can be measured from the console or a live UI.
 if (typeof window !== "undefined") {
-  window.nuiEval = { report: evalReport, reset: evalReset };
+  window.nuiEval = { report: evalReport, snapshot: evalSnapshot, reset: evalReset };
 }

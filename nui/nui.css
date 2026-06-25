@@ -587,6 +587,37 @@
 .nui-module-note {
   margin: 10px 0 0; font-size: 0.74rem; line-height: 1.4; color: var(--nui-text-muted);
 }
+
+/* Live evaluation panel: mirrors nui/eval.js numbers on the Evaluation page. */
+.nui-eval { margin: 1.5rem 0; }
+.nui-eval-grid { gap: 14px 28px; }
+.nui-eval-grid .nui-eval-wide { flex-basis: 100%; }
+#nui-eval-reset {
+  padding: 0.3rem 0.7rem; font-size: 0.78rem; font-weight: 600;
+  border-radius: 7px; cursor: pointer;
+  border: 1px solid var(--nui-line-strong);
+  background: var(--nui-bg-2); color: var(--nui-text-strong);
+}
+#nui-eval-reset:hover { background: rgba(236, 58, 46, 0.12); border-color: var(--nui-accent); color: var(--nui-accent); }
+.nui-eval-live {
+  display: inline-block; width: 8px; height: 8px; border-radius: 999px;
+  background: var(--nui-text-muted); vertical-align: middle; margin-right: 4px;
+}
+/* Pulse green only once the session is actually producing data. */
+.nui-eval[data-empty="false"] .nui-eval-live {
+  background: #34c759; box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.5);
+  animation: nui-eval-pulse 1.8s var(--nui-ease-inout) infinite;
+}
+@keyframes nui-eval-pulse {
+  70%  { box-shadow: 0 0 0 7px rgba(52, 199, 89, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(52, 199, 89, 0); }
+}
+/* Swap the empty hint for the legend once real numbers arrive. */
+.nui-eval[data-empty="true"]  .nui-eval-hint,
+.nui-eval[data-empty="false"] .nui-eval-empty { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .nui-eval[data-empty="false"] .nui-eval-live { animation: none; }
+}
 .nui-pg-chips {
   display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; padding: 0;
   list-style: none;
