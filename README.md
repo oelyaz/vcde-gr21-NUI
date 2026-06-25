@@ -1,59 +1,107 @@
-# Interaktive NUI-Website
-Dieses Repository enthält unsere Quarto-Webseite zum Thema Natural User Interfaces.
-Quarto übernimmt das Rendern der Seiten, Python wird für Auswertungen und
-Abbildungen genutzt. Für interaktive 3D-Visualisierungen ist Babylon.js eingebunden.
+# NUI · Hand- & Pose-Tracking
 
----
-https://oelyaz.github.io/vcde-gr21-NUI/
----
+Interaktive Quarto-Website zum Thema **Natural User Interfaces (NUI)**: Sie erklärt
+gestenbasierte Eingabe und macht sie direkt erlebbar - der Chrome-T-Rex lässt sich
+per **Handgeste** oder **Körperpose** über die Webcam steuern, und die ganze Seite
+ist per Hand-Cursor bedienbar. Tracking läuft mit **MediaPipe** vollständig
+*on-device* im Browser; Maus und Tastatur funktionieren jederzeit als Fallback.
 
-## Konfigurationsschritte (Setup)
-Für eine eigene Arbeitsumgebung reichen diese Schritte. Am besten in der Reihenfolge
-durchgehen, sonst scheitert später oft der Pages-Build.
+**Live:** https://oelyaz.github.io/vcde-gr21-NUI/
 
-- **Repository forken**
-Oben rechts auf GitHub auf "Fork" klicken. Dadurch landet eine Kopie des Projekts im
-eigenen GitHub-Account.
+Visual Computing · Gruppe 21 · Restle · Seidl · Kastrati
 
-- **Konfiguration der Workflow-Berechtigungen**
-In Forks sind Schreibrechte für automatisierte Prozesse meist deaktiviert. Für den
-Website-Build müssen sie einmal aktiviert werden:
+## Projektstruktur
 
-  - Navigieren Sie zu Settings > Actions > General.
-    
-  - Suchen Sie den Abschnitt Workflow permissions.
+| Pfad | Inhalt |
+|------|--------|
+| `*.qmd` | Die Seiten der Website (Start, Grundlagen, Methode, Live-Demo, Evaluation, Über). |
+| `nui/` | Eigene Front-end-Library (kein Framework): Steuerung, Filter, Overlay, Eval u.a. |
+| `trex/` | Vendored Chrome-Dino-Runner (BSD), unverändert eingebettet. |
+| `_quarto.yml` | Website-Konfiguration: Navbar, Theme, globales Kamera-Dock. |
+| `references.bib` | Literaturverzeichnis. |
+| `.github/workflows/` | `publish.yml` (Render + Deploy), `ci.yml` (Tests + Render-Check). |
 
-  - Aktivieren Sie die Option "Read and write permissions" und bestätigen Sie mit Save.
+### Die `nui/`-Module
 
-  - Wechseln Sie zum Reiter Actions und bestätigen Sie die Aktivierung der Workflows durch Klick auf "I understand my workflows, go ahead and enable them".
+| Datei | Aufgabe |
+|-------|---------|
+| `controller.js` | Herzstück: Kamera, MediaPipe-Erkennung (Hand/Pose), Zustandsmaschine, Hand-Cursor, Dock. |
+| `filters.js` | Pure Mathe-Helfer: `clamp`, Abstände, 1-Euro-Filter, Hand-Features. |
+| `eval.js` | Leichtes Mess-Harness (Latenz, Erkennung, Aktionen). |
+| `evalpanel.js` | Zeigt die `eval.js`-Messwerte live auf der Evaluationsseite an. |
+| `overlay.js` | Skelett-Overlay über dem Kamerabild. |
+| `explainer.js` | Interaktive Demo-Module (Landmark-Explorer, Gesten-Playground). |
+| `onboarding.js`, `help.js`, `signature.js` | Coachmark, Hilfe-Popout, visuelle Effekte. |
+| `dock.html` | Globales Kamera-Dock, per `include-after-body` auf jeder Seite. |
 
-- **Aktivierung von GitHub Pages**
+## Lokal entwickeln
 
-  - Navigieren Sie zu Settings > Pages.
+Voraussetzungen: [Quarto](https://quarto.org), [uv](https://docs.astral.sh/uv/)
+(Python) und [Node.js](https://nodejs.org) (nur für die Tests).
 
-  - Wählen Sie unter dem Punkt "Build and deployment" bei Branch den Branch gh-pages aus.
+```bash
+# Python-Umgebung aus pyproject.toml / uv.lock einrichten
+uv sync
 
-  - Bestätigen Sie die Auswahl mit Save.
-(Hinweis: Der Branch gh-pages entsteht erst nach dem ersten erfolgreichen Durchlauf
-der GitHub Action, außer er wird vorher manuell erstellt.)
+# Website lokal mit Live-Reload starten
+quarto preview
+```
 
-## Workflow für Bearbeitung und Deployment
-Nach einem Push ins Repository startet automatisch die CI/CD-Pipeline:
+`quarto preview` öffnet die Seite unter `http://localhost:<port>`. **Die Kamera
+braucht einen sicheren Kontext** (`http://localhost` oder HTTPS) — über `file://`
+oder eine LAN-IP verweigert der Browser den Zugriff.
 
-- Python-Umgebung: Quarto führt enthaltene Code-Segmente aus und erzeugt die passenden Abbildungen.
+Eine einzelne Seite rendern: `quarto render evaluation.qmd`. Die puren Helfer
+(`filters.js`, `eval.js`) sind mit `npm test` abgedeckt (Node-Test-Runner, keine
+Extra-Pakete).
 
-- Rendering: Die Markdown-Inhalte werden als statische HTML-Seiten ausgegeben.
+## Evaluation: echte Messwerte ablesen
 
-- Deployment: Die aktualisierte Website wird unter folgendem URL-Schema bereitgestellt: https://<ihr-username>.github.io/<repo-name>/
+`nui/eval.js` misst im laufenden Betrieb Inferenz- und Aktions-Latenz, erkannte
+Gesten und ausgelöste Aktionen. Zwei Wege, die Zahlen zu sehen:
 
-## Richtlinien zur Quarto-Syntax:
-- Mathematische Formeln: Verwenden Sie die LaTeX-Notation, z. B. $E = mc^2$.
+- **Auf der Seite:** Auf der [Evaluationsseite](https://oelyaz.github.io/vcde-gr21-NUI/evaluation.html)
+  die Kamera im Dock starten, ein paar Gesten machen — das Panel **„Deine
+  Live-Messung"** füllt sich mit echten Werten deiner Sitzung.
+- **In der Konsole:** `window.nuiEval.report()` druckt eine Zusammenfassung,
+  `window.nuiEval.reset()` startet ein frisches Messfenster.
 
-- Python-Berechnungen: Code-Blöcke müssen mit ```{python} eingeleitet werden.
+## Deployment
 
-- HTML/3D-Inhalte: Die Integration von Babylon.js-Skripten erfolgt innerhalb von ```{=html} Blöcken.
+Ein Push auf `main` startet `publish.yml`: Quarto rendert die Seiten (inkl. der
+Python-Abbildungen) und deployt das Ergebnis nach `gh-pages` → GitHub Pages.
+Pull Requests werden zusätzlich von `ci.yml` geprüft (Unit-Tests + Render-Check).
 
-## Fehleranalyse (Troubleshooting)
-- Fehlende Python-Grafiken: Im Protokoll unter "Actions" prüfen, ob matplotlib oder numpy korrekt installiert wurden.
+### Eigenen Fork einrichten
 
-- Inaktiver 3D-Canvas: Wenn die 3D-Umgebung nicht lädt, in der Browser-Konsole (Taste F12) nach einem 404 (Not Found) Fehler suchen. Meist stimmt dann der Verweis auf Babylon.js oder eine Asset-Datei nicht.
+Damit der automatische Build im eigenen Fork funktioniert:
+
+1. **Workflow-Berechtigungen:** Settings → Actions → General → *Workflow
+   permissions* → „Read and write permissions" aktivieren und speichern. Im Reiter
+   *Actions* die Workflows einmal bestätigen.
+2. **GitHub Pages:** Settings → Pages → *Build and deployment* → Branch `gh-pages`
+   wählen und speichern. (Der Branch entsteht nach dem ersten erfolgreichen
+   Action-Durchlauf.)
+
+Die Seite liegt danach unter `https://<username>.github.io/<repo-name>/`.
+
+## Hinweise zur Quarto-Syntax
+
+- **Formeln:** LaTeX-Notation, z. B. `$E = mc^2$`.
+- **Python-Berechnungen:** Code-Blöcke mit ` ```{python} ` einleiten.
+- **HTML/JS-Einbindung:** innerhalb von ` ```{=html} `-Blöcken.
+
+## Troubleshooting
+
+- **Kamera startet nicht:** Sicheren Kontext prüfen (`http://localhost`, nicht
+  `file://`) und die Kamera-Freigabe in den Seiteneinstellungen erlauben.
+- **Fehlende Python-Grafiken:** Im *Actions*-Protokoll prüfen, ob `matplotlib`,
+  `numpy` oder `pandas` korrekt installiert wurden.
+- **MediaPipe lädt nicht:** Browser-Konsole (F12) auf Netzwerkfehler prüfen — das
+  Modell wird zur Laufzeit per CDN geladen, eine Internetverbindung ist nötig.
+
+## Lizenz & Attribution
+
+Eigener Code unter der Lizenz in [`LICENSE`](LICENSE). Der Chrome-Dino-Runner in
+`trex/` stammt von den Chromium-Autoren (BSD). Tracking über *MediaPipe
+Tasks-Vision* (Google, Apache-2.0), zur Laufzeit per CDN geladen.
