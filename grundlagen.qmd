@@ -24,34 +24,34 @@ Typische Use-Cases reichen von XR und Accessibility bis Medizin und Gaming. Hist
 
 ## Von der leeren Hand zum Befehl {#motivation}
 
-Klassische Eingabe braucht meistens ein *Instrument*: Maus, Tastatur oder
-Touchscreen. Ein **Natural User Interface (NUI)** probiert das Gegenteil.
+Klassische Eingabe braucht meistens ein Instrument: Maus, Tastatur oder
+Touchscreen. Ein Natural User Interface (NUI) probiert das Gegenteil.
 Fähigkeiten, die Menschen sowieso mitbringen, etwa Zeigen, Greifen, Mimik oder
-Körperhaltung, sollen *direkt* zur Eingabe werden. Hand- und Pose-Tracking liefern
+Körperhaltung, sollen direkt zur Eingabe werden. Hand- und Pose-Tracking liefern
 dafür die technische Grundlage. Eine gewöhnliche RGB-Kamera genügt, um die Hand
 bzw. den ganzen Körper als Eingabegerät zu erkennen. In der Landkarte des Visual
-Computing liegt dieses Projekt damit zwischen **Human-Computer Interaction** und
-der **Bildanalyse** (*Image Analysis → Recognition*).
+Computing liegt dieses Projekt damit zwischen Human-Computer Interaction und
+der Bildanalyse (Image Analysis → Recognition).
 
 Dabei ist „natürlich" ein Designziel, kein Automatismus. Auch Gesten sind erlernt
 und kulturell geprägt. Ein NUI wird erst dann gut bedienbar, wenn es übliche
 Usability-Prinzipien erfüllt: Die Nutzer müssen erkennen können, welche Gesten möglich
-sind (*Discoverability*), und unmittelbares *Feedback* bekommen
+sind (Discoverability), und unmittelbares Feedback bekommen
 [@norman2010nui; @wigdor2011brave]. Zwei Begriffe strukturieren das
 ganze Projekt:
 
 - **Diskrete vs. kontinuierliche Gesten.** Eine diskrete Geste ist ein
-  *Klassen­ereignis* (offene Handfläche → Sprung), ein kontinuierlicher Kanal ein
-  *Wert* (z. B. die Pinch-Distanz zwischen Daumen und Zeigefinger als Schieberegler).
-- **Engagement / Disengagement.** Wann *meint* eine Bewegung einen Befehl, und
-  wann ist sie beiläufig? Ohne saubere Zustände entsteht das **Midas-Touch-Problem**:
-  Jede Bewegung löst ungewollt aus. Buxtons *Three-State-Model* (Out-of-Range →
+  Klassen­ereignis (offene Handfläche → Sprung), ein kontinuierlicher Kanal ein
+  Wert (z. B. die Pinch-Distanz zwischen Daumen und Zeigefinger als Schieberegler).
+- **Engagement / Disengagement.** Wann meint eine Bewegung einen Befehl, und
+  wann ist sie beiläufig? Ohne saubere Zustände entsteht das Midas-Touch-Problem:
+  Jede Bewegung löst ungewollt aus. Buxtons Three-State-Model (Out-of-Range →
   Tracking → Aktiv) liefert das passende Vokabular, um Erkennen und Auslösen
   sauber zu trennen [@buxton1990threestate].
 
 Das zeigt sich direkt in der Technik, zum Beispiel bei Debounce, Hysterese und
-Kalibrierung in der [Methode](methode.qmd). Die Grenzen besprechen wir später auch
-offen: *Gorilla-Arm*, Ermüdung und Fehltrigger in der [Evaluation](evaluation.qmd).
+Kalibrierung in der Methode. Die Grenzen besprechen wir später auch
+offen: Gorilla-Arm, Ermüdung und Fehltrigger in der Evaluation.
 
 ## Use-Cases {#use-cases}
 
@@ -65,7 +65,7 @@ Vier Felder zeigen, warum berührungsloses Tracking mehr ist als eine Spielerei:
         <i class="ph ph-virtual-reality nui-card-ico" aria-hidden="true"></i>
         <h3>AR/VR &amp; Spatial Computing</h3>
         <p>Aktuelle Headsets (Meta Quest, Apple Vision Pro) ersetzen Controller
-          zunehmend durch <strong>markerloses Hand-Tracking</strong> als primäre
+          zunehmend durch markerloses Hand-Tracking als primäre
           Eingabe.</p>
       </div>
       <div class="nui-card">
@@ -78,7 +78,7 @@ Vier Felder zeigen, warum berührungsloses Tracking mehr ist als eine Spielerei:
       <div class="nui-card">
         <i class="ph ph-hospital nui-card-ico" aria-hidden="true"></i>
         <h3>Touchless &amp; Medizin</h3>
-        <p>Im OP oder am öffentlichen Kiosk ist <em>berührungslos</em> ein Hygienegewinn:
+        <p>Im OP oder am öffentlichen Kiosk ist berührungslos ein Hygienegewinn:
           Chirurg:innen blättern durch Bildmaterial, ohne das sterile Feld zu
           verlassen.</p>
       </div>
@@ -278,21 +278,21 @@ Vier Felder zeigen, warum berührungsloses Tracking mehr ist als eine Spielerei:
 ## Eine kurze Geschichte {#geschichte}
 
 Die Idee, den Körper selbst zur Schnittstelle zu machen, ist alt. Grob sieht man
-zwei Linien: *getragene* Sensorik und *kamerabasierte*, markerlose Verfahren.
+zwei Linien: getragene Sensorik und kamerabasierte, markerlose Verfahren.
 
 ::: {.nui-reveal}
-- **1975: Videoplace** (Myron Krueger): einer der ersten interaktiven Räume, in
-  dem die *Silhouette* der Person ohne getragene Hardware mit virtuellen Inhalten
+- 1975: Videoplace (Myron Krueger): einer der ersten interaktiven Räume, in
+  dem die Silhouette der Person ohne getragene Hardware mit virtuellen Inhalten
   interagiert. Für markerlose Gestensteuerung ist das ein frühes Vorbild.
-- **1987: VPL DataGlove:** Der Datenhandschuh macht Fingerbeugung direkt messbar.
-  Das ist präzise, aber *instrumentiert* (Hardware an der Hand) [@buxton1990threestate].
-- **2010: Microsoft Kinect:** erstmals **markerloses Ganzkörper-Skelett** für den
-  Massenmarkt, möglich durch eine aktive **Tiefenkamera**.
-- **2013: Leap Motion:** dedizierter IR-Stereo-Sensor für hochpräzises
+- 1987: VPL DataGlove: Der Datenhandschuh macht Fingerbeugung direkt messbar.
+  Das ist präzise, aber instrumentiert (Hardware an der Hand) [@buxton1990threestate].
+- 2010: Microsoft Kinect: erstmals markerloses Ganzkörper-Skelett für den
+  Massenmarkt, möglich durch eine aktive Tiefenkamera.
+- 2013: Leap Motion: dedizierter IR-Sensor für hochpräzises
   Finger-Tracking im Nahbereich.
-- **2019: MediaPipe** (Google): Die hier genutzte Pipeline bringt Hand- und
-  Pose-Tracking *on-device* auf gewöhnliche RGB-Kameras und damit auch in den
-  **Browser** [@lugaresi2019mediapipe; @zhang2020mediapipehands].
+- 2019: MediaPipe (Google): Die hier genutzte Pipeline bringt Hand- und
+  Pose-Tracking on-device auf gewöhnliche RGB-Kameras und damit auch in den
+  Browser [@lugaresi2019mediapipe; @zhang2020mediapipehands].
 :::
 
 Über die Jahrzehnte geht der Trend von Spezial-Hardware zu markerloser Erkennung auf

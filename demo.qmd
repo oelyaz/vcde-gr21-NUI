@@ -10,35 +10,35 @@ suppress-bibliography: true
 ::: {.nui-lead}
 Auf dieser Seite probieren wir die [Methode](methode.qmd) aus: mit
 Live-Skelett-Overlay, zwei kleinen Modulen und dem per Hand oder Körperpose
-gesteuerten **Chrome-T-Rex**. Die Kamera startest du im **NUI-Dock unten rechts**.
-Sie läuft *on-device*, nichts verlässt dein Gerät. Maus und Tastatur funktionieren
+gesteuerten Chrome-T-Rex. Die Kamera startest du im NUI-Dock unten rechts.
+Sie läuft on-device, nichts verlässt dein Gerät. Maus und Tastatur funktionieren
 weiterhin.
 :::
 :::
 
 ## Live-Skelett-Overlay {#interaktiv}
 
-Die erste interaktive Visualisierung ist das **Live-Skelett-Overlay**. Im
-Kamerabild zeichnet ein Canvas die von *MediaPipe* erkannten **Landmarks als
-Knoten und Kanten** nach: 21 Punkte pro Hand bzw. ein Ganzkörper-Skelett aus den
-33 Pose-Landmarks. **Blaue** Knoten und Kanten stehen für *sicher erkannt*,
-**rote** für *unsicher*. Im Pose-Modus markiert eine **blaue Linie** die
+Die erste interaktive Visualisierung ist das Live-Skelett-Overlay. Im
+Kamerabild zeichnet ein Canvas die von MediaPipe erkannten Landmarks als
+Knoten und Kanten nach: 21 Punkte pro Hand bzw. ein Ganzkörper-Skelett aus den
+33 Pose-Landmarks. Blaue Knoten und Kanten stehen für sicher erkannt,
+rote für unsicher. Im Pose-Modus markiert eine blaue Linie die
 kalibrierte Neutral-Höhe. Dieser Landmark-Graph taucht deshalb auch im Design der
 Seite wieder auf.
 
-Über die Visualisierung hinaus lässt sich die **ganze Seite per Hand bedienen**:
-Ein global an-/abschaltbarer Modus blendet einen **Hand-Cursor** ein, der der
-**Zeigefingerspitze** folgt; ein **Pinch** (Daumen- zu Zeigefingerspitze, auf die
+Über die Visualisierung hinaus lässt sich die ganze Seite per Hand bedienen:
+Ein global an-/abschaltbarer Modus blendet einen Hand-Cursor ein, der der
+Zeigefingerspitze folgt; ein Pinch (Daumen- zu Zeigefingerspitze, auf die
 Handgröße normiert:
 $\hat{d}=\lVert \mathbf{p}_{\text{thumb}}-\mathbf{p}_{\text{index}}\rVert_2 / s_{\text{hand}}$,
-siehe [Methode](methode.qmd#pipeline)) wird zum **Klick**, ein **Pinch + Ziehen** zum
-**Scrollen**. Den Cursor glättet der **1-Euro-Filter**. **Maus und Tastatur
-bleiben jederzeit nutzbar** (Pflicht-Fallback).
+siehe [Methode](methode.qmd#pipeline)) wird zum Klick, ein Pinch + Ziehen zum
+Scrollen. Den Cursor glättet der 1-Euro-Filter. Maus und Tastatur
+bleiben jederzeit nutzbar (Pflicht-Fallback).
 
 Zum Ausprobieren zweier Bausteine aus der [Methode](methode.qmd#pipeline) gibt es
-unten zwei Module: **Pinch-Distanz** $d$ und **Beugungswinkel** $\theta$. Beide
-laufen **auch ohne Kamera** mit einem statischen Beispiel. Sobald die Kamera aktiv
-ist, zeigen sie **Live-Daten**.
+unten zwei Module: Pinch-Distanz $d$ und Beugungswinkel $\theta$. Beide
+laufen auch ohne Kamera mit einem statischen Beispiel. Sobald die Kamera aktiv
+ist, zeigen sie Live-Daten.
 
 ```{=html}
 <div class="nui-modules">
@@ -83,37 +83,37 @@ ist, zeigen sie **Live-Daten**.
 
 ## Pose-gesteuerter T-Rex & NUI-Modus {#demo}
 
-Die eigene Ergänzung ist der Chrome-T-Rex, gesteuert per Handgeste **oder** per
-Körperpose über die Webcam. Im Dock wählst du den **Steuerungsmodus**. Es läuft
-immer nur *ein* Modell zugleich, damit die CPU nicht unnötig arbeitet:
+Die eigene Ergänzung ist der Chrome-T-Rex, gesteuert per Handgeste oder per
+Körperpose über die Webcam. Im Dock wählst du den Steuerungsmodus. Es läuft
+immer nur ein Modell zugleich, damit die CPU nicht unnötig arbeitet:
 
-- <i class="ph ph-hand" aria-hidden="true"></i> **Hand**: Handgesten steuern das Spiel. **Open palm** = Sprung ·
-  **Closed fist** = Ducken (halten) · **Thumbs up** = Neustart nach einem Crash.
-  Das HUD zeigt die **erkannte Geste samt Konfidenz**; ein kurzes
-  Debounce/Hysterese unterdrückt Fehltrigger. Bei aktiver **Hand-Nav** (s. u.)
-  treiben dieselben Landmarks stattdessen den **Seiten-Cursor**.
-- <i class="ph ph-person-arms-spread" aria-hidden="true"></i> **Pose**: Ganzkörper-Steuerung. Erst kurz **neutral und ruhig stehen**
-  (Kalibrierung der Schulter-/Hüft-Baseline), danach **hochspringen / aufrichten
-  = Sprung** und **in die Hocke gehen = Ducken (halten)**.
-  *Tipp:* Stell dich **~2-3 m zurück**, sodass **Schultern und Hüfte** im
-  Kamerabild sind. Die **blaue Linie** ist deine kalibrierte Neutral-Höhe.
+- <i class="ph ph-hand" aria-hidden="true"></i> **Hand**: Handgesten steuern das Spiel. Open palm = Sprung ·
+  Closed fist = Ducken (halten) · Thumbs up = Neustart nach einem Crash.
+  Das HUD zeigt die erkannte Geste samt Konfidenz; ein kurzes
+  Debounce/Hysterese unterdrückt Fehltrigger. Bei aktiver Hand-Nav (s. u.)
+  treiben dieselben Landmarks stattdessen den Seiten-Cursor.
+- <i class="ph ph-person-arms-spread" aria-hidden="true"></i> **Pose**: Ganzkörper-Steuerung. Erst kurz neutral und ruhig stehen
+  (Kalibrierung der Schulter-/Hüft-Baseline), danach hochspringen / aufrichten
+  = Sprung und in die Hocke gehen = Ducken (halten).
+  *Tipp:* Stell dich ca. 2–3 m zurück, sodass Schultern und Hüfte im
+  Kamerabild sind. Die blaue Linie ist deine kalibrierte Neutral-Höhe.
 - <i class="ph ph-power" aria-hidden="true"></i> **Off**: Steuerung pausiert (Kamerabild bleibt sichtbar).
 
-**NUI-Navigation (ganze Seite).** Mit dem Button **„Hand-Nav“** (oder Taste
-<kbd>N</kbd>) schaltest du die **Handsteuerung der ganzen Seite** ein. Dann steuern
-die Handgesten nicht das Spiel, sondern einen **Hand-Cursor** (1-Euro-geglättet).
-Der **Pinch** ist der **eine kontinuierliche Kanal**: **kurzer Pinch = Klick**,
-**Pinch + Ziehen = Scrollen**; **Victory** blendet das **NUI-Menü** ein/aus.
-Zum **Seitenwechsel** zeigst du mit dem Cursor auf einen **Navbar-Link** und
-**pinchst** ihn an. Die Handsteuerung läuft auf der neuen Seite automatisch
-weiter. Cursor und Pinch reagieren nur bei **gestrecktem Zeigefinger**
+**NUI-Navigation (ganze Seite).** Mit dem Button „Hand-Nav“ (oder Taste
+<kbd>N</kbd>) schaltest du die Handsteuerung der ganzen Seite ein. Dann steuern
+die Handgesten nicht das Spiel, sondern einen Hand-Cursor (1-Euro-geglättet).
+Der Pinch ist der einzige kontinuierliche Kanal: kurzer Pinch = Klick,
+Pinch + Ziehen = Scrollen; Victory blendet das NUI-Menü ein/aus.
+Zum Seitenwechsel zeigst du mit dem Cursor auf einen Navbar-Link und
+pinchst ihn an. Die Handsteuerung läuft auf der neuen Seite automatisch
+weiter. Cursor und Pinch reagieren nur bei gestrecktem Zeigefinger
 (Posture-Gate). Eine Faust friert den Cursor ein, statt ungewollt zu klicken. Der
-Pinch nutzt **Hysterese** (zwei Schwellen) gegen Flattern, also gegen
-„Midas-Touch“. **Maus und Tastatur funktionieren weiterhin jederzeit**, auch zum
+Pinch nutzt Hysterese (zwei Schwellen) gegen Flattern, also gegen
+„Midas-Touch“. Maus und Tastatur funktionieren weiterhin jederzeit, auch zum
 Spielen selbst (Pflicht-Fallback aus dem vendored Runner).
 
-Die folgende Tabelle fasst den **Mapping-Layer** zusammen, also unsere Übersetzung
-*Quelle → Intent → Aktion*. Dieselbe Quelle kann je nach Modus anders belegt sein; das ist der Sinn der Entkopplung.
+Die folgende Tabelle fasst den Mapping-Layer zusammen, also unsere Übersetzung
+Quelle → Intent → Aktion. Dieselbe Quelle kann je nach Modus anders belegt sein; das ist der Sinn der Entkopplung.
 
 ::: {.nui-table-wrap}
 | Quelle (Geste / Pose) | Modus | Intent | Aktion |
@@ -149,9 +149,9 @@ Die folgende Tabelle fasst den **Mapping-Layer** zusammen, also unsere Übersetz
 </div>
 
 <p class="nui-dock-pointer">
-  Die Steuerung sitzt im schwebenden <strong>NUI-Dock</strong> unten rechts.
-  Es bleibt auch beim Scrollen sichtbar. Dort die <strong>Kamera starten</strong>,
-  den Modus wählen und <strong>Hand-Nav</strong> ein-/ausschalten (Taste <kbd>N</kbd>).
+  Die Steuerung sitzt im schwebenden NUI-Dock unten rechts.
+  Es bleibt auch beim Scrollen sichtbar. Dort die Kamera starten,
+  den Modus wählen und Hand-Nav ein-/ausschalten (Taste <kbd>N</kbd>).
   Auch ohne Kamera spielbar:
   <kbd>Space</kbd>/<kbd>↑</kbd> Sprung · <kbd>↓</kbd> ducken · <kbd>Enter</kbd> Neustart.
 </p>
@@ -161,10 +161,10 @@ Die folgende Tabelle fasst den **Mapping-Layer** zusammen, also unsere Übersetz
 
 ::: {.callout-note appearance="simple"}
 **Lizenz & Attribution (Demo).** Die T-Rex-Demo nutzt den quelloffenen
-*Chrome-Dino*-Runner (`trex/trex-runner.js`), © 2014 The Chromium Authors,
+Chrome-Dino-Runner (`trex/trex-runner.js`), © 2014 The Chromium Authors,
 BSD-Lizenz; vendored mit kleinen Einbettungs-Guards für die lokale Demo.
 Die Gesten-/Pose-Steuerung darüber ist Eigenleistung. Tracking läuft über
-*MediaPipe Tasks-Vision* (Google, Apache-2.0), zur
+MediaPipe Tasks-Vision (Google, Apache-2.0), zur
 Laufzeit per CDN geladen [@lugaresi2019mediapipe]. Vollständige Hinweise unter
 [Über & Referenzen](ueber.qmd#referenzen).
 :::

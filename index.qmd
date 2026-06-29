@@ -24,8 +24,8 @@ format:
   <div class="nui-hero-inner">
     <p class="nui-hero-eyebrow">Visual Computing · Natural User Interfaces</p>
     <p class="nui-hero-title">Die leere Hand wird zur <span class="nui-grad">Schnittstelle</span>.</p>
-    <p class="nui-hero-sub">Markerloses <strong>Hand- &amp; Pose-Tracking</strong> mit
-      <em>MediaPipe</em>: Eine gewöhnliche Webcam genügt, um Gesten und Körperhaltung
+    <p class="nui-hero-sub">Markerloses Hand- &amp; Pose-Tracking mit
+      MediaPipe: Eine gewöhnliche Webcam genügt, um Gesten und Körperhaltung
       in Echtzeit in Befehle umzusetzen. Damit lässt sich sogar der Dinosaurier nur mit
       Bewegung steuern.</p>
     <div class="nui-hero-cta">
@@ -40,10 +40,10 @@ format:
 ::::
 
 ::: {.nui-lead}
-Dieses Projekt zeigt, wie **Hand- und Pose-Tracking** mit *MediaPipe* ein **Natural
-User Interface (NUI)** möglich macht: vom Funktionsprinzip *unter der Haube* bis
+Dieses Projekt zeigt, wie Hand- und Pose-Tracking mit MediaPipe ein Natural
+User Interface (NUI) möglich macht: vom Funktionsprinzip unter der Haube bis
 zur spielbaren Live-Demo. Du steuerst den Dinosaurier mit Körperbewegung und
-Handgesten, und die ganze Seite lässt sich **per Handgeste bedienen** (Taste
+Handgesten, und die ganze Seite lässt sich per Handgeste bedienen (Taste
 <kbd>N</kbd> oder Button im Dock unten rechts).
 :::
 
@@ -52,12 +52,12 @@ Handgesten, und die ganze Seite lässt sich **per Handgeste bedienen** (Taste
 ::: {.callout-note appearance="simple"}
 Natural User Interfaces wollen den Körper selbst zur Eingabe machen, statt Maus,
 Tastatur oder Controller. Wir zeigen, dass dafür eine gewöhnliche Webcam reicht:
-*MediaPipe* schätzt Hand- und Körper-Landmarks on-device direkt im Browser
+MediaPipe schätzt Hand- und Körper-Landmarks on-device direkt im Browser
 [@lugaresi2019mediapipe; @zhang2020mediapipehands; @bazarevsky2020blazepose]. Aus
 diesen Landmarks bauen wir zwei Steuerungen. Erstens einen pose- und
 gestengesteuerten Chrome-T-Rex (Springen, Ducken, Neustart). Zweitens eine komplett
-handbedienbare Website mit Cursor, Pinch-Klick und Scrollen als *einem*
-kontinuierlichen Kanal. Der Kern ist ein eigener **Mapping-Layer**, der Geste
+handbedienbare Website mit Cursor, Pinch-Klick und Scrollen als einem
+kontinuierlichen Kanal. Der Kern ist ein eigener Mapping-Layer, der Geste
 oder Pose über einen abstrakten Intent auf Befehle abbildet. Gegen das
 Midas-Touch-Problem nutzen wir Engagement-Toggle, Confidence-Gate, Debounce,
 Hysterese und den 1-Euro-Filter [@buxton1990threestate; @casiez2012euro]. Eine

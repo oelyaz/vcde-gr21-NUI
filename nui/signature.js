@@ -304,16 +304,8 @@ async function initHero() {
 }
 
 // Scroll-driven bits, with GSAP + ScrollTrigger and optional Lenis.
-// Only pull in GSAP when this page actually has a scroll-driven moment.
-function hasScrollTargets() {
-  return !!document.getElementById('nui-flow')
-      || !!document.getElementById('tbl-vergleich')
-      || !!document.querySelector('.trex-stage');
-}
-
+// Loads libraries and configures smooth scrolling globally for site-wide consistency.
 async function initScrollMoments() {
-  if (!hasScrollTargets()) return;          // nothing to animate, skip the lib
-
   let gsap, ScrollTrigger;
   try {
     await loadScript('https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js');

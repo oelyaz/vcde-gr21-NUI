@@ -691,3 +691,20 @@ details.quiz-a[open] > summary { margin-bottom: 0.6rem; }
   white-space: nowrap;
   flex-basis: auto;
 }
+
+/* Lenis smooth scrolling compatibility styles */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis-smooth [data-lenis-prevent] {
+  overflow: clip;
+}
+
+.lenis-target {
+  scroll-behavior: auto !important;
+}

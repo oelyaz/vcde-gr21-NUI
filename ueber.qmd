@@ -10,8 +10,8 @@ nocite: |
 
 ::: {.nui-lead}
 Wer hat was gebaut, welche fremden Bausteine stecken im Projekt, und worauf
-stützt sich die Theorie? Hier stehen **Aufgabenverteilung**, **Lizenzen** der
-Drittanbieter-Assets und die **vollständige Literaturliste**.
+stützt sich die Theorie? Hier stehen die Aufgabenverteilung, Lizenzen der
+Drittanbieter-Assets und die vollständige Literaturliste.
 :::
 :::
 
