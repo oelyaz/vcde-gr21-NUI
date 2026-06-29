@@ -185,7 +185,7 @@ window.Quarto = {
 <div class="nui-pagehead">
 <p><span class="nui-eyebrow">Unter der Haube · Pipeline</span></p>
 <div class="nui-lead">
-<p>Wie wird aus einem Webcam-Frame ein Befehl? MediaPipe löst das nicht in <em>einem</em> großen Netz, sondern als <strong>Pipeline</strong> aus kleineren, spezialisierten Stufen. Wir gehen sie hier von der Kamera bis zur Spielaktion durch, in neun Schritten. Beim Scrollen läuft die <strong>animierte Szene</strong> rechts mit.</p>
+<p>Wie wird aus einem Webcam-Frame ein Befehl? MediaPipe löst das nicht in einem großen Netz, sondern als Pipeline aus kleineren, spezialisierten Stufen. Wir gehen sie hier von der Kamera bis zur Spielaktion durch, in neun Schritten. Beim Scrollen läuft die animierte Szene rechts mit.</p>
 </div>
 </div>
 <div class="callout callout-style-simple callout-note">
@@ -200,12 +200,12 @@ window.Quarto = {
 </div>
 <section id="lernkern" class="level2">
 <h2 class="anchored" data-anchor-id="lernkern">Der gemeinsame Lern-Kern</h2>
-<p>Detektion, Landmark-Schätzung und Gestenklassifikation sind allesamt <strong>überwacht gelernte Modelle</strong>: Aus gelabelten Beispielen <span class="math inline">\(S=\{(x_i,y_i)\}\)</span> wird eine Abbildung <span class="math inline">\(h_\theta\)</span> trainiert, die eine <strong>Loss-Funktion</strong> über den Daten minimiert. Der entscheidende Unterschied zwischen den Stufen ist die <strong>Art der Ausgabe</strong> <span class="math inline">\(Y\)</span> und damit die Aufgabe:</p>
+<p>Detektion, Landmark-Schätzung und Gestenklassifikation sind allesamt überwacht gelernte Modelle: Aus gelabelten Beispielen <span class="math inline">\(S=\{(x_i,y_i)\}\)</span> wird eine Abbildung <span class="math inline">\(h_\theta\)</span> trainiert, die eine Loss-Funktion über den Daten minimiert. Der entscheidende Unterschied zwischen den Stufen ist die Art der Ausgabe <span class="math inline">\(Y\)</span> und damit die Aufgabe:</p>
 <ul>
-<li><strong>Klassifikation</strong> (<span class="math inline">\(Y\)</span> <em>diskret</em>): die Geste <span class="math inline">\(\in\{\)</span><code>Open_Palm</code>, <code>Closed_Fist</code>, …<span class="math inline">\(\}\)</span>.</li>
-<li><strong>Regression</strong> (<span class="math inline">\(Y\subseteq\mathbb{R}^n\)</span> <em>kontinuierlich</em>): die Landmark-Koordinaten.</li>
+<li><strong>Klassifikation</strong> (<span class="math inline">\(Y\)</span> diskret): die Geste <span class="math inline">\(\in\{\)</span><code>Open_Palm</code>, <code>Closed_Fist</code>, …<span class="math inline">\(\}\)</span>.</li>
+<li><strong>Regression</strong> (<span class="math inline">\(Y\subseteq\mathbb{R}^n\)</span> kontinuierlich): die Landmark-Koordinaten.</li>
 </ul>
-<p>Die Merkmale lernen <strong>Convolutional Neural Networks (CNNs)</strong> automatisch, statt sie von Hand zu entwerfen <span class="citation" data-cites="friedrich_vc_recognition">(Friedrich 2025a)</span>. Entscheidend für die Einordnung: Diese Netze sind <strong>diskriminativ</strong> (Bild <span class="math inline">\(\rightarrow\)</span> strukturierte Ausgabe), nicht <strong>generativ</strong> (latenter Raum <span class="math inline">\(\rightarrow\)</span> neues Bild) <span class="citation" data-cites="friedrich_vc_neural">(Friedrich 2025c)</span>.</p>
+<p>Die Merkmale lernen Convolutional Neural Networks (CNNs) automatisch, statt sie von Hand zu entwerfen <span class="citation" data-cites="friedrich_vc_recognition">(Friedrich 2025a)</span>. Entscheidend für die Einordnung: Diese Netze sind diskriminativ (Bild <span class="math inline">\(\rightarrow\)</span> strukturierte Ausgabe), nicht generativ (latenter Raum <span class="math inline">\(\rightarrow\)</span> neues Bild) <span class="citation" data-cites="friedrich_vc_neural">(Friedrich 2025c)</span>.</p>
 </section>
 <section id="pipeline" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="pipeline">Die Pipeline: von der Kamera zur Aktion</h2>
@@ -307,12 +307,12 @@ window.Quarto = {
 <div class="nui-flow-steps">
 <section id="stufe-1-aufnahme" class="level3 nui-flow-step">
 <h3 class="anchored" data-anchor-id="stufe-1-aufnahme">Stufe 1: Aufnahme</h3>
-<p>Die Webcam liefert RGB-Frames. Für die Inferenz werden sie <strong>herunterskaliert</strong> (Downscaling spart Rechenzeit), der Farbraum normalisiert und das Bild <strong>gespiegelt</strong> (Selfie-View), damit Links/Rechts intuitiv stimmt. Schon hier entstehen <strong>Latenz</strong> und <strong>CPU-Last</strong>, die später das Echtzeitverhalten prägen.</p>
+<p>Die Webcam liefert RGB-Frames. Für die Inferenz werden sie herunterskaliert (Downscaling spart Rechenzeit), der Farbraum normalisiert und das Bild gespiegelt (Selfie-View), damit Links/Rechts intuitiv stimmt. Schon hier entstehen Latenz und CPU-Last, die später das Echtzeitverhalten prägen.</p>
 </section>
 <section id="stufe-2-detektion-blazepalm-pose-detektor" class="level3 nui-flow-step">
 <h3 class="anchored" data-anchor-id="stufe-2-detektion-blazepalm-pose-detektor">Stufe 2: Detektion (BlazePalm / Pose-Detektor)</h3>
-<p>Zuerst muss gefunden werden, <em>wo</em> Hand bzw. Person im Bild sind. Das ist <strong>Objekt­erkennung</strong> = Lokalisierung + Klassifikation, mit der bekannten Unterscheidung <em>one-stage</em> (schnell) vs.&nbsp;<em>two-stage</em> (genauer) <span class="citation" data-cites="friedrich_vc_recognition">(Friedrich 2025a)</span>. MediaPipe nutzt einen schnellen <strong>one-stage, SSD-artigen Anchor-Detektor</strong> <span class="citation" data-cites="liu2016ssd zhang2020mediapipehands">(Liu u.&nbsp;a. 2016; Zhang u.&nbsp;a. 2020)</span>: Über das Bild verteilte <em>Default-Boxen</em> werden in einem Durchgang bewertet und per <strong>gewichteter Non-Maximum-Suppression</strong> (weighted NMS: überlappende Boxen werden gemittelt statt hart verworfen) auf die besten reduziert.</p>
-<p>Ein Designtrick: BlazePalm detektiert <strong>Handflächen statt ganzer Hände</strong>. Die Handfläche ist ein nahezu <em>rigides</em>, gut umschließbares Objekt ohne abgespreizte Finger. Das bedeutet: kleinere Varianz, stabilere Boxen und weniger Seitenverhältnisse. Die schwierige Artikulation der Finger wird erst in Stufe 4 gelöst.</p>
+<p>Zuerst muss gefunden werden, wo Hand bzw. Person im Bild sind. Das ist Objekterkennung = Lokalisierung + Klassifikation, mit der bekannten Unterscheidung one-stage (schnell) vs.&nbsp;two-stage (genauer) <span class="citation" data-cites="friedrich_vc_recognition">(Friedrich 2025a)</span>. MediaPipe nutzt einen schnellen one-stage, SSD-artigen Anchor-Detektor <span class="citation" data-cites="liu2016ssd zhang2020mediapipehands">(Liu u.&nbsp;a. 2016; Zhang u.&nbsp;a. 2020)</span>: Über das Bild verteilte Default-Boxen werden in einem Durchgang bewertet und per gewichteter Non-Maximum-Suppression (weighted NMS: überlappende Boxen werden gemittelt statt hart verworfen) auf die besten reduziert.</p>
+<p>Ein Designtrick: BlazePalm detektiert Handflächen statt ganzer Hände. Die Handfläche ist ein nahezu rigides, gut umschließbares Objekt ohne abgespreizte Finger. Das bedeutet: kleinere Varianz, stabilere Boxen und weniger Seitenverhältnisse. Die schwierige Artikulation der Finger wird erst in Stufe 4 gelöst.</p>
 </section>
 <section id="stufe-3-roi-ausrichtung-per-affiner-transformation" class="level3 nui-flow-step">
 <h3 class="anchored" data-anchor-id="stufe-3-roi-ausrichtung-per-affiner-transformation">Stufe 3: ROI-Ausrichtung per affiner Transformation</h3>
@@ -352,25 +352,25 @@ A = \begin{pmatrix} \cos\alpha &amp; -\sin\alpha \\[2pt] \sin\alpha &amp; \cos\a
 </section>
 <section id="stufe-8-mapping-layer-unsere-eigenleistung" class="level3 nui-flow-step">
 <h3 class="anchored" data-anchor-id="stufe-8-mapping-layer-unsere-eigenleistung">Stufe 8: Mapping-Layer (unsere Eigenleistung)</h3>
-<p>Ab hier beginnt unser eigener Code: die Übersetzung <strong>Quelle → Intent → Aktion</strong>. Eine erkannte Geste oder Pose wird auf einen abstrakten <em>Intent</em> abgebildet und dieser auf einen Spiel- oder Navigationsbefehl. Zum Beispiel wird <code>Open_Palm</code>/Aufrichten auf <em>Jump</em> gelegt, <code>Closed_Fist</code>/Hocke auf <em>Duck</em>. Diese Entkopplung erlaubt es, dieselben Gesten im Spiel anders zu belegen als in der Navigation. Wie der Mapping-Layer den vendored T-Rex-Runner ansteuert, zeigt die <a href="./demo.html">Live-Demo</a>.</p>
+<p>Ab hier beginnt unser eigener Code: die Übersetzung Quelle → Intent → Aktion. Eine erkannte Geste oder Pose wird auf einen abstrakten Intent abgebildet und dieser auf einen Spiel- oder Navigationsbefehl. Zum Beispiel wird <code>Open_Palm</code>/Aufrichten auf Jump gelegt, <code>Closed_Fist</code>/Hocke auf Duck. Diese Entkopplung erlaubt es, dieselben Gesten im Spiel anders zu belegen als in der Navigation. Wie der Mapping-Layer den vendored T-Rex-Runner ansteuert, zeigt die <a href="./demo.html">Live-Demo</a>.</p>
 </section>
 <section id="stufe-9-echtzeit-optimierung" class="level3 nui-flow-step">
 <h3 class="anchored" data-anchor-id="stufe-9-echtzeit-optimierung">Stufe 9: Echtzeit-Optimierung</h3>
-<p>Damit all das <em>im Browser</em> flüssig läuft, steckt viel Effizienz-Engineering in den Modellen:</p>
+<p>Damit all das im Browser flüssig läuft, steckt viel Effizienz-Engineering in den Modellen:</p>
 <ul>
-<li><strong>Depthwise-Separable Convolutions</strong> (MobileNet-Prinzip) sparen ein Vielfaches an Rechenoperationen <span class="citation" data-cites="howard2017mobilenets">(Howard u.&nbsp;a. 2017)</span>.</li>
-<li><strong>Quantisierung</strong> (z. B. Float16) und <strong>Knowledge Distillation</strong> (kleine „Student”-Netze ahmen große „Teacher”-Netze nach <span class="citation" data-cites="hinton2015distilling">(Hinton u.&nbsp;a. 2015)</span>) sind in mobilen Pipelines übliche Mittel gegen Größe und Rechenlast.</li>
-<li><strong>Hardware-Delegates</strong>: Inferenz läuft wahlweise auf <strong>GPU</strong> (WebGL) oder <strong>CPU</strong> (WASM), im Web ohne Installation.</li>
-<li><strong>On-device</strong>: Die Frames verlassen das Gerät nie → ein <strong>Datenschutz</strong>-Vorteil gegenüber Cloud-Inferenz <span class="citation" data-cites="zhang2020mediapipehands">(Zhang u.&nbsp;a. 2020)</span>.</li>
+<li><strong>Depthwise-Separable Convolutions:</strong> Convolutions nach dem MobileNet-Prinzip sparen ein Vielfaches an Rechenoperationen <span class="citation" data-cites="howard2017mobilenets">(Howard u.&nbsp;a. 2017)</span>.</li>
+<li><strong>Quantisierung &amp; Knowledge Distillation:</strong> Float16-Quantisierung und kleinere „Student“-Netze, die große „Teacher“-Netze nachahmen <span class="citation" data-cites="hinton2015distilling">(Hinton u.&nbsp;a. 2015)</span>, reduzieren die Rechenlast.</li>
+<li><strong>Hardware-Delegates:</strong> Inferenz läuft wahlweise auf GPU (WebGL) oder CPU (WASM), im Web ohne Installation.</li>
+<li><strong>On-device-Verarbeitung:</strong> Die Frames verlassen das Gerät nie, was ein klarer Datenschutz-Vorteil gegenüber Cloud-Inferenz ist <span class="citation" data-cites="zhang2020mediapipehands">(Zhang u.&nbsp;a. 2020)</span>.</li>
 </ul>
-<p>Echtzeit auf Standard-Hardware und native Browser-Integration sind die Punkte, an denen wir MediaPipe gleich <a href="#vergleich">vergleichen</a>.</p>
+<p>Echtzeit auf Standard-Hardware und native Browser-Integration sind die Punkte, an denen wir MediaPipe gleich vergleichen.</p>
 </section>
 </div>
 </div>
 </section>
 <section id="vergleich" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="vergleich">Verwandte Methoden &amp; Vergleich</h2>
-<p>Webcam-basiertes Tracking ist nicht der einzige Weg zur Gestenerkennung. Es ist ein <strong>Kompromiss</strong>. Andere Verfahren kaufen sich höhere Genauigkeit oder Robustheit mit Spezial-Hardware bzw. getragener Sensorik. Die folgende Tabelle stellt sechs Ansätze gegenüber; die Werte sind <em>qualitative</em> Einordnungen (keine Benchmark-Zahlen).</p>
+<p>Webcam-basiertes Tracking ist nicht der einzige Weg zur Gestenerkennung. Es ist ein Kompromiss. Andere Verfahren kaufen sich höhere Genauigkeit oder Robustheit mit Spezial-Hardware bzw. getragener Sensorik. Die folgende Tabelle stellt sechs Ansätze gegenüber; die Werte sind qualitative Einordnungen (keine Benchmark-Zahlen).</p>
 <div class="nui-table-wrap column-page">
 <div id="tbl-vergleich" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -401,13 +401,13 @@ Tabelle&nbsp;1: Vergleich verwandter Methoden zur Gestenerkennung (qualitative E
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>MediaPipe (Webcam)</strong></td>
-<td><strong>gering</strong>, jede RGB-Kamera</td>
+<td>MediaPipe (Webcam)</td>
+<td>gering, jede RGB-Kamera</td>
 <td>mittel bis hoch (2D); 3D nur relativ</td>
-<td><strong>ja</strong></td>
+<td>ja</td>
 <td>mittel, licht-/verdeckungsabhängig</td>
 <td>Echtzeit (on-device)</td>
-<td><strong>hoch</strong> (WASM/WebGL)</td>
+<td>hoch (WASM/WebGL)</td>
 </tr>
 <tr class="even">
 <td>Leap Motion</td>
@@ -440,7 +440,7 @@ Tabelle&nbsp;1: Vergleich verwandter Methoden zur Gestenerkennung (qualitative E
 <td>Datenhandschuh / IMU</td>
 <td>getragene Hardware</td>
 <td>hoch (direkte Gelenkmessung)</td>
-<td><strong>nein</strong></td>
+<td>nein</td>
 <td>hoch, keine Verdeckung; aber Drift</td>
 <td>sehr gering</td>
 <td>gering bis mittel</td>
@@ -463,13 +463,13 @@ Tabelle&nbsp;1: Vergleich verwandter Methoden zur Gestenerkennung (qualitative E
 <section id="einordnung-der-alternativen" class="level3">
 <h3 class="anchored" data-anchor-id="einordnung-der-alternativen">Einordnung der Alternativen</h3>
 <ul>
-<li><strong>Leap Motion</strong> liefert mit aktivem <strong>IR-Stereo</strong> das präziseste Finger-Tracking im Nahbereich, erkauft das aber mit einem <strong>Zusatzgerät</strong> und einem kleinen, festen Arbeitsvolumen. Für eine im Browser lauffähige Lösung ist das ungeeignet.</li>
-<li><strong>Kinect / Tiefenkameras</strong> umgehen das schwierigste Problem von RGB, die fehlende <strong>Tiefe</strong>, direkt über <em>Structured-Light</em>- oder <em>Time-of-Flight</em>-Sensorik. Sie sind damit weitgehend <strong>lichtunabhängig</strong>. Diese metrische, kamerabasierte 3D-Erfassung gilt im XR-Tracking als Ideal; der Preis ist erneut dedizierte Hardware ohne Browser-Pfad.</li>
-<li><strong>OpenPose</strong> ist wie MediaPipe <strong>CNN-basiert</strong> und markerlos, zielt aber auf <em>maximale</em> Multi-Person-Genauigkeit und braucht dafür eine <strong>starke GPU</strong>.</li>
-<li><strong>Datenhandschuh / IMU</strong> misst Gelenkwinkel <em>direkt</em> und ist robust gegen Verdeckung und schlechtes Licht, ist aber als <strong>instrumentierter</strong>, getragener Ansatz das genaue Gegenteil der „leeren Hand” aus den <a href="./grundlagen.html#motivation">Grundlagen</a>.</li>
-<li><strong>Klassische CV</strong> (handgebaute Merkmale) ist rechnerisch günstig und überall lauffähig, scheitert aber an Beleuchtung und Hintergrund. Der Sprung zu <strong>gelernten</strong> Merkmalen (CNNs) war die Antwort auf diese Fragilität.</li>
+<li><strong>Leap Motion</strong> liefert mit aktivem IR-Stereo das präziseste Finger-Tracking im Nahbereich, erkauft das aber mit einem Zusatzgerät und einem kleinen, festen Arbeitsvolumen. Für eine im Browser lauffähige Lösung ist das ungeeignet.</li>
+<li><strong>Kinect / Tiefenkameras</strong> umgehen das schwierigste Problem von RGB, die fehlende Tiefe, direkt über Structured-Light- oder Time-of-Flight-Sensorik. Sie sind damit weitgehend lichtunabhängig. Diese metrische, kamerabasierte 3D-Erfassung gilt im XR-Tracking als Ideal; der Preis ist erneut dedizierte Hardware ohne Browser-Pfad.</li>
+<li><strong>OpenPose</strong> ist wie MediaPipe CNN-basiert und markerlos, zielt aber auf maximale Multi-Person-Genauigkeit und braucht dafür eine starke GPU.</li>
+<li><strong>Datenhandschuh / IMU</strong> misst Gelenkwinkel direkt und ist robust gegen Verdeckung und schlechtes Licht, ist aber als instrumentierter, getragener Ansatz das genaue Gegenteil der „leeren Hand” aus den <a href="./grundlagen.html#motivation">Grundlagen</a>.</li>
+<li><strong>Klassische CV</strong> (handgebaute Merkmale) ist rechnerisch günstig und überall lauffähig, scheitert aber an Beleuchtung und Hintergrund. Der Sprung zu gelernten Merkmalen (CNNs) war die Antwort auf diese Fragilität.</li>
 </ul>
-<p><strong>Fazit.</strong> Kein Verfahren ist universell „am besten”. MediaPipe ist nicht das genaueste, punktet aber mit der Kombination aus geringem Hardware-Bedarf, markerlosem Echtzeit-Tracking und nativer Browser-Integration <span class="citation" data-cites="zhang2020mediapipehands bazarevsky2020blazepose">(Zhang u.&nbsp;a. 2020; Bazarevsky u.&nbsp;a. 2020)</span>. Für eine Web-Demo, die auf beliebigen Laptops laufen soll, ist das der entscheidende Kompromiss.</p>
+<p><strong>Fazit:</strong> Kein Verfahren ist universell „am besten”. MediaPipe ist nicht das genaueste, punktet aber mit der Kombination aus geringem Hardware-Bedarf, markerlosem Echtzeit-Tracking und nativer Browser-Integration <span class="citation" data-cites="zhang2020mediapipehands bazarevsky2020blazepose">(Zhang u.&nbsp;a. 2020; Bazarevsky u.&nbsp;a. 2020)</span>. Für eine Web-Demo, die auf beliebigen Laptops laufen soll, ist das der entscheidende Kompromiss.</p>
 <nav class="nui-pagenav" aria-label="Seitennavigation">
   <a class="nui-btn nui-btn-ghost" href="grundlagen.html">← Grundlagen</a>
   <a class="nui-btn nui-btn-primary" href="demo.html">Weiter: Live-Demo →</a>
