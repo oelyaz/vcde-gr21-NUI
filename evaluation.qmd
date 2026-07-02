@@ -68,9 +68,10 @@ sind echte Messwerte von deinem Gerät, keine Modellannahme.
 
 Ein passives Harness kann den Pipeline-Takt messen und Ereignisse zählen. Es weiß
 aber nicht, was die Person eigentlich vorhatte. Erkennungsrate und
-Fehltrigger-Rate kommen deshalb aus einem kleinen strukturierten Versuch: jede
-Geste 20× bewusst ausführen (erkannt / nicht erkannt), dazu ein 2-minütiges
-Ruhefenster ohne gewollte Geste. Jede ausgelöste Aktion in dieser Ruhephase zählt
+Fehltrigger-Rate kommen deshalb aus einem kleinen strukturierten Versuch mit drei
+Kern-Mappings der Spielsteuerung (offene Handfläche → Sprung, Faust → Ducken,
+Hocke → Ducken): jedes davon 20× bewusst ausführen (erkannt / nicht erkannt),
+dazu ein 2-minütiges Ruhefenster ohne gewollte Geste. Jede ausgelöste Aktion in dieser Ruhephase zählt
 als Fehltrigger. Die Zahlen unten stammen aus einem gemessenen Versuch auf einem
 einzelnen Setup (Details im `meta`-Feld von `nui/eval-data.json`). Es geht um
 Größenordnungen, nicht um einen Benchmark.
