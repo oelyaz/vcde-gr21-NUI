@@ -16,7 +16,7 @@ Visual Computing · Gruppe 21 · Restle · Seidl · Kastrati
 |------|--------|
 | `*.qmd` | Die Seiten der Website (Start, Grundlagen, Methode, Live-Demo, Evaluation, Über). |
 | `nui/` | Eigene Front-end-Library (kein Framework): Steuerung, Filter, Overlay, Eval u.a. |
-| `trex/` | Vendored Chrome-Dino-Runner (BSD), unverändert eingebettet. |
+| `trex/` | Vendored Chrome-Dino-Runner (BSD); Spiellogik unverändert, nur minimale Einbettungs-Guards. |
 | `_quarto.yml` | Website-Konfiguration: Navbar, Theme, globales Kamera-Dock. |
 | `references.bib` | Literaturverzeichnis. |
 | `.github/workflows/` | `publish.yml` (Render + Deploy), `ci.yml` (Tests + Render-Check). |
