@@ -18,7 +18,7 @@ Diskussion der Grenzen in der [Evaluation](evaluation.qmd).
 ::: {.callout-note appearance="simple"}
 **Kurzfassung:** Ein Interface wirkt „natürlich", wenn es vorhandene menschliche Fähigkeiten verständlich nutzbar macht. Das gelingt aber nicht von selbst, sondern ist ein Designziel [@norman2010nui].
 Für die Umsetzung ist wichtig, diskrete Gesten als einzelne Ereignisse von kontinuierlichen Kanälen wie Position, Abstand oder Haltung zu trennen.
-Engagement und Disengagement bestimmen, wann eine Bewegung wirklich als Befehl gilt, sonst entsteht das Midas-Touch-Problem [@buxton1990threestate].
+Engagement und Disengagement bestimmen, wann eine Bewegung wirklich als Befehl gilt, sonst entsteht das Midas-Touch-Problem [@jacob1991eyetracking; @buxton1990threestate].
 Typische Use-Cases reichen von XR und Accessibility bis Medizin und Gaming. Historisch verschiebt sich das Feld von getragenen Sensoren und Handschuhen hin zu markerlosem, kamerabasiertem Tracking.
 :::
 
@@ -44,7 +44,8 @@ ganze Projekt:
   Klassen­ereignis (offene Handfläche → Sprung), ein kontinuierlicher Kanal ein
   Wert (z. B. die Pinch-Distanz zwischen Daumen und Zeigefinger als Schieberegler).
 - **Engagement / Disengagement.** Wann meint eine Bewegung einen Befehl, und
-  wann ist sie beiläufig? Ohne saubere Zustände entsteht das Midas-Touch-Problem:
+  wann ist sie beiläufig? Ohne saubere Zustände entsteht das Midas-Touch-Problem
+  [@jacob1991eyetracking]:
   Jede Bewegung löst ungewollt aus. Buxtons Three-State-Model (Out-of-Range →
   Tracking → Aktiv) liefert das passende Vokabular, um Erkennen und Auslösen
   sauber zu trennen [@buxton1990threestate].
@@ -285,7 +286,7 @@ zwei Linien: getragene Sensorik und kamerabasierte, markerlose Verfahren.
   dem die Silhouette der Person ohne getragene Hardware mit virtuellen Inhalten
   interagiert. Für markerlose Gestensteuerung ist das ein frühes Vorbild.
 - 1987: VPL DataGlove: Der Datenhandschuh macht Fingerbeugung direkt messbar.
-  Das ist präzise, aber instrumentiert (Hardware an der Hand) [@buxton1990threestate].
+  Das ist präzise, aber instrumentiert (Hardware an der Hand) [@zimmerman1987dataglove].
 - 2010: Microsoft Kinect: erstmals markerloses Ganzkörper-Skelett für den
   Massenmarkt, möglich durch eine aktive Tiefenkamera.
 - 2013: Leap Motion: dedizierter IR-Sensor für hochpräzises

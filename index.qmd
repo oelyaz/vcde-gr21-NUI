@@ -60,7 +60,7 @@ handbedienbare Website mit Cursor, Pinch-Klick und Scrollen als einem
 kontinuierlichen Kanal. Der Kern ist ein eigener Mapping-Layer, der Geste
 oder Pose über einen abstrakten Intent auf Befehle abbildet. Gegen das
 Midas-Touch-Problem nutzen wir Engagement-Toggle, Confidence-Gate, Debounce,
-Hysterese und den 1-Euro-Filter [@buxton1990threestate; @casiez2012euro]. Eine
+Hysterese und den 1-Euro-Filter [@jacob1991eyetracking; @buxton1990threestate; @casiez2012euro]. Eine
 leichte Evaluation misst Latenz, Erkennungs- und Fehltrigger-Rate in einem kleinen
 Versuch und benennt die Grenzen offen. Maus und Tastatur bleiben jederzeit aktiv.
 :::

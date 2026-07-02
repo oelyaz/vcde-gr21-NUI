@@ -235,7 +235,7 @@ Maus/Tastatur-Fallback.
 **Midas-Touch.** Da die Kamera immer etwas sieht, kann schnell jede Bewegung als
 Befehl verstanden werden. Dagegen helfen explizites Engagement (globaler
 Toggle), Confidence-Gate, Debounce/Hysterese, Cooldowns und die Trennung von Spiel-
-und Navigationskanal [@buxton1990threestate; @norman2010nui]. Die
+und Navigationskanal [@jacob1991eyetracking; @buxton1990threestate; @norman2010nui]. Die
 Fehltrigger-Spalte in @tbl-eval zeigt, dass trotzdem vereinzelt Fehltrigger übrig bleiben.
 
 Deshalb ist der Maus/Tastatur-Fallback Pflicht und immer aktiv:
