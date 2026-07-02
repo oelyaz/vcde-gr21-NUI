@@ -1,9 +1,9 @@
 {
   "meta": {
-    "device": "",
+    "device": "MacBook Air (M3)",
     "browser": "Safari (macOS)",
-    "delegate": "",
-    "camera": "",
+    "delegate": "GPU (WebGL)",
+    "camera": "integrierte FaceTime-HD-Kamera",
     "date": "2026-06-25"
   },
   "latency": {

@@ -239,7 +239,8 @@ function updateGestureHud(rawName, rawScore) {
 //   • quick pinch (little motion) -> click whatever is under the cursor
 //   • pinch + move                -> drag-scroll the page (grab-scroll)
 //   • Victory (debounced gesture) -> toggle the floating NUI menu overlay
-//   • Pointing_Up / Thumb_Down    -> step to the next / previous navbar page
+//   • page-to-page navigation     -> pinch-click a navbar link (Pointing_Up is
+//     the cursor posture, Thumb_Down stays unbound; see navCommit)
 // Engagement is explicit and the mouse/keyboard + the vendored runner's own
 // listeners stay active throughout, so the whole page still works without
 // a camera. No Midas touch.
