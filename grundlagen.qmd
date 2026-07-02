@@ -56,7 +56,9 @@ offen: Gorilla-Arm, Ermüdung und Fehltrigger in der Evaluation.
 
 ## Use-Cases {#use-cases}
 
-Vier Felder zeigen, warum berührungsloses Tracking mehr ist als eine Spielerei:
+Vier Felder zeigen, warum berührungsloses Tracking mehr ist als eine Spielerei —
+vom sterilen Blättern durch OP-Bildmaterial [@ohara2014touchless] bis zum
+Hand-Tracking als primärer Eingabe aktueller Headsets:
 
 ```{=html}
 <div class="nui-carousel-root nui-reveal" id="nui-usecases">

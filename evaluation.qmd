@@ -288,21 +288,23 @@ Entwicklungen deuten darauf hin, dass berührungslose Eingabe künftig breiter g
 
 ::: {.nui-reveal}
 - **Transformer-Pose-Modelle.** Aufmerksamkeitsbasierte Architekturen lösen reine
-  CNN-Detektoren zunehmend ab. Sie versprechen mehr Robustheit gegen Verdeckung und
-  eine stabilere 3D-Schätzung als die heutige Pipeline.
-- **Tiefe aus Mono-RGB.** Gelernte monokulare Tiefenschätzung bringt echte 3D-Gesten
+  CNN-Detektoren zunehmend ab [@xu2022vitpose]. Sie versprechen mehr Robustheit gegen
+  Verdeckung und eine stabilere 3D-Schätzung als die heutige Pipeline.
+- **Tiefe aus Mono-RGB.** Gelernte monokulare Tiefenschätzung [@ranftl2022midas]
+  bringt echte 3D-Gesten
   ohne Extra-Sensor in Reichweite und entschärft die zentrale Schwäche, die der
   Webcam-Ansatz heute gegenüber Tiefenkameras hat (siehe
   [Vergleich](methode.qmd#vergleich)).
-- **WebGPU.** Als Nachfolger von WebGL erlaubt es schnellere On-device-Inferenz direkt
+- **WebGPU.** Als Nachfolger von WebGL [@w3c2025webgpu] erlaubt es schnellere
+  On-device-Inferenz direkt
   im Browser und drückt die in der [Latenz-Diskussion](#grenzen) gemessenen
   Verarbeitungszeiten weiter nach unten.
 - **Multimodale Eingabe.** Hand, Blick und Sprache werden kombiniert statt einzeln
   ausgewertet. Aktuelle Spatial-Computing-Geräte (Apple Vision Pro) zeigen das Muster:
   Der Blick zielt, ein Pinch bestätigt.
 - **Sensorfusion jenseits der Kamera.** EMG-Armbänder lesen Muskelsignale, Radar-Chips
-  wie Googles *Soli* erfassen feine Bewegungen. Beide ergänzen das Kamerabild und
-  umgehen dessen Licht- und Verdeckungsprobleme.
+  wie Googles *Soli* erfassen feine Bewegungen [@lien2016soli]. Beide ergänzen das
+  Kamerabild und umgehen dessen Licht- und Verdeckungsprobleme.
 :::
 
 Die Richtung ist dieselbe wie in der

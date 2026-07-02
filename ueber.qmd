@@ -92,7 +92,9 @@ und verantwortet.
 Die folgende Liste sammelt die zitierte Fachliteratur: das MediaPipe-Framework mit
 seinen Modellen (Hands, BlazePose, GHUM) und den zugehörigen Model Cards, die
 Detektions- und Effizienz-Grundlagen (SSD, MobileNets, Knowledge Distillation), die
-NUI-/HCI-Literatur (Norman, Buxton, Wigdor) und den 1-Euro-Filter.
+NUI-/HCI-Literatur (Norman, Buxton, Wigdor, Jacob, Zimmerman), den 1-Euro-Filter
+sowie Belege zu Use-Cases und Ausblick (Touchless-Interaktion im OP, ViTPose,
+monokulare Tiefenschätzung, Soli-Radar, WebGPU).
 
 ::: {#refs}
 :::
