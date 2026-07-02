@@ -76,6 +76,26 @@ als Fehltrigger. Die Zahlen unten stammen aus einem gemessenen Versuch auf einem
 einzelnen Setup (Details im `meta`-Feld von `nui/eval-data.json`). Es geht um
 Größenordnungen, nicht um einen Benchmark.
 
+::: {.callout-note collapse="true"}
+## Mess-Protokoll (zum Nachmessen)
+
+1. Auf dieser Seite die Kamera im NUI-Dock starten und den passenden Modus
+   wählen (Hand bzw. Pose); die Zähler mit **„Zurücksetzen"** im Panel (oder
+   `window.nuiEval.reset()`) auf null stellen.
+2. Pro Mapping 20 bewusste Wiederholungen mit je ca. 2 s Pause. Eine
+   Wiederholung zählt als *erkannt*, wenn die zugehörige Aktion auslöst
+   (sichtbar im HUD bzw. im Spiel).
+3. Danach ein 2-Minuten-Ruhefenster: normal vor dem Rechner sitzen, ohne
+   gewollte Geste. Jede trotzdem ausgelöste Aktion zählt als Fehltrigger.
+4. **„Daten exportieren"** lädt die Sitzung (inkl. roher Inferenz-Samples) als
+   JSON herunter; die Datei ersetzt `nui/eval-data.json`. Die Zählungen aus
+   Schritt 2–3 werden von Hand in das `trial`-Feld eingetragen, die
+   Geräteinfos in das `meta`-Feld.
+
+Gemessenes Setup (siehe `meta`): MacBook Air (M3), Safari (macOS),
+GPU-Delegate (WebGL), integrierte FaceTime-HD-Kamera, 25.06.2026.
+:::
+
 Die beiden Kennzahlen sind bewusst einfach definiert:
 
 $$
@@ -96,7 +116,7 @@ if not trial:
     display(Markdown(
         "*Noch keine Versuchsdaten. Die Werte entstehen aus einem strukturierten "
         "Versuch und werden in `nui/eval-data.json` (`trial`) eingetragen — siehe das "
-        "Mess-Protokoll im Repository.*"
+        "Mess-Protokoll oben auf dieser Seite.*"
     ))
 else:
     df = pd.DataFrame(trial)
