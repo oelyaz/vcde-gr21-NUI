@@ -109,9 +109,12 @@ else:
     display(df.set_index("Geste → Aktion"))
 ```
 
-Welche Geste wie zuverlässig erkannt wird, zeigt @tbl-eval. Tendenziell sind
-kompakte, eindeutige Handformen (etwa die Faust) robuster als feinere Gesten.
-Fehltrigger bleiben dank Confidence-Gate, Debounce und Hysterese selten, ganz weg
+Welche Geste wie zuverlässig erkannt wird, zeigt @tbl-eval. In unserem Versuch
+waren offene Handfläche und Pose-Hocke fehlerfrei (20/20, keine Fehltrigger);
+die Faust war die einzige Quelle mit einer verpassten Erkennung und vereinzelten
+Fehltriggern. Das ist plausibel: Eine entspannt eingerollte Hand sieht der Faust
+ähnlich, während die offene Handfläche kaum mit einer Ruhehaltung zu verwechseln
+ist. Fehltrigger bleiben dank Confidence-Gate, Debounce und Hysterese selten, ganz weg
 sind sie aber nicht. Genau das ist der Kern des Midas-Touch-Problems (s. u.).
 
 ```{python}
