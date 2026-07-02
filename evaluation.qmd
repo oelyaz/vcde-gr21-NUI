@@ -29,10 +29,10 @@ Benchmark, und wir benennen ihre Schwächen offen.
 ## Wie wir messen {#messung}
 
 Ein kleines Eval-Harness ([`nui/eval.js`](nui/eval.js)) hängt sich mit wenigen
-Zeilen in den Controller. Es erfasst im laufenden Betrieb drei Dinge: die
-Verarbeitungslatenz pro Frame (Zeit vom Kamera-Frame bis zum abgesetzten
-Spiel-Befehl), die Zahl committeter Gesten je Klasse und die ausgelösten
-Aktionen (Sprung / Ducken / Neustart). Nach einer Sitzung gibt
+Zeilen in den Controller. Es erfasst im laufenden Betrieb die Inferenzzeit pro
+Frame, die Latenz vom Kamera-Frame bis zum abgesetzten Spiel-Befehl (gemessen
+bei jeder ausgelösten Aktion), die Zahl committeter Gesten je Klasse und die
+ausgelösten Aktionen (Sprung / Ducken / Neustart). Nach einer Sitzung gibt
 `window.nuiEval.report()` die Zusammenfassung in der Konsole aus.
 
 Du musst dafür aber nicht in die Konsole schauen. Das Panel unten liest dieselben
@@ -140,7 +140,7 @@ sind sie aber nicht. Genau das ist der Kern des Midas-Touch-Problems (s. u.).
 
 ```{python}
 #| label: fig-eval-latency
-#| fig-cap: "Latenz-Budget Frame → Aktion: der Inferenz-Median stammt aus den geloggten Frames (`nui/eval-data.json`); Kamera-Frame-Intervall (≈ 33 ms bei 30 fps) und das Debounce-Fenster von drei stabilen Frames (≈ 100 ms, nur diskrete Hand-Gesten) sind strukturelle Konstanten. Der Pose-Pfad nutzt Anstiegserkennung ohne Debounce."
+#| fig-cap: "Latenz-Budget Frame → Aktion: der Inferenz-Median stammt aus den geloggten Frames (`nui/eval-data.json`); Kamera-Frame-Intervall (≈ 33 ms bei 30 fps, Worst Case) und das Debounce-Fenster von drei stabilen Frames (≈ 100 ms, nur diskrete Hand-Gesten) sind strukturelle Konstanten. Der Pose-Sprung nutzt Anstiegserkennung ohne Frame-Debounce; das Pose-Ducken engagiert erst nach zwei stabilen Frames (≈ 66 ms, hier nicht abgebildet)."
 #| echo: false
 import json
 import numpy as np
@@ -154,7 +154,7 @@ measured = samples.size > 0
 t_proc   = int(round(float(np.median(samples)))) if measured else 50
 proc_lbl = f"Inferenz (Median) ≈ {t_proc} ms" + ("" if measured else " (angenommen)")
 t_frame, t_debounce = 33, 100
-paths     = ["Pose\n(kontinuierlich)", "Hand\n(diskret)"]
+paths     = ["Pose · Sprung\n(kontinuierlich)", "Hand\n(diskret)"]
 frame     = [t_frame, t_frame]
 proc      = [t_proc,  t_proc]
 deb       = [0,       t_debounce]
@@ -195,15 +195,17 @@ plt.show()
 
 Die gemessene Inferenz ist nur ein kleiner Teil der Verzögerung, die man beim
 Spielen merkt (@fig-eval-latency). Grob kommen drei Dinge zusammen:
-Kamera-Frame-Intervall (≈ 33 ms bei 30 fps), die geloggte Inferenz (Median aus
+Kamera-Frame-Intervall (bis zu ≈ 33 ms bei 30 fps, im Budget als Worst Case
+angesetzt), die geloggte Inferenz (Median aus
 den Frames in `nui/eval-data.json`) und, nur bei den diskreten Hand-Gesten, das
 Debounce-Fenster von drei stabilen Frames (≈ 100 ms):
 
 $$t_{\text{spürbar}} \approx t_{\text{Frame}} + t_{\text{Verarbeitung}} + t_{\text{Debounce}}.$$
 
-Der Debounce-Term entfällt für den Pose-Pfad (er nutzt Anstiegs- statt
-Klassen-Erkennung) und ist der Preis für Stabilität bei den diskreten
-Hand-Gesten: drei stabile Frames gegen Fehltrigger kosten ~100 ms Reaktionszeit.
+Der Debounce-Term entfällt für den Pose-Sprung (er nutzt Anstiegs- statt
+Klassen-Erkennung); das Pose-Ducken wartet immerhin zwei stabile Frames
+(≈ 66 ms). Bei den diskreten Hand-Gesten ist der Debounce der Preis für
+Stabilität: drei stabile Frames gegen Fehltrigger kosten ~100 ms Reaktionszeit.
 
 ## Grenzen des Ansatzes {#grenzen}
 
@@ -220,8 +222,9 @@ unkritisch; spürbar wird vor allem das Debounce-Fenster der diskreten Gesten.
 GPU-Delegate und der Verzicht auf künstliches Throttling halten die Inferenz schnell. Der
 1-Euro-Filter glättet den Cursor *geschwindigkeitsadaptiv* und fügt absichtlich
 kaum Verzögerung hinzu
-[@casiez2012euro]. Einzelne p95-Ausreißer entstehen durch
-Garbage-Collection und gelegentliche Modell-Hänger.
+[@casiez2012euro]. Einzelne Ausreißer bleiben: Der größte in unseren Daten
+(≈ 227 ms) ist das Warm-up der allerersten Inferenz nach dem Modell-Laden;
+seltene kleinere Spitzen passen zu Browser-Pausen wie Garbage-Collection.
 
 **Gorilla-Arm & Ermüdung.** Hand-Gesten in der Luft und wiederholtes
 Aufstehen/Hocken ermüden schneller, als man denkt. Das ist das klassische
@@ -249,8 +252,8 @@ Aussagekraft ein, und es lohnt sich, sie zu nennen:
   können die Erkennung verschieben.
 - **Median-Budget statt voller Verteilung.** @fig-eval-latency zeigt die drei realen,
   additiven Latenzbeiträge am Median, nicht die vollständige Verteilung. Einzelne
-  p95-Ausreißer (Garbage-Collection, Modell-Hänger) liegen darüber und sind hier nicht
-  abgebildet.
+  Ausreißer (etwa das Warm-up der ersten Inferenz mit ≈ 227 ms) liegen darüber und
+  sind hier nicht abgebildet.
 - **Intent ist nicht direkt messbar.** Ob eine Bewegung als Befehl gemeint war, weiß
   nur die Person. Erkennungs- und Fehltrigger-Rate kommen deshalb aus dem bewusst
   strukturierten Versuch, nicht aus dem passiven Harness, das nur den Takt der
