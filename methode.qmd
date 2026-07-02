@@ -239,8 +239,10 @@ Hier wird aus der Geometrie eine Bedeutung. Dafür gibt es zwei Wege:
 
 1. **Gelernte Gestenklassen.** Der `GestureRecognizer` bettet die Landmarks in
    einen Merkmalsvektor ein und klassifiziert ihn in die eingebauten Gestenklassen.
-   Davon nutzen wir diese sechs: `Closed_Fist`, `Open_Palm`, `Pointing_Up`,
-   `Thumb_Up`, `Thumb_Down`, `Victory`.
+   Fünf davon sind bei uns mit einer Funktion belegt: `Closed_Fist`, `Open_Palm`,
+   `Pointing_Up`, `Thumb_Up`, `Victory`. `Thumb_Down` wird erkannt und im HUD
+   angezeigt, ist aber bewusst an keine Aktion gebunden — das Vokabular bleibt
+   klein und verwechslungsarm.
 2. **Geometrische Heuristik aus Landmarks.** Die **Pinch-Distanz** zwischen Daumen-
    und Zeigefingerspitze,
    $$ \hat{d} = \frac{\lVert \mathbf{p}_{\text{thumb}} - \mathbf{p}_{\text{index}} \rVert_2}{s_{\text{hand}}}, $$
